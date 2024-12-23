@@ -15,6 +15,9 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+Route::get('/', function () {
+    return response()->view('welcome');
+});
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
