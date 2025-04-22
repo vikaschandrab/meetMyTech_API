@@ -32,4 +32,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: "cd /var/www/html/meetMyTech_API && ./.scripts/deploy.sh"
+          script: "cd /var/www/html/meetMyTech_API && ./deploy.sh"
