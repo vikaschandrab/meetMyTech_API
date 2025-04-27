@@ -4,8 +4,29 @@
 <head>
         <title>B Vikas Chandra - Personal CV/Resume </title>
         <!-- Required meta tags -->
-        <meta charset="utf-8">
+       <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content=" skilled PHP developer with expertise in crafting dynamic and efficient web applications. With a keen eye for detail and a passion for problem-solving, Vikas excels in leveraging PHP frameworks such as Laravel, Symfony, and CodeIgniter to develop robust and scalable solutions. His proficiency extends to database management systems like MySQL and MongoDB, enabling him to design data-driven applications seamlessly. Vikas is adept at implementing best practices in coding standards, ensuring maintainability and scalability of projects. With a strong understanding of frontend technologies like HTML, CSS, and JavaScript, Vikas collaborates effectively with cross-functional teams to deliver high-quality software solutions. His dedication to staying updated with the latest trends and technologies in PHP development ensures that his projects are always at the forefront of innovation." />
+        <meta name="keywords" content="Vikas Chandra
+        ,PHP developer
+        ,Web development
+        ,PHP frameworks
+        ,Laravel
+        ,Symfony
+        ,CodeIgniter
+        ,MySQL
+        ,Database management
+        ,Backend development
+        ,Frontend technologies
+        ,HTML
+        ,CSS
+        ,JavaScript
+        ,Coding standards
+        ,Scalability
+        ,Maintainability
+        ,Innovation
+        ,Cross-functional collaboration. " />
+        <meta name="developer" content="B Vikas Chandra">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <!-- FAV AND ICONS   -->
@@ -193,21 +214,6 @@
                 <div class="row section-separator">
                     <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
                         <h2>What I do</h2>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
-                            <i class="fa fa-bullseye purple-color"></i>
-                            <h3>UI Design</h3>
-                            <p>
-                               A high-quality website is built around exceptional user experience.
-                               A seamless digital interface is essential for making a strong,
-                               lasting impression on visitors who often compare multiple profiles
-                               before making a decision. I specialize in crafting intuitive,
-                               visually engaging designs that set you apart. With the right UI,
-                               you're already halfway to winning customer trust and delight—creating
-                               a space where users feel at ease and encouraged to stay longer.
-                            </p>
-                        </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
@@ -573,7 +579,7 @@
                                         </ul>
                                     </div>
                                     <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
-                                        <h4>Software Developer II<a href="https://www.mrisoftware.com/" target="_blank">MRI Software India Pvt Ltd</a></h4>
+                                        <h4>Software Developer II <a href="https://www.mrisoftware.com/" target="_blank">MRI Software India Pvt Ltd</a></h4>
                                         <div class="mh-eduyear">2024-Till Now</div>
                                         <span>Roles &amp; Responsibility :</span>
                                         <ul class="work-responsibility">
