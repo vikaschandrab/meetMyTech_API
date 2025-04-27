@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class VikasProfileController extends Controller
 {
     public function homePage(){
-        return view('vikas.vikas');
+        return view('Vikas.vikas');
     }
 }
