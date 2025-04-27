@@ -42,7 +42,7 @@
         <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/yellow.css')}}" title="yellow">
 
     </head>
-    <body class="white-vertion black-bg">
+    <body class="dark-vertion black-bg">
 
         <!-- Start Loader -->
         <div class="section-loader">
@@ -167,14 +167,10 @@
                                     <li><span>JavaScript</span></li>
                                     <li><span>AJAX</span></li>
                                     <li><span>php</span></li>
-                                    <li><span>Laravel 8</span></li>
+                                    <li><span>Laravel</span></li>
                                     <li><span>Vue.js</span></li>
                                     <li><span>React Native</span></li>
                                     <li><span>MySQL</span></li>
-                                    <li><span>PCB Designing</span></li>
-                                    <li><span>Embedded C</span></li>
-                                    <li><span>Arduino</span></li>
-                                    <li><span>Circuit Design and Development</span></li>
                                     <li><span>Logo Design</span></li>
                                     <li><span>UI Design</span></li>
                                 </ul>
@@ -240,17 +236,6 @@
                             </p>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-4">
-                        <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s">
-                            <i class="fa fa-object-ungroup sky-color"></i>
-                            <h3>App Development</h3>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                                sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-                                magna aliquam erat volutpat.
-                            </p>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </section>
