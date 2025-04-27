@@ -213,9 +213,9 @@
             <div class="container">
                 <div class="row section-separator">
                     <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
-                        <h2>What I do</h2>
+                        <h3>What I do</h3>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
                             <i class="fa fa-apple purple-color"></i>
                             <h3>Logo Design</h3>
@@ -224,16 +224,16 @@
                                 brand or business is the core responsibility of
                                 every smart designer. A powerful logo can communicate
                                 the strength and credibility of your business and can
-                                also attract potential opportunities and customers into it.
+                                also attract potential opportunities and customers into it. <br><br><br>
                             </p>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.5s">
                             <i class="fa fa-code iron-color"></i>
                             <h3>Web Development</h3>
                             <p>
-                               A great website starts with a seamless user experience.
+                                 A great website starts with a seamless user experience.
                                A flawless digital interface is key to making a lasting
                                impression on online visitors, especially those comparing
                                multiple businesses before making a choice. Through thoughtful
