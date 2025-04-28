@@ -18,4 +18,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/health', [\App\Http\Controllers\HealthCheckController::class, 'index']);
-Route::get('/vikas-profile',[\App\Http\Controllers\VikasProfileController::class, 'homePage']);
+Route::domain('vikas.meetmytech.com')->group(function () {
+    Route::get('/vikas', [\App\Http\Controllers\VikasProfileController::class, 'homePage']);
+});
+Route::get('/vikas-profile', [\App\Http\Controllers\VikasProfileController::class, 'homePage']);
