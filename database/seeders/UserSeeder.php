@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                 'name' => 'Jyothi A H',
                 'email' => 'ahjyothi.1994@gmail.com',
                 'password' => Hash::make('jAdmin1@3&4'), // Encrypt the password
+                'user_type' => 'user',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
                 'name' => 'B Vikas Chandra',
                 'email' => 'chandravikasa38@gmail.com',
                 'password' => Hash::make('vcAdmin1@3&4'),
+                'user_type' => 'user',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -36,6 +38,7 @@ class UserSeeder extends Seeder
                 'name' => 'Manikanta Talanki',
                 'email' => 'manikanta.t341@gmail.com',
                 'password' => Hash::make('mAdmin1@3&4'),
+                'user_type' => 'user',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],

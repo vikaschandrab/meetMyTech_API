@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'js',
+        'user_type',
     ];
 
     /**
@@ -41,4 +43,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function detail()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
+
+    public function workExperiences()
+    {
+        return $this->hasMany(WorkExperience::class);
+    }
+
+    public function userActivity()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+     public function professionalSkill()
+    {
+        return $this->hasMany(professionalSkill::class);
+    }
 }
