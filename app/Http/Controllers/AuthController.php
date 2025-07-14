@@ -8,6 +8,11 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    public function index(){
+        return view('Users.login');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -15,28 +20,37 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        // Attempt login
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+
+            // Check user_type
+            if ($user->user_type !== 'user') {
+                Auth::logout(); // logout immediately
+                return redirect()->back()->withErrors(['email' => 'Unauthorized user type.']);
+            }
+
+            // Regenerate session to prevent fixation
+            $request->session()->regenerate();
+
+            return redirect()->intended('/dashboard'); // or your target route
         }
 
-        $user = Auth::user();
-        $user->tokens()->delete();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Login successful',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        // If login failed
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials.']);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        Auth::logout(); // logs out the user
 
-        return response()->json([
-            'message' => 'Logged out successfully',
-        ]);
+        // Invalidate the session
+        $request->session()->invalidate();
+
+        // Regenerate CSRF token to prevent session fixation
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with('status', 'You have been logged out successfully.');
     }
 }
 
