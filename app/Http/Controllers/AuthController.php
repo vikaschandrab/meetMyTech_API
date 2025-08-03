@@ -33,6 +33,10 @@ class AuthController extends Controller
             // Regenerate session to prevent fixation
             $request->session()->regenerate();
 
+            // Add success message
+            session()->flash('message', 'Welcome back! You have been successfully logged in.');
+            session()->flash('message_type', 'success');
+
             return redirect()->intended('/dashboard'); // or your target route
         }
 

@@ -5,14 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProfessionalSkill extends Model
+class UserProfessionalSkill extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'skill_name',
-        'percentage',
+        'communication',
+        'team_work',
+        'project_management',
+        'creativity',
+        'team_management',
+        'active_participation',
     ];
 
     /**

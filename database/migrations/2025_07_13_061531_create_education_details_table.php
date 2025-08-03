@@ -12,8 +12,8 @@ class CreateEducationDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index(); // Foreign key to users table
             $table->string('degree');
-            $table->year('from_date');
-            $table->year('to_date')->nullable();
+            $table->date('from_date');
+            $table->date('to_date')->nullable();
             $table->string('percentage_or_cgpa');
             $table->string('university');
             $table->text('description')->nullable();

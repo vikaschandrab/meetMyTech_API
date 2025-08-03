@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'contactNum',
         'js',
         'user_type',
     ];
@@ -59,8 +60,22 @@ class User extends Authenticatable
         return $this->hasMany(UserActivity::class);
     }
 
-     public function professionalSkill()
+    public function UserProfessionalSkill()
     {
-        return $this->hasMany(professionalSkill::class);
+        return $this->hasMany(UserProfessionalSkill::class);
+    }
+
+    public function EducationDetail(){
+        return $this->hasMany(EducationDetail::class);
+    }
+
+    public function SiteSettings()
+    {
+        return $this->hasMany(SiteSetting::class);
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
     }
 }

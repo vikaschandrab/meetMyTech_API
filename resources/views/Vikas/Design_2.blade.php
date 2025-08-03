@@ -24,7 +24,7 @@
         ,Coding standards
         ,Scalability
         ,Maintainability
-        ,Innovation
+        ,Innovation"
         ,Cross-functional collaboration. " />
         <meta name="developer" content="B Vikas Chandra">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -64,8 +64,8 @@
 
     </head>
     <body class="dark-vertion black-bg">
-
-        <!-- Start Loader -->
+<main>
+<!-- Start Loader -->
         <div class="section-loader">
             <div class="loader">
                 <div></div>
@@ -899,6 +899,7 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+</main>
 </body>
 
 </html>
