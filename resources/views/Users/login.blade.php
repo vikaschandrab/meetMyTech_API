@@ -37,21 +37,49 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="m-sm-3">
+									
+									<!-- Display Flash Messages -->
+									@if(session('message'))
+										<div class="alert alert-{{ session('message_type', 'info') }} alert-dismissible fade show" role="alert">
+											{{ session('message') }}
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+										</div>
+									@endif
+
+									<!-- Display Validation Errors -->
+									@if($errors->any())
+										<div class="alert alert-danger alert-dismissible fade show" role="alert">
+											<ul class="mb-0">
+												@foreach($errors->all() as $error)
+													<li>{{ $error }}</li>
+												@endforeach
+											</ul>
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+										</div>
+									@endif
+
 									<form  action="{{ route('login.submit') }}" method="POST" >
                                         @csrf
 										<div class="mb-3">
 											<label class="form-label">Email</label>
-											<input class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" />
+											<input class="form-control form-control-lg @error('email') is-invalid @enderror" 
+												type="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required />
+											@error('email')
+												<div class="invalid-feedback">{{ $message }}</div>
+											@enderror
 										</div>
 										<div class="mb-3">
 											<label class="form-label">Password</label>
-											<input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" />
+											<input class="form-control form-control-lg @error('password') is-invalid @enderror" 
+												type="password" name="password" placeholder="Enter your password" required />
+											@error('password')
+												<div class="invalid-feedback">{{ $message }}</div>
+											@enderror
 										</div>
-										<div>
-											<div class="form-check align-items-center">
-												<input id="customControlInline" type="checkbox" class="form-check-input" value="remember-me" name="remember-me" checked>
-												<label class="form-check-label text-small" for="customControlInline">Remember me</label>
-											</div>
+                                        <div class="mb-3">
+                                            <a href="#" class="form-check-label text-small text-decoration-none">
+                                            Forgot Password?
+                                            </a>
 										</div>
 										<div class="d-grid gap-2 mt-3">
                                             <button type="submit" class="btn btn-lg btn-primary">Sign in</button>
@@ -66,6 +94,8 @@
 		</div>
 	</main>
 
+	<!-- Bootstrap JS for alert functionality -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="{{asset('dashboard_css/js/app.js')}}"></script>
 
 </body>

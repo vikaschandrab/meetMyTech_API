@@ -1,350 +1,358 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('Users.Layouts.app')
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-	<meta name="author" content="Meet My tech">
-	<meta name="keywords" content="meetMyTech, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+@section('title', 'Work Experience | ' . Auth::user()->name)
 
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="{{ asset('dashboard_css/img/icons/icon-48x48.png') }}" />
+@push('styles')
+<style>
+    .experience-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    
+    .experience-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-left-color: #007bff;
+    }
+    
+    .experience-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .experience-position {
+        color: #495057;
+        font-weight: 600;
+    }
+    
+    .experience-organization {
+        color: #007bff;
+        font-weight: 500;
+    }
+    
+    .experience-period {
+        background: #f8f9fa;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+        border: 1px solid #e9ecef;
+    }
+    
+    .experience-duration {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        border-radius: 1rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .timeline-indicator {
+        width: 12px;
+        height: 12px;
+        background: #007bff;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
+    
+    .current-position {
+        background: #28a745;
+    }
+    
+    .responsibilities-preview {
+        max-height: 4.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+</style>
+@endpush
 
-	<!-- Bootstrap 5 CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('content')
+<div class="container-fluid p-0">
+    {{-- Header Section --}}
+    <div class="mb-4">
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 d-inline align-middle">Work Experience</h1>
+                <p class="text-muted mb-0">Manage your professional work history and achievements</p>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWorkExperienceModal">
+                <i data-feather="plus" class="feather-sm me-1"></i>
+                Add Experience
+            </button>
+        </div>
 
-	<!-- Bootstrap 5 JS Bundle -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        {{-- Statistics Cards --}}
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i data-feather="briefcase" class="feather-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="mb-0">{{ $experienceCount }}</h3>
+                                <p class="text-muted mb-0">Total Positions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i data-feather="building" class="feather-lg text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="mb-0">{{ $workExperiences ? $workExperiences->unique('organization')->count() : 0 }}</h3>
+                                <p class="text-muted mb-0">Organizations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i data-feather="clock" class="feather-lg text-warning"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="mb-0">{{ $workExperiences ? $workExperiences->where('to_date', null)->count() : 0 }}</h3>
+                                <p class="text-muted mb-0">Current Positions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i data-feather="calendar" class="feather-lg text-info"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                @php
+                                    $totalYears = 0;
+                                    if ($workExperiences) {
+                                        foreach ($workExperiences as $exp) {
+                                            $fromYear = $exp->from_date;
+                                            $toYear = $exp->to_date ?? date('Y');
+                                            $totalYears += ($toYear - $fromYear);
+                                        }
+                                    }
+                                @endphp
+                                <h3 class="mb-0">{{ $totalYears }}</h3>
+                                <p class="text-muted mb-0">Total Years</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-	<title>Experiance | {{ Auth::user()->name }}</title>
+        {{-- Experience Timeline --}}
+        @if($hasExperiences)
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i data-feather="list" class="feather-sm me-2"></i>
+                        Professional Timeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach ($workExperiences->sortByDesc('from_date') as $experience)
+                            <div class="col-12 col-lg-6 mb-3">
+                                <div class="card experience-card h-100">
+                                    <div class="card-body">
+                                        {{-- Header with Actions --}}
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div class="d-flex align-items-start">
+                                                <div class="timeline-indicator {{ !$experience->to_date ? 'current-position' : '' }}"></div>
+                                                <div>
+                                                    <h6 class="card-title experience-position mb-1">{{ $experience->position ?? 'N/A' }}</h6>
+                                                    <p class="experience-organization mb-0">{{ $experience->organization ?? 'N/A' }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    <i data-feather="more-horizontal"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editWorkExperienceModal{{ $experience->id }}">
+                                                            <i data-feather="edit" class="feather-sm me-2"></i>Edit
+                                                        </button>
+                                                    </li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <form action="{{ route('work-experience.delete', $experience->id) }}" method="POST" class="d-inline delete-form">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i data-feather="trash-2" class="feather-sm me-2"></i>Delete
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
 
-	<link href="{{ asset('dashboard_css/css/app.css') }}" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
+                                        {{-- Experience Meta Information --}}
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-12">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <span class="experience-period">
+                                                        <i data-feather="calendar" class="feather-sm me-1"></i>
+                                                        {{ $experience->from_date }} - {{ $experience->to_date ?? 'Present' }}
+                                                    </span>
+                                                    @php
+                                                        $duration = ($experience->to_date ?? date('Y')) - $experience->from_date;
+                                                        $durationText = $duration > 1 ? $duration . ' years' : $duration . ' year';
+                                                    @endphp
+                                                    <span class="experience-duration">
+                                                        <i data-feather="clock" class="feather-sm me-1"></i>
+                                                        {{ $durationText }}
+                                                    </span>
+                                                    @if(!$experience->to_date)
+                                                        <span class="badge bg-success">Current Position</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
 
-<body>
-	<div class="wrapper">
-		<nav id="sidebar" class="sidebar js-sidebar">
-			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="{{ route('dashboard') }}">
-          <span class="align-middle">Meet My Tech</span>
-        </a>
-
-				<ul class="sidebar-nav">
-					<li class="sidebar-header">
-						Pages
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('dashboard') }}">
-              <i class="align-middle" data-feather="menu"></i> <span class="align-middle">Dashboard</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('profile') }}">
-              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('aboutMe') }}">
-              <i class="align-middle" data-feather="users"></i> <span class="align-middle">About Me</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('myActivities') }}">
-              <i class="align-middle" data-feather="activity"></i> <span class="align-middle">What I do</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('education') }}">
-              <i class="align-middle" data-feather="book-open"></i> <span class="align-middle">Education</span>
-            </a>
-					</li>
-
-                    <li class="sidebar-item active">
-						<a class="sidebar-link" href="{{ route('experiance') }}">
-              <i class="align-middle" data-feather="monitor"></i> <span class="align-middle">Experiance</span>
-            </a>
-					</li>
-
-				</ul>
-			</div>
-		</nav>
-
-		<div class="main">
-			<nav class="navbar navbar-expand navbar-light navbar-bg">
-				<a class="sidebar-toggle js-sidebar-toggle">
-          <i class="hamburger align-self-center"></i>
-        </a>
-
-				<div class="navbar-collapse collapse">
-					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
-								<div class="position-relative">
-									<i class="align-middle" data-feather="bell"></i>
-									<span class="indicator">4</span>
-								</div>
-							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
-								<div class="dropdown-menu-header">
-									4 New Notifications
-								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-danger" data-feather="alert-circle"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Update completed</div>
-												<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
-												<div class="text-muted small mt-1">30m ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-warning" data-feather="bell"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Lorem ipsum</div>
-												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
-												<div class="text-muted small mt-1">2h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-primary" data-feather="home"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Login from 192.186.1.8</div>
-												<div class="text-muted small mt-1">5h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-success" data-feather="user-plus"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">New connection</div>
-												<div class="text-muted small mt-1">Christina accepted your request.</div>
-												<div class="text-muted small mt-1">14h ago</div>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all notifications</a>
-								</div>
-							</div>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
-								<div class="position-relative">
-									<i class="align-middle" data-feather="message-square"></i>
-								</div>
-							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
-								<div class="dropdown-menu-header">
-									<div class="position-relative">
-										4 New Messages
-									</div>
-								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Vanessa Tucker</div>
-												<div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
-												<div class="text-muted small mt-1">15m ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="William Harris">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">William Harris</div>
-												<div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-												<div class="text-muted small mt-1">2h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-4.jpg" class="avatar img-fluid rounded-circle" alt="Christina Mason">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Christina Mason</div>
-												<div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
-												<div class="text-muted small mt-1">4h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Sharon Lessman">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Sharon Lessman</div>
-												<div class="text-muted small mt-1">Aenean tellus metus, bibendum sed, posuere ac, mattis non.</div>
-												<div class="text-muted small mt-1">5h ago</div>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all messages</a>
-								</div>
-							</div>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
-                <i class="align-middle" data-feather="settings"></i>
-              </a>
-
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                <img src="{{ asset('dashboard_css/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded me-1" alt="{{ auth::user()->name }}" /> <span class="text-dark">{{ Auth::user()->name}}</span>
-              </a>
-							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
-								<div class="dropdown-divider"></div>
-								<form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</nav>
-
-			<main class="content">
-				<div class="container-fluid p-0">
-
-					<div class="mb-3 d-flex justify-content-between align-items-center">
-						<h1 class="h3 d-inline align-middle">Experiance</h1>
-                        <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addExperianceModal">
-										<i data-feather="plus"></i> Add
-									</a>
-					</div>
-							<div class="card mb-3">
-								<div class="card-body">
-									<div class="d-flex justify-content-between align-items-center mb-2">
-                                        <h5 class="h6 card-title mb-0">Organization 1</h5>
-                                        <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addExperianceModal">
-                                            <i data-feather="edit"></i> Edit
-                                        </a>
+                                        {{-- Roles and Responsibilities --}}
+                                        <div class="experience-description">
+                                            <h6 class="mb-2">
+                                                <i data-feather="list" class="feather-sm me-1"></i>
+                                                Key Responsibilities
+                                            </h6>
+                                            <div class="responsibilities-preview">
+                                                <p class="text-muted mb-0" style="text-align: justify;">
+                                                    {{ Str::limit($experience->roles_and_responsibilities ?? '', 200) }}
+                                                </p>
+                                            </div>
+                                            @if(strlen($experience->roles_and_responsibilities ?? '') > 200)
+                                                <button class="btn btn-sm btn-link p-0 mt-1" type="button" 
+                                                        data-bs-toggle="collapse" data-bs-target="#responsibilities-{{ $experience->id }}">
+                                                    Read more
+                                                </button>
+                                                <div class="collapse mt-2" id="responsibilities-{{ $experience->id }}">
+                                                    <div class="text-muted">{{ $experience->roles_and_responsibilities }}</div>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-									<ul class="list-unstyled mb-0">
-										<li class="mb-1">From Date <a href="#">2011</a></li>
-										<li class="mb-1">To date <a href="#">2015</a></li>
-										<li class="mb-1">Position <a href="#">100%</a></li>
-										<li class="mb-1">Roles and Responsibility <a href="#">sdtrfghujhygtfdesefdgfhgjhb</a></li>
-									</ul>
-								</div>
-								<hr class="my-0" />
-								<div class="card-body">
-									<div class="d-flex justify-content-between align-items-center mb-2">
-                                        <h5 class="h6 card-title mb-0">Organization 2</h5>
-                                        <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addExperianceModal">
-                                            <i data-feather="edit"></i> Edit
-                                        </a>
-                                    </div>
-									<ul class="list-unstyled mb-0">
-										<li class="mb-1">From Date <a href="#">2011</a></li>
-										<li class="mb-1">To date <a href="#">2015</a></li>
-										<li class="mb-1">Position<a href="#">100%</a></li>
-										<li class="mb-1">Roles and Responsibility <a href="#">sdtrfghujhygtfdesefdgfhgjhb</a></li>
-									</ul>
-								</div>
-							</div>
-				</div>
-			</main>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @else
+            {{-- Empty State --}}
+            <div class="card">
+                <div class="card-body empty-state">
+                    <i data-feather="briefcase"></i>
+                    <h5>No Work Experience</h5>
+                    <p class="text-muted">Start building your professional profile by adding your first work experience.</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWorkExperienceModal">
+                        <i data-feather="plus" class="feather-sm me-1"></i>
+                        Add Your First Experience
+                    </button>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
 
-		<!-- Edit Profile Modal -->
-		<div class="modal fade" id="addExperianceModal" tabindex="-1" aria-labelledby="editProfileLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<form action="#" method="POST" enctype="multipart/form-data">
-						@csrf
-						@method('PUT')
-						<div class="modal-header">
-							<h5 class="modal-title" id="editProfileLabel">Add Education</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div class="row mb-3">
-								<div class="col-md-8">
-									<div class="mb-3">
-										<label for="organization" class="form-label">Organization *</label>
-										<input type="text" class="form-control" id="organization" name="organization" value="" required>
-									</div>
-									<div class="mb-3">
-										<label for="position" class="form-label">Position *</label>
-										<input type="text" class="form-control" id="position" name="position" value="" required>
-									</div>
-									<div class="mb-3">
-										<label for="from_date" class="form-label">From Date *</label>
-										<input type="text" class="form-control" id="from_date" name="from_date" value="" required>
-									</div>
-									<div class="mb-3">
-										<label for="to_date" class="form-label">To Date</label>
-										<input type="text" class="form-control" id="to_date" name="to_date" value="">
-									</div>
-									<div class="mb-3">
-										<label for="r&r" class="form-label">Roles adn Responsibility *</label>
-										<input type="text" class="form-control" id="r&r" name="r&r" value="" required>
-									</div>
-								</div>
-							</div>
+{{-- Include Modals --}}
+@include('Users.Partials.experience-add-modal')
+@include('Users.Partials.experience-edit-modals')
+@endsection
 
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-primary">Save Changes</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		</div>
-	</div>
-	
+@push('scripts')
+{{-- Success/Error Messages --}}
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
 
-	<script src="{{ asset('dashboard_css/js/app.js') }}"></script>
-	<script>
-		function previewImage(event) {
-			const reader = new FileReader();
-			reader.onload = function () {
-				document.getElementById('profilePreview').src = reader.result;
-			}
-			reader.readAsDataURL(event.target.files[0]);
-		}
-	</script>
+@if(session('error'))
+<script>
+    Swal.fire({
+        title: 'Error!',
+        text: "{{ session('error') }}",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
 
-</body>
+@if($errors->any())
+<script>
+    Swal.fire({
+        title: 'Validation Error!',
+        text: "{{ $errors->first() }}",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
 
-</html>
+{{-- Delete Confirmation --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle delete forms with SweetAlert
+    const deleteForms = document.querySelectorAll('.delete-form');
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this work experience!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endpush

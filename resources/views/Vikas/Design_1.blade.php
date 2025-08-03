@@ -4,7 +4,7 @@
 <head>
         <title>B Vikas Chandra - Personal CV/Resume </title>
         <!-- Required meta tags -->
-       <meta charset="utf-8">
+        <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content=" skilled PHP developer with expertise in crafting dynamic and efficient web applications. With a keen eye for detail and a passion for problem-solving, Vikas excels in leveraging PHP frameworks such as Laravel, Symfony, and CodeIgniter to develop robust and scalable solutions. His proficiency extends to database management systems like MySQL and MongoDB, enabling him to design data-driven applications seamlessly. Vikas is adept at implementing best practices in coding standards, ensuring maintainability and scalability of projects. With a strong understanding of frontend technologies like HTML, CSS, and JavaScript, Vikas collaborates effectively with cross-functional teams to deliver high-quality software solutions. His dedication to staying updated with the latest trends and technologies in PHP development ensures that his projects are always at the forefront of innovation." />
         <meta name="keywords" content="Vikas Chandra
@@ -24,7 +24,7 @@
         ,Coding standards
         ,Scalability
         ,Maintainability
-        ,Innovation
+        ,Innovation"
         ,Cross-functional collaboration. " />
         <meta name="developer" content="B Vikas Chandra">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -64,8 +64,8 @@
 
     </head>
     <body class="white-vertion black-bg">
-
-        <!-- Start Loader -->
+<main>
+<!-- Start Loader -->
         <div class="section-loader">
             <div class="loader">
                 <div></div>
@@ -209,7 +209,7 @@
            SERVICE
         ===================
         -->
-         <section class="mh-service">
+        <section class="mh-service">
             <div class="container">
                 <div class="row section-separator">
                     <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
@@ -899,6 +899,7 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+</main>
 </body>
 
 </html>

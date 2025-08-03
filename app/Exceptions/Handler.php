@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -42,7 +43,14 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-            return response()->json(['message' => 'Unauthenticated.'], 401);
+            // For API routes or AJAX requests, return JSON
+            if ($request->is('api/*') || $request->wantsJson() || $request->ajax()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+            
+            // For web routes, redirect to login with flash message
+            session()->flash('error', 'Please log in to access this page.');
+            return redirect()->route('login');
         }
 
         return parent::render($request, $exception);
