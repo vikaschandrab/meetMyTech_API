@@ -67,6 +67,77 @@ return [
             'days' => 14,
         ],
 
+        // Custom functionality-based log channels
+        'authentication' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/authentication.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'profile' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/profile.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'blog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/blog.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'dashboard' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/dashboard.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'education' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/education.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'experience' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/experience.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'site_settings' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/site_settings.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'api' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 90,
+        ],
+
+        'database' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/database.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

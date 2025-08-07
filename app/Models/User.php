@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'contactNum',
+        'profilePic',
         'js',
         'user_type',
     ];

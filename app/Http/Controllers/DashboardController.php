@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DashboardRequest;
 use App\Services\DashboardService;
+use App\Services\LoggingService;
 use App\Traits\DashboardTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,13 +28,15 @@ class DashboardController extends Controller
     public function index(DashboardRequest $request)
     {
         try {
+            LoggingService::logDashboard('dashboard_view', 'User viewed dashboard page');
+
             // Get dashboard statistics
             $dashboardStats = $this->dashboardService->getDashboardStats();
-            
+
             // Get additional data for charts
             $browserStats = $this->dashboardService->getBrowserStats();
             $worldMapData = $this->dashboardService->getWorldMapData();
-            
+
             // Format the data for the view
             $data = [
                 'stats' => $dashboardStats,
@@ -45,6 +48,9 @@ class DashboardController extends Controller
 
             return view('Users.Pages.dashboard', $data);
         } catch (Exception $e) {
+            LoggingService::logError($e, 'dashboard', [
+                'action' => 'dashboard_load_failed'
+            ]);
             return back()->with('error', 'Unable to load dashboard data. Please try again.');
         }
     }
@@ -56,7 +62,7 @@ class DashboardController extends Controller
     {
         try {
             $filters = $this->validateDashboardFilters($request->all());
-            
+
             $data = [
                 'stats' => $this->dashboardService->getDashboardStats(),
                 'browserStats' => $this->dashboardService->getBrowserStats(),

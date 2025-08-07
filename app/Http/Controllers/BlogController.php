@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Blog;
 use App\Services\BlogService;
+use App\Services\LoggingService;
 use App\Http\Requests\BlogRequest;
 use App\Http\Requests\BlogSearchRequest;
 use Exception;
@@ -30,6 +31,10 @@ class BlogController extends Controller
     public function index(BlogSearchRequest $request)
     {
         try {
+            LoggingService::logBlog('blog_index_view', 'User viewed blogs listing page', [
+                'filters' => $request->validated()
+            ]);
+
             $filters = $request->validated();
             $blogs = $this->blogService->getUserBlogs(Auth::id(), $filters);
             $stats = $this->blogService->getBlogStatistics(Auth::id());
@@ -38,7 +43,9 @@ class BlogController extends Controller
 
             return view('Users.Pages.blogs.index', compact('blogs', 'stats', 'filters', 'hasBlogs', 'totalBlogs'));
         } catch (Exception $e) {
-            Log::error('Error loading blogs index: ' . $e->getMessage());
+            LoggingService::logError($e, 'blog', [
+                'action' => 'blog_index_failed'
+            ]);
             return redirect()->back()->with('error', 'Failed to load blogs. Please try again.');
         }
     }
