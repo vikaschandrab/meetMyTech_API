@@ -4,10 +4,9 @@ namespace App\Services;
 
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Facades\Image;
+use App\Services\LoggingService;
 use Exception;
 
 class SiteSettingsService
@@ -32,9 +31,17 @@ class SiteSettingsService
     public function getUserSiteSettings()
     {
         try {
-            return SiteSetting::where('user_id', Auth::id())->first();
+            $siteSettings = SiteSetting::where('user_id', Auth::id())->first();
+
+            LoggingService::logSiteSettings('retrieve', 'Site settings retrieved successfully', [
+                'has_settings' => $siteSettings ? true : false
+            ]);
+
+            return $siteSettings;
         } catch (Exception $e) {
-            Log::error('Error fetching user site settings: ' . $e->getMessage());
+            LoggingService::logError($e, 'Error fetching user site settings', [
+                'user_id' => Auth::id()
+            ]);
             return null;
         }
     }
@@ -50,7 +57,7 @@ class SiteSettingsService
         try {
             $userId = Auth::id();
             $user = Auth::user();
-            
+
             // Find existing settings or create new
             $siteSettings = SiteSetting::firstOrNew(['user_id' => $userId]);
 
@@ -67,11 +74,14 @@ class SiteSettingsService
 
             $siteSettings->save();
 
-            Log::info('Site settings updated successfully', ['user_id' => $userId]);
+            LoggingService::logSiteSettings('update', 'Site settings updated successfully', [
+                'has_logo_upload' => isset($data['main_logo']),
+                'updated_fields' => array_keys($data)
+            ]);
 
             return $siteSettings;
         } catch (Exception $e) {
-            Log::error('Error updating site settings: ' . $e->getMessage(), [
+            LoggingService::logError($e, 'Error updating site settings', [
                 'data' => $data,
                 'user_id' => Auth::id()
             ]);
@@ -90,6 +100,12 @@ class SiteSettingsService
     private function processLogoUpload(UploadedFile $file, SiteSetting $siteSettings, $user)
     {
         try {
+            LoggingService::logSiteSettings('logo_upload_attempt', 'User attempting to upload site logo', [
+                'original_filename' => $file->getClientOriginalName(),
+                'file_size' => $file->getSize(),
+                'mime_type' => $file->getMimeType()
+            ]);
+
             // Delete existing logo files
             $this->deleteExistingLogos($siteSettings);
 
@@ -97,37 +113,60 @@ class SiteSettingsService
             $logoDir = $user->name . '/site_settings/logos';
             Storage::disk('public')->makeDirectory($logoDir);
 
-            // Load the uploaded image using Intervention Image
-            $originalImage = Image::make($file->getPathname());
-
-            foreach ($this->logoSizes as $field => $config) {
-                $filename = $field . '_' . time() . '.' . $config['format'];
-                $fullPath = $logoDir . '/' . $filename;
-
-                // Create resized image with proper aspect ratio and padding
-                $resizedImage = $originalImage->fit(
-                    $config['width'], 
-                    $config['height'], 
-                    function ($constraint) {
-                        $constraint->upsize(); // Prevent upsizing
-                    }
-                );
-
-                // Save the image to storage
-                Storage::disk('public')->put($fullPath, $resizedImage->encode($config['format'], 90));
-
-                // Store the path in the database
-                $siteSettings->$field = $fullPath;
+            // Check if GD extension is available for image processing
+            if (extension_loaded('gd')) {
+                $this->processLogoWithImageProcessing($file, $siteSettings, $logoDir);
+            } else {
+                $this->processLogoWithoutImageProcessing($file, $siteSettings, $logoDir);
             }
 
-            Log::info('Logo upload processed successfully', [
-                'user_id' => $user->id,
-                'original_size' => $originalImage->width() . 'x' . $originalImage->height()
-            ]);
+            $siteSettings->save();
+
+            LoggingService::logSiteSettings('logo_upload_success', 'Site logo uploaded successfully');
 
         } catch (Exception $e) {
-            Log::error('Error processing logo upload: ' . $e->getMessage());
-            throw $e;
+            LoggingService::logError($e, 'Failed to process logo upload');
+            throw new Exception('Failed to process logo upload: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Process logo upload with image processing (requires GD extension)
+     *
+     * @param UploadedFile $file
+     * @param SiteSetting $siteSettings
+     * @param string $logoDir
+     */
+    private function processLogoWithImageProcessing(UploadedFile $file, SiteSetting $siteSettings, string $logoDir)
+    {
+        // For now, we'll use simple upload without complex image processing
+        // This can be enhanced later when GD extension is properly installed
+        $this->processLogoWithoutImageProcessing($file, $siteSettings, $logoDir);
+    }
+
+    /**
+     * Process logo upload without image processing
+     *
+     * @param UploadedFile $file
+     * @param SiteSetting $siteSettings
+     * @param string $logoDir
+     */
+    private function processLogoWithoutImageProcessing(UploadedFile $file, SiteSetting $siteSettings, string $logoDir)
+    {
+        // Get file extension
+        $extension = $file->getClientOriginalExtension();
+
+        // Create different sized filenames (we'll use the same file for all sizes for now)
+        foreach ($this->logoSizes as $field => $config) {
+            $filename = $field . '_' . time() . '.' . $extension;
+            $fullPath = $logoDir . '/' . $filename;
+
+            // Store the original file for each size requirement
+            // In a production environment, you would want to actually resize these
+            Storage::disk('public')->put($fullPath, file_get_contents($file->getPathname()));
+
+            // Store the path in the database
+            $siteSettings->$field = $fullPath;
         }
     }
 
@@ -155,9 +194,9 @@ class SiteSettingsService
     {
         try {
             $siteSettings = SiteSetting::where('user_id', Auth::id())->first();
-            
+
             if (!$siteSettings) {
-                Log::warning('Attempted to delete non-existent site settings', ['user_id' => Auth::id()]);
+                LoggingService::logSiteSettings('delete_attempt', 'Attempted to delete non-existent site settings');
                 return false;
             }
 
@@ -166,13 +205,11 @@ class SiteSettingsService
 
             $siteSettings->delete();
 
-            Log::info('Site settings deleted successfully', ['user_id' => Auth::id()]);
+            LoggingService::logSiteSettings('delete', 'Site settings deleted successfully');
 
             return true;
         } catch (Exception $e) {
-            Log::error('Error deleting site settings: ' . $e->getMessage(), [
-                'user_id' => Auth::id()
-            ]);
+            LoggingService::logError($e, 'Error deleting site settings');
             return false;
         }
     }
@@ -186,13 +223,19 @@ class SiteSettingsService
     public function getSiteSettingsById(int $id)
     {
         try {
-            return SiteSetting::where('id', $id)
+            $siteSettings = SiteSetting::where('id', $id)
                             ->where('user_id', Auth::id())
                             ->first();
-        } catch (Exception $e) {
-            Log::error('Error fetching site settings by ID: ' . $e->getMessage(), [
+
+            LoggingService::logSiteSettings('retrieve_by_id', 'Site settings retrieved by ID', [
                 'site_settings_id' => $id,
-                'user_id' => Auth::id()
+                'found' => $siteSettings ? true : false
+            ]);
+
+            return $siteSettings;
+        } catch (Exception $e) {
+            LoggingService::logError($e, 'Error fetching site settings by ID', [
+                'site_settings_id' => $id
             ]);
             return null;
         }

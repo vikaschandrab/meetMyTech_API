@@ -15,6 +15,8 @@ class UserDetail extends Model
         'facebook_profile',
         'instagram_profile',
         'linkedin_profile',
+        'github_profile',
+        'twitter_profile',
         'whatsapp_number',
         'about',
         'technologies',

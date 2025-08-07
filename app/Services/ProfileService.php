@@ -41,9 +41,9 @@ class ProfileService
             /** @var User $user */
             $user = Auth::user();
 
-            // Handle profile image upload
-            if (isset($data['profile_pic'])) {
-                $profilePicPath = $this->handleProfilePictureUpload($data['profile_pic'], $user);
+            // Handle profile image upload (simplified version without GD)
+            if (isset($data['profile_pic']) && $data['profile_pic']) {
+                $profilePicPath = $this->handleSimpleProfilePictureUpload($data['profile_pic'], $user);
                 $user->profilePic = $profilePicPath;
                 $user->save();
             }
@@ -66,6 +66,29 @@ class ProfileService
     }
 
     /**
+     * Simple profile picture upload without image processing
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @param User $user
+     * @return string
+     */
+    private function handleSimpleProfilePictureUpload($file, User $user): string
+    {
+        // Delete old profile picture if exists
+        if ($user->profilePic && Storage::disk('public')->exists($user->profilePic)) {
+            Storage::disk('public')->delete($user->profilePic);
+        }
+
+        // Generate unique filename
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+        // Store file directly without image processing
+        $path = $file->storeAs('profile_pics', $filename, 'public');
+
+        return $path;
+    }
+
+    /**
      * Handle profile picture upload
      *
      * @param \Illuminate\Http\UploadedFile $file
@@ -83,15 +106,26 @@ class ProfileService
         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
         $path = $user->name . '/profile_pics/' . $filename;
 
-        // Resize and optimize image
-        $image = Image::make($file->getRealPath());
-        $image->resize(300, 300, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
+        // Check if GD extension is available for image processing
+        if (extension_loaded('gd')) {
+            try {
+                // Resize and optimize image using Intervention Image
+                $image = Image::make($file->getRealPath());
+                $image->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
 
-        // Save the image
-        Storage::disk('public')->put($path, (string) $image->encode());
+                // Save the processed image
+                Storage::disk('public')->put($path, (string) $image->encode());
+            } catch (Exception $e) {
+                // Fallback to direct upload if image processing fails
+                $path = $file->storeAs('profile_pics', $filename, 'public');
+            }
+        } else {
+            // Direct upload without image processing if GD is not available
+            $path = $file->storeAs('profile_pics', $filename, 'public');
+        }
 
         return $path;
     }

@@ -1,103 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('Users.Layouts.auth')
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-	<meta name="author" content="MeetMyTech">
-	<meta name="keywords" content="meetmytect, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+@section('title', __('Sign In | MeetMyTech'))
 
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="{{asset('dashboard_css/img/icons/icon-48x48.png')}}" />
+@section('description', 'Sign in to your MeetMyTech account to access your dashboard and manage your professional profile.')
 
-	{{-- <link rel="canonical" href="https://demo-basic.adminkit.io/pages-sign-in.html" /> --}}
+@section('content')
+<main class="d-flex w-100 min-vh-100">
+    <div class="container d-flex flex-column">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
 
-	<title>Sign In | MeetMyTech</title>
+                {{-- Header Section --}}
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <img src="{{ asset('dashboard_css/img/icons/icon-48x48.png') }}"
+                             alt="MeetMyTech Logo"
+                             class="img-fluid"
+                             style="max-height: 64px;">
+                    </div>
+                    <h1 class="h2 fw-bold text-dark">{{ __('auth.welcome_back') }}</h1>
+                    <p class="lead text-muted">
+                        {{ __('auth.sign_in_message') }}
+                    </p>
+                </div>
 
-	<link href="{{asset('dashboard_css/css/app.css')}}" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
+                {{-- Login Card --}}
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
 
-<body>
-	<main class="d-flex w-100">
-		<div class="container d-flex flex-column">
-			<div class="row vh-100">
-				<div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
-					<div class="d-table-cell align-middle">
+                        {{-- Flash Messages --}}
+                        @include('Users.Components.flash-messages')
 
-						<div class="text-center mt-4">
-							<h1 class="h2">Welcome back!</h1>
-							<p class="lead">
-								Sign in to your account to continue
-							</p>
-						</div>
+                        {{-- Login Form --}}
+                        @include('Users.Components.login-form')
 
-						<div class="card">
-							<div class="card-body">
-								<div class="m-sm-3">
-									
-									<!-- Display Flash Messages -->
-									@if(session('message'))
-										<div class="alert alert-{{ session('message_type', 'info') }} alert-dismissible fade show" role="alert">
-											{{ session('message') }}
-											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-										</div>
-									@endif
+                    </div>
+                </div>
 
-									<!-- Display Validation Errors -->
-									@if($errors->any())
-										<div class="alert alert-danger alert-dismissible fade show" role="alert">
-											<ul class="mb-0">
-												@foreach($errors->all() as $error)
-													<li>{{ $error }}</li>
-												@endforeach
-											</ul>
-											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-										</div>
-									@endif
+                {{-- Footer Links --}}
+                <div class="text-center mt-4">
+                    <p class="text-muted small">
+                        {{ __('auth.terms_agreement') }}
+                        <a href="#" class="text-decoration-none">{{ __('auth.terms_of_service') }}</a>
+                        {{ __('auth.and') }}
+                        <a href="#" class="text-decoration-none">{{ __('auth.privacy_policy') }}</a>
+                    </p>
+                </div>
 
-									<form  action="{{ route('login.submit') }}" method="POST" >
-                                        @csrf
-										<div class="mb-3">
-											<label class="form-label">Email</label>
-											<input class="form-control form-control-lg @error('email') is-invalid @enderror" 
-												type="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required />
-											@error('email')
-												<div class="invalid-feedback">{{ $message }}</div>
-											@enderror
-										</div>
-										<div class="mb-3">
-											<label class="form-label">Password</label>
-											<input class="form-control form-control-lg @error('password') is-invalid @enderror" 
-												type="password" name="password" placeholder="Enter your password" required />
-											@error('password')
-												<div class="invalid-feedback">{{ $message }}</div>
-											@enderror
-										</div>
-                                        <div class="mb-3">
-                                            <a href="#" class="form-check-label text-small text-decoration-none">
-                                            Forgot Password?
-                                            </a>
-										</div>
-										<div class="d-grid gap-2 mt-3">
-                                            <button type="submit" class="btn btn-lg btn-primary">Sign in</button>
-                                        </div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
+            </div>
+        </div>
+    </div>
+</main>
+@endsection
 
-	<!-- Bootstrap JS for alert functionality -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="{{asset('dashboard_css/js/app.js')}}"></script>
+@push('styles')
+<style>
+    .min-vh-100 {
+        min-height: 100vh;
+    }
 
-</body>
+    .card {
+        border-radius: 0.75rem;
+    }
 
-</html>
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .form-control-lg {
+        border-radius: 0.5rem;
+        border: 1px solid #e0e6ed;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-lg:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    // Form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    // Auto-hide alerts after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+</script>
+@endpush
