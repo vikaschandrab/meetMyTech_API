@@ -13,10 +13,9 @@
                 {{-- Header Section --}}
                 <div class="text-center mb-4">
                     <div class="mb-3">
-                        <img src="{{ asset('dashboard_css/img/icons/icon-48x48.png') }}"
-                             alt="MeetMyTech Logo"
-                             class="img-fluid"
-                             style="max-height: 64px;">
+                        <h2 class="text-primary fw-bold" style="font-size: 2rem;">
+                            <i class="fas fa-code me-2"></i>MeetMyTech
+                        </h2>
                     </div>
                     <h1 class="h2 fw-bold text-dark">{{ __('Forgot Password?') }}</h1>
                     <p class="lead text-muted">
@@ -48,16 +47,16 @@
                         {{-- Forgot Password Form --}}
                         <form method="POST" action="{{ route('forgot-password.submit') }}" class="needs-validation" novalidate>
                             @csrf
-                            
+
                             <div class="mb-4">
                                 <label for="email" class="form-label fw-semibold">
                                     <i class="fas fa-envelope me-2 text-primary"></i>{{ __('Email Address') }}
                                 </label>
-                                <input type="email" 
-                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ old('email') }}" 
+                                <input type="email"
+                                       class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                       id="email"
+                                       name="email"
+                                       value="{{ old('email') }}"
                                        placeholder="Enter your registered email address"
                                        required>
                                 @error('email')
@@ -91,7 +90,7 @@
                     <div class="alert alert-info border-0" style="background: linear-gradient(135deg, #e3f2fd, #f0f9ff);">
                         <i class="fas fa-shield-alt text-primary me-2"></i>
                         <small class="text-muted">
-                            <strong>Security Notice:</strong> For your security, we'll send a new auto-generated password to your email. 
+                            <strong>Security Notice:</strong> For your security, we'll send a new auto-generated password to your email.
                             Please change it after logging in.
                         </small>
                     </div>
