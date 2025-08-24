@@ -48,22 +48,6 @@
         @enderror
     </div>
 
-    {{-- Remember Me Checkbox --}}
-    <div class="mb-3">
-        <div class="form-check">
-            <input
-                class="form-check-input"
-                type="checkbox"
-                name="remember"
-                id="remember"
-                {{ old('remember') ? 'checked' : '' }}
-            >
-            <label class="form-check-label" for="remember">
-                {{ __('auth.remember_me') }}
-            </label>
-        </div>
-    </div>
-
     {{-- Forgot Password Link --}}
     <div class="mb-3">
         <a href="{{ route('forgot-password') }}" class="text-decoration-none text-muted">

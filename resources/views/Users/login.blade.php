@@ -13,10 +13,9 @@
                 {{-- Header Section --}}
                 <div class="text-center mb-4">
                     <div class="mb-3">
-                        <img src="{{ asset('dashboard_css/img/icons/icon-48x48.png') }}"
-                             alt="MeetMyTech Logo"
-                             class="img-fluid"
-                             style="max-height: 64px;">
+                        <h2 class="text-primary fw-bold" style="font-size: 2rem;">
+                            <i class="fas fa-code me-2"></i>MeetMyTech
+                        </h2>
                     </div>
                     <h1 class="h2 fw-bold text-dark">{{ __('auth.welcome_back') }}</h1>
                     <p class="lead text-muted">
@@ -35,16 +34,6 @@
                         @include('Users.Components.login-form')
 
                     </div>
-                </div>
-
-                {{-- Footer Links --}}
-                <div class="text-center mt-4">
-                    <p class="text-muted small">
-                        {{ __('auth.terms_agreement') }}
-                        <a href="#" class="text-decoration-none">{{ __('auth.terms_of_service') }}</a>
-                        {{ __('auth.and') }}
-                        <a href="#" class="text-decoration-none">{{ __('auth.privacy_policy') }}</a>
-                    </p>
                 </div>
 
             </div>
