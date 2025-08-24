@@ -31,21 +31,43 @@ class BlogController extends Controller
     public function index(BlogSearchRequest $request)
     {
         try {
+            $userId = Auth::id();
+            
+            if (!$userId) {
+                return redirect()->route('login')->with('error', 'Please log in to access your blogs.');
+            }
+
             LoggingService::logBlog('blog_index_view', 'User viewed blogs listing page', [
+                'user_id' => $userId,
                 'filters' => $request->validated()
             ]);
 
             $filters = $request->validated();
-            $blogs = $this->blogService->getUserBlogs(Auth::id(), $filters);
-            $stats = $this->blogService->getBlogStatistics(Auth::id());
+            $blogs = $this->blogService->getUserBlogs($userId, $filters);
+            $stats = $this->blogService->getBlogStatistics($userId);
             $hasBlogs = $blogs->total() > 0;
             $totalBlogs = $stats['total'] ?? 0;
 
+            // Enhanced logging for debugging
+            Log::info('Blog Index Page Loaded', [
+                'user_id' => $userId,
+                'stats' => $stats,
+                'blogs_count' => $blogs->total(),
+                'has_blogs' => $hasBlogs,
+                'filters' => $filters
+            ]);
+
             return view('Users.Pages.blogs.index', compact('blogs', 'stats', 'filters', 'hasBlogs', 'totalBlogs'));
         } catch (Exception $e) {
+            Log::error('Blog Index Error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             LoggingService::logError($e, 'blog', [
                 'action' => 'blog_index_failed'
             ]);
+            
             return redirect()->back()->with('error', 'Failed to load blogs. Please try again.');
         }
     }
@@ -264,6 +286,31 @@ class BlogController extends Controller
         } catch (Exception $e) {
             Log::error('Error duplicating blog: ' . $e->getMessage(), ['slug' => $slug]);
             return redirect()->back()->with('error', 'Failed to duplicate blog.');
+        }
+    }
+
+    /**
+     * Display a listing of published blogs for public viewing
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function publicIndex(Request $request)
+    {
+        try {
+            $filters = [
+                'search' => $request->get('search'),
+                'per_page' => $request->get('per_page', 12),
+                'sort_by' => $request->get('sort_by', 'published_at'),
+                'sort_order' => $request->get('sort_order', 'desc')
+            ];
+
+            $blogs = $this->blogService->getPublishedBlogs($filters);
+
+            return view('public.blogs.index', compact('blogs', 'filters'));
+        } catch (Exception $e) {
+            Log::error('Error loading public blogs: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to load blogs. Please try again.');
         }
     }
 }

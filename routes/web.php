@@ -10,6 +10,7 @@ use App\Http\Controllers\ExperianceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ProfilePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,10 +29,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::get('/', [\App\Http\Controllers\HealthCheckController::class, 'index']);
-Route::domain('vikas.meetmytech.com')->group(function () {
-    Route::get('/vikas', [\App\Http\Controllers\VikasProfileController::class, 'homePage']);
-});
-Route::get('/vikas-profile', [\App\Http\Controllers\VikasProfileController::class, 'homePage']);
 
 Route::middleware(['auth', 'ensure.user'])->group(function () {
 
@@ -76,7 +73,6 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
         Route::get('/create', [BlogController::class, 'create'])->name('create');
         Route::post('/', [BlogController::class, 'store'])->name('store');
-        Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
         Route::get('/{slug}/edit', [BlogController::class, 'edit'])->name('edit');
         Route::put('/{slug}', [BlogController::class, 'update'])->name('update');
         Route::delete('/{slug}', [BlogController::class, 'destroy'])->name('destroy');
@@ -85,3 +81,10 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
     });
 
 });
+
+Route::prefix('blogs')->name('blogs.')->group(function () {
+    Route::get('/{slug}', [ProfilePageController::class, 'publicShow'])->name('show');
+});
+
+// Route for user profiles based on username
+Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');

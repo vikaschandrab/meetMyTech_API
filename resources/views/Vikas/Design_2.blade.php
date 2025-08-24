@@ -106,6 +106,12 @@
                                    <a class="nav-link" href="#mh-experience">Experiences</a>
                                 </li>
                                 <li class="nav-item">
+                                   <a class="nav-link" href="{{ route('public.blogs.index') }}">Blog</a>
+                                </li>
+                                <li class="nav-item">
+                                   <a class="nav-link" href="#mh-contact">Contact</a>
+                                </li>
+                                <li class="nav-item">
                                    <a class="nav-link" href="#mh-contact">Contact</a>
                                 </li>
                             </ul>

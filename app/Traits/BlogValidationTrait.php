@@ -13,16 +13,11 @@ trait BlogValidationTrait
      */
     public function blogRules($operation = 'create', $blogId = null)
     {
-        $slugRule = $operation === 'update' 
-            ? 'nullable|string|max:255|unique:blogs,slug,' . $blogId
-            : 'nullable|string|max:255|unique:blogs,slug';
-
-        return [
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'content' => 'required|string',
-            'slug' => $slugRule,
-            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120', // 5MB max
+            'featured_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:51200', // 50MB max
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:1000',
@@ -32,6 +27,13 @@ trait BlogValidationTrait
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:50',
         ];
+
+        // Only add slug validation for create operations
+        if ($operation === 'create') {
+            $rules['slug'] = 'nullable|string|max:255|unique:blogs,slug';
+        }
+
+        return $rules;
     }
 
     /**
@@ -50,7 +52,7 @@ trait BlogValidationTrait
             'slug.max' => 'Slug must not exceed 255 characters.',
             'featured_image.image' => 'Featured image must be a valid image file.',
             'featured_image.mimes' => 'Featured image must be a JPEG, JPG, PNG, GIF, or WebP file.',
-            'featured_image.max' => 'Featured image must not exceed 5MB.',
+            'featured_image.max' => 'Featured image must not exceed 50MB.',
             'meta_title.max' => 'Meta title must not exceed 255 characters.',
             'meta_description.max' => 'Meta description must not exceed 500 characters.',
             'meta_keywords.max' => 'Meta keywords must not exceed 1000 characters.',

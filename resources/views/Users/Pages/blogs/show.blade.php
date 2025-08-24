@@ -46,19 +46,42 @@
         color: #495057;
     }
     
-    .blog-content h1,
-    .blog-content h2,
-    .blog-content h3,
-    .blog-content h4,
-    .blog-content h5,
-    .blog-content h6 {
+    .blog-content h1, .blog-content h2, .blog-content h3,
+    .blog-content h4, .blog-content h5, .blog-content h6 {
         color: #2c3e50;
         margin-top: 2rem;
         margin-bottom: 1rem;
+        font-weight: 600;
+        line-height: 1.25;
     }
+
+    .blog-content h1 { font-size: 2.5rem; }
+    .blog-content h2 { font-size: 2rem; }
+    .blog-content h3 { font-size: 1.75rem; }
+    .blog-content h4 { font-size: 1.5rem; }
+    .blog-content h5 { font-size: 1.25rem; }
+    .blog-content h6 { font-size: 1.1rem; }
     
     .blog-content p {
         margin-bottom: 1.5rem;
+        text-align: justify;
+    }
+
+    .blog-content ul, .blog-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .blog-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-content ul li {
+        list-style-type: disc;
+    }
+
+    .blog-content ol li {
+        list-style-type: decimal;
     }
     
     .blog-content blockquote {
@@ -77,6 +100,7 @@
         border-radius: 0.25rem;
         font-size: 0.9em;
         color: #e83e8c;
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     
     .blog-content pre {
@@ -92,6 +116,50 @@
         background: none;
         color: inherit;
         padding: 0;
+        border-radius: 0;
+    }
+
+    .blog-content table {
+        width: 100%;
+        margin-bottom: 1.5rem;
+        border-collapse: collapse;
+        border: 1px solid #dee2e6;
+    }
+
+    .blog-content th, .blog-content td {
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+        text-align: left;
+    }
+
+    .blog-content th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .blog-content strong {
+        font-weight: 600;
+    }
+
+    .blog-content em {
+        font-style: italic;
+    }
+
+    .blog-content a {
+        color: #007bff;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+
+    .blog-content a:hover {
+        border-bottom-color: #007bff;
+    }
+
+    .blog-content hr {
+        margin: 3rem 0;
+        border: 0;
+        border-top: 2px solid #dee2e6;
     }
     
     .blog-content img {
@@ -434,7 +502,7 @@
 
                 {{-- Blog Content --}}
                 <div class="blog-content">
-                    {!! nl2br(e($blog->content)) !!}
+                    {!! $blog->content !!}
                 </div>
 
                 {{-- Tags --}}
