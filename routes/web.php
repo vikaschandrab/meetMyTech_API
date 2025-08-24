@@ -11,6 +11,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfilePageController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +25,20 @@ use App\Http\Controllers\ProfilePageController;
 |
 */
 
+// Homepage Routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-blogs');
+
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Forgot Password Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password.submit');
 
-Route::get('/', [\App\Http\Controllers\HealthCheckController::class, 'index']);
+
+Route::get('/health', [\App\Http\Controllers\HealthCheckController::class, 'index']);
 
 Route::middleware(['auth', 'ensure.user'])->group(function () {
 
@@ -86,5 +96,9 @@ Route::prefix('blogs')->name('blogs.')->group(function () {
     Route::get('/{slug}', [ProfilePageController::class, 'publicShow'])->name('show');
 });
 
-// Route for user profiles based on username
+// Contact Routes (must be before catch-all route)
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+// Route for user profiles based on username (catch-all - must be last)
 Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');

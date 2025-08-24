@@ -66,15 +66,9 @@
 
     {{-- Forgot Password Link --}}
     <div class="mb-3">
-        @if(Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="text-decoration-none text-muted">
-                {{ __('auth.forgot_password') }}
-            </a>
-        @else
-            <a href="#" class="text-decoration-none text-muted" onclick="alert('Password reset functionality coming soon!')">
-                {{ __('auth.forgot_password') }}
-            </a>
-        @endif
+        <a href="{{ route('forgot-password') }}" class="text-decoration-none text-muted">
+            <i class="fas fa-key me-1"></i>{{ __('auth.forgot_password') }}
+        </a>
     </div>
 
     {{-- Submit Button --}}
