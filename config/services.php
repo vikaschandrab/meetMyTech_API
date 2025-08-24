@@ -30,4 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'tawk' => [
+        'enabled' => env('TAWK_ENABLED', true),
+        'widget_id' => env('TAWK_WIDGET_ID', '63aecf8047425128790ad5e8'),
+        'property_id' => env('TAWK_PROPERTY_ID', '1glhdl4dc'),
+    ],
+
+    'google_maps' => [
+        'enabled' => env('GOOGLE_MAPS_ENABLED', false),
+        'api_key' => env('GOOGLE_MAPS_API_KEY', 'AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc'),
+    ],
+
 ];

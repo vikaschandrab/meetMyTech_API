@@ -1,69 +1,72 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-        <title>B Vikas Chandra - Personal CV/Resume </title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content=" skilled PHP developer with expertise in crafting dynamic and efficient web applications. With a keen eye for detail and a passion for problem-solving, Vikas excels in leveraging PHP frameworks such as Laravel, Symfony, and CodeIgniter to develop robust and scalable solutions. His proficiency extends to database management systems like MySQL and MongoDB, enabling him to design data-driven applications seamlessly. Vikas is adept at implementing best practices in coding standards, ensuring maintainability and scalability of projects. With a strong understanding of frontend technologies like HTML, CSS, and JavaScript, Vikas collaborates effectively with cross-functional teams to deliver high-quality software solutions. His dedication to staying updated with the latest trends and technologies in PHP development ensures that his projects are always at the forefront of innovation." />
-        <meta name="keywords" content="Vikas Chandra
-        ,PHP developer
-        ,Web development
-        ,PHP frameworks
-        ,Laravel
-        ,Symfony
-        ,CodeIgniter
-        ,MySQL
-        ,Database management
-        ,Backend development
-        ,Frontend technologies
-        ,HTML
-        ,CSS
-        ,JavaScript
-        ,Coding standards
-        ,Scalability
-        ,Maintainability
-        ,Innovation"
-        ,Cross-functional collaboration. " />
-        <meta name="developer" content="B Vikas Chandra">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    {{-- SEO Meta Tags --}}
+    <title>{{ config('app.name', 'B Vikas Chandra') }} - Personal CV/Resume</title>
+    <meta name="description" content="Skilled PHP developer with expertise in crafting dynamic and efficient web applications. With a keen eye for detail and a passion for problem-solving, Vikas excels in leveraging PHP frameworks such as Laravel, Symfony, and CodeIgniter to develop robust and scalable solutions.">
+    <meta name="keywords" content="Vikas Chandra, PHP developer, Web development, PHP frameworks, Laravel, Symfony, CodeIgniter, MySQL, Database management, Backend development, Frontend technologies, HTML, CSS, JavaScript, Coding standards, Scalability, Maintainability, Innovation, Cross-functional collaboration">
+    <meta name="author" content="B Vikas Chandra">
+    <meta name="robots" content="index, follow">
+    
+    {{-- Open Graph Meta Tags --}}
+    <meta property="og:title" content="B Vikas Chandra - Personal CV/Resume">
+    <meta property="og:description" content="Skilled PHP developer with 7+ years of experience in web development">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('vikas_css/images/my_image.png') }}">
+    
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="B Vikas Chandra - Personal CV/Resume">
+    <meta name="twitter:description" content="Skilled PHP developer with 7+ years of experience in web development">
+    <meta name="twitter:image" content="{{ asset('vikas_css/images/my_image.png') }}">
 
-        <!-- FAV AND ICONS   -->
-        <link rel="shortcut icon" href="{{ asset('vikas_css/images/favicon.ico') }}">
-        <link rel="shortcut icon" href="{{asset('vikas_css/images/my-icon.png')}}">
-        <link rel="shortcut icon" sizes="72x72" href="{{asset('vikas_css/images/my-icon-72x72.png')}}">
-        <link rel="shortcut icon" sizes="114x114" href="{{asset('vikas_css/images/my-icon-114x114.png')}}">
+    
+    {{-- Favicons --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('vikas_css/images/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vikas_css/images/my-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="72x72" href="{{ asset('vikas_css/images/my-icon-72x72.png') }}">
+    <link rel="icon" type="image/png" sizes="114x114" href="{{ asset('vikas_css/images/my-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('vikas_css/images/my-icon-114x114.png') }}">
 
-        <!-- Google Font-->
-        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css')}}">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/bootstrap.min.css')}}">
-        <!-- Animate CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/animate.css')}}">
-        <!-- Owl Carousel CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/owl.css')}}">
-        <!-- Fancybox-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/jquery.fancybox.min.css')}}">
-
-        <!-- Custom CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/css/styles.css')}}">
-        <link rel="stylesheet" href="{{asset('vikas_css/css/responsive.css')}}">
-
-        <!-- Colors -->
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/blue.css')}}" title="blue">
-        <link rel="stylesheet" href="{{asset('vikas_css/css/colors/defauld.css')}}" title="defauld">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/green.css')}}" title="green">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/blue-munsell.css')}}" title="blue-munsell">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/orange.css')}}" title="orange">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/purple.css')}}" title="purple">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/slate.css')}}" title="slate">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/yellow.css')}}" title="yellow">
-
-    </head>
-    <body class="white-vertion black-bg">
+    {{-- Preconnect for performance --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    {{-- External Stylesheets --}}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    
+    {{-- Stylesheets --}}
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/owl.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/jquery.fancybox.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/css/styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/css/responsive.css') }}">
+    @endpush
+    
+    {{-- Color Themes --}}
+    @stack('color-themes')
+    <link rel="stylesheet" href="{{ asset('vikas_css/css/colors/defauld.css') }}" title="default">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/blue.css') }}" title="blue">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/green.css') }}" title="green">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/blue-munsell.css') }}" title="blue-munsell">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/orange.css') }}" title="orange">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/purple.css') }}" title="purple">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/slate.css') }}" title="slate">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/yellow.css') }}" title="yellow">
+    
+    @stack('styles')
+</head>
+    <body class="white-version black-bg" data-spy="scroll" data-target="#navbar" data-offset="50">
 <main>
 <!-- Start Loader -->
         <div class="section-loader">
@@ -877,7 +880,7 @@
     <!-- Fancybox js-->
     <script src="{{asset('vikas_css/plugins/js/jquery.fancybox.min.js')}}"></script>
     <!-- Map api -->
-    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;key=AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;key=AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc" async defer></script>
     <!-- isotope js-->
     <script src="{{asset('vikas_css/plugins/js/isotope.pkgd.js')}}"></script>
     <script src="{{asset('vikas_css/plugins/js/packery-mode.pkgd.js')}}"></script>
@@ -886,19 +889,21 @@
     <script src="{{asset('vikas_css/js/custom-scripts.js')}}"></script>
 
 
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/63aecf8047425128790ad5e8/1glhdl4dc';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    {{-- Tawk.to Chat Widget --}}
+    @if(config('services.tawk.enabled', true))
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            (function(){
+                var s1 = document.createElement("script"), 
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/{{ config('services.tawk.widget_id', '63aecf8047425128790ad5e8') }}/{{ config('services.tawk.property_id', '1glhdl4dc') }}';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+    @endif
 </main>
 </body>
 

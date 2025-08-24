@@ -1,0 +1,233 @@
+/* Blog Section Styles */
+.mh-blog {
+    padding: 120px 0 90px;
+    background: #1e1e1e;
+}
+
+.mh-blog-item {
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+.mh-blog-item:hover {
+    transform: translateY(-5px);
+}
+
+.mh-blog-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.mh-blog-img img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.mh-blog-item:hover .mh-blog-img img {
+    transform: scale(1.05);
+}
+
+.mh-blog-info {
+    padding: 25px;
+}
+
+.mh-blog-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.blog-date {
+    color: #999;
+    font-size: 14px;
+}
+
+.blog-category {
+    background: #f9bf3b;
+    color: #1e1e1e;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.mh-blog-info h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.mh-blog-info h3 a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.mh-blog-info h3 a:hover {
+    color: #f9bf3b;
+}
+
+.mh-blog-info p {
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.mh-blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn.btn-outline {
+    background: transparent;
+    border: 1px solid #f9bf3b;
+    color: #f9bf3b;
+    padding: 8px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn.btn-outline:hover {
+    background: #f9bf3b;
+    color: #1e1e1e;
+}
+
+/* Owl Carousel Custom Styles */
+.mh-blog-slider.owl-carousel .owl-nav {
+    display: none;
+}
+
+.mh-blog-slider.owl-carousel .owl-dots {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.mh-blog-slider.owl-carousel .owl-dots .owl-dot {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.mh-blog-slider.owl-carousel .owl-dots .owl-dot span {
+    width: 10px;
+    height: 10px;
+    background: #666;
+    border-radius: 50%;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.mh-blog-slider.owl-carousel .owl-dots .owl-dot.active span,
+.mh-blog-slider.owl-carousel .owl-dots .owl-dot:hover span {
+    background: #f9bf3b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mh-blog-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .mh-blog-info h3 {
+        font-size: 18px;
+    }
+}
+
+/* No Blogs Section */
+.mh-no-blogs {
+    padding: 60px 0;
+}
+
+.no-blogs-content {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(249, 191, 59, 0.2);
+}
+
+.no-blogs-icon {
+    margin-bottom: 25px;
+}
+
+.no-blogs-icon i {
+    font-size: 48px;
+    color: #f9bf3b;
+    opacity: 0.8;
+}
+
+.no-blogs-content h4 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.no-blogs-content p {
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+.coming-soon-badge {
+    display: inline-block;
+}
+
+.badge-text {
+    background: linear-gradient(135deg, #f9bf3b, #e6a82d);
+    color: #1e1e1e;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 10px rgba(249, 191, 59, 0.3);
+}
+
+/* Blog meta enhancements */
+.blog-reading-time {
+    color: #f9bf3b;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.blog-views {
+    color: #999;
+    font-size: 12px;
+}
+
+.blog-views i {
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .no-blogs-content {
+        margin: 0 20px;
+        padding: 30px 20px;
+    }
+    
+    .no-blogs-icon i {
+        font-size: 36px;
+    }
+    
+    .no-blogs-content h4 {
+        font-size: 20px;
+    }
+    
+    .no-blogs-content p {
+        font-size: 14px;
+    }
+}

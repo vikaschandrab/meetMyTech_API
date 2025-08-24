@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Exception;
 
 class BlogService
@@ -102,9 +103,21 @@ class BlogService
             $userId = Auth::id();
             $user = Auth::user();
 
+            Log::info('Creating blog', [
+                'user_id' => $userId,
+                'title' => $data['title'] ?? 'No title',
+                'has_featured_image' => isset($data['featured_image'])
+            ]);
+
             // Handle featured image upload
             if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
-                $data['featured_image'] = $this->processFeaturedImage($data['featured_image'], $user);
+                try {
+                    $data['featured_image'] = $this->processFeaturedImage($data['featured_image'], $user);
+                } catch (Exception $imageException) {
+                    Log::error('Featured image processing failed during blog creation: ' . $imageException->getMessage());
+                    // Continue without featured image rather than failing completely
+                    unset($data['featured_image']);
+                }
             }
 
             // Set user_id
@@ -122,8 +135,9 @@ class BlogService
             return $blog;
         } catch (Exception $e) {
             Log::error('Error creating blog: ' . $e->getMessage(), [
-                'data' => $data,
-                'user_id' => Auth::id()
+                'data' => array_merge($data, ['featured_image' => isset($data['featured_image']) ? 'File uploaded' : 'No file']),
+                'user_id' => Auth::id(),
+                'stack_trace' => $e->getTraceAsString()
             ]);
             return null;
         }
@@ -141,14 +155,29 @@ class BlogService
         try {
             $user = Auth::user();
 
+            Log::info('Updating blog', [
+                'blog_id' => $blog->id,
+                'user_id' => Auth::id(),
+                'has_featured_image' => isset($data['featured_image'])
+            ]);
+
             // Handle featured image upload
             if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
-                // Delete old image
-                if ($blog->featured_image) {
-                    $this->deleteFeaturedImage($blog->featured_image);
+                try {
+                    // Delete old image
+                    if ($blog->featured_image) {
+                        $this->deleteFeaturedImage($blog->featured_image);
+                    }
+                    $data['featured_image'] = $this->processFeaturedImage($data['featured_image'], $user);
+                } catch (Exception $imageException) {
+                    Log::error('Featured image processing failed during blog update: ' . $imageException->getMessage());
+                    // Continue without updating featured image rather than failing completely
+                    unset($data['featured_image']);
                 }
-                $data['featured_image'] = $this->processFeaturedImage($data['featured_image'], $user);
             }
+
+            // Remove slug from update data to prevent slug changes
+            unset($data['slug']);
 
             // Handle published_at
             if ($data['status'] === 'published' && $blog->status !== 'published' && empty($data['published_at'])) {
@@ -163,8 +192,9 @@ class BlogService
         } catch (Exception $e) {
             Log::error('Error updating blog: ' . $e->getMessage(), [
                 'blog_id' => $blog->id,
-                'data' => $data,
-                'user_id' => Auth::id()
+                'data' => array_merge($data, ['featured_image' => isset($data['featured_image']) ? 'File uploaded' : 'No file']),
+                'user_id' => Auth::id(),
+                'stack_trace' => $e->getTraceAsString()
             ]);
             return null;
         }
@@ -255,6 +285,13 @@ class BlogService
     private function processFeaturedImage(UploadedFile $file, User $user)
     {
         try {
+            Log::info('Starting featured image processing', [
+                'user_id' => $user->id,
+                'file_name' => $file->getClientOriginalName(),
+                'file_size' => $file->getSize(),
+                'mime_type' => $file->getMimeType()
+            ]);
+
             // Create directory if it doesn't exist
             $blogDir = $user->name . '/blogs/featured_images';
             Storage::disk('public')->makeDirectory($blogDir);
@@ -263,26 +300,69 @@ class BlogService
             $filename = 'featured_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
             $fullPath = $blogDir . '/' . $filename;
 
-            // Process image with Intervention Image
-            $image = Image::make($file->getPathname());
-            
-            // Resize to standard blog featured image size (maintain aspect ratio)
-            $image->fit(1200, 630, function ($constraint) {
-                $constraint->upsize(); // Prevent upsizing
-            });
+            // Try to process image with Intervention Image if available
+            try {
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($file->getPathname());
+                
+                Log::info('Image loaded successfully', [
+                    'original_width' => $image->width(),
+                    'original_height' => $image->height()
+                ]);
+                
+                // Resize to standard blog featured image size (maintain aspect ratio)
+                $image->cover(1200, 630);
 
-            // Save the processed image
-            Storage::disk('public')->put($fullPath, $image->encode($file->getClientOriginalExtension(), 85));
+                // Get the file extension to determine encoding format
+                $extension = strtolower($file->getClientOriginalExtension());
+                
+                // Encode based on file type
+                if (in_array($extension, ['jpg', 'jpeg'])) {
+                    $encodedImage = $image->toJpeg(85);
+                } elseif ($extension === 'png') {
+                    $encodedImage = $image->toPng();
+                } elseif ($extension === 'webp') {
+                    $encodedImage = $image->toWebp(85);
+                } else {
+                    // Default to JPEG for other formats
+                    $encodedImage = $image->toJpeg(85);
+                    $filename = str_replace('.' . $extension, '.jpg', $filename);
+                    $fullPath = $blogDir . '/' . $filename;
+                }
 
-            Log::info('Featured image processed successfully', [
-                'user_id' => $user->id,
-                'path' => $fullPath,
-                'original_size' => $file->getSize()
-            ]);
+                // Save the processed image
+                Storage::disk('public')->put($fullPath, $encodedImage);
+
+                Log::info('Featured image processed successfully', [
+                    'user_id' => $user->id,
+                    'path' => $fullPath,
+                    'original_size' => $file->getSize(),
+                    'processed_size' => strlen($encodedImage)
+                ]);
+
+            } catch (Exception $processingException) {
+                Log::warning('Image processing failed, storing original: ' . $processingException->getMessage());
+                
+                // Store original image without processing
+                $storedPath = $file->storeAs($blogDir, $filename, 'public');
+                $fullPath = $storedPath;
+                
+                Log::info('Original image stored successfully', [
+                    'user_id' => $user->id,
+                    'path' => $fullPath,
+                    'original_size' => $file->getSize()
+                ]);
+            }
 
             return $fullPath;
+            
         } catch (Exception $e) {
-            Log::error('Error processing featured image: ' . $e->getMessage());
+            Log::error('Error in featured image processing: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'file_name' => $file->getClientOriginalName() ?? 'unknown',
+                'file_size' => $file->getSize() ?? 0,
+                'stack_trace' => $e->getTraceAsString()
+            ]);
             throw $e;
         }
     }
@@ -315,24 +395,49 @@ class BlogService
     {
         try {
             $userId = $userId ?? Auth::id();
+            
+            if (!$userId) {
+                Log::warning('Blog statistics requested without user ID');
+                return [
+                    'total' => 0,
+                    'published' => 0,
+                    'draft' => 0,
+                    'archived' => 0,
+                    'featured' => 0,
+                    'total_views' => 0,
+                ];
+            }
 
+            // Get base query for user's blogs
+            $baseQuery = Blog::where('user_id', $userId);
+            
             $stats = [
-                'total_blogs' => Blog::where('user_id', $userId)->count(),
-                'published_blogs' => Blog::where('user_id', $userId)->published()->count(),
-                'draft_blogs' => Blog::where('user_id', $userId)->draft()->count(),
-                'total_views' => Blog::where('user_id', $userId)->sum('views_count'),
-                'featured_blogs' => Blog::where('user_id', $userId)->featured()->count(),
+                'total' => (clone $baseQuery)->count(),
+                'published' => (clone $baseQuery)->where('status', 'published')->count(),
+                'draft' => (clone $baseQuery)->where('status', 'draft')->count(),
+                'archived' => (clone $baseQuery)->where('status', 'archived')->count(),
+                'featured' => (clone $baseQuery)->where('is_featured', true)->count(),
+                'total_views' => (clone $baseQuery)->sum('views_count') ?? 0,
             ];
+
+            Log::info('Blog statistics calculated', [
+                'user_id' => $userId,
+                'stats' => $stats
+            ]);
 
             return $stats;
         } catch (Exception $e) {
-            Log::error('Error generating blog statistics: ' . $e->getMessage(), ['user_id' => $userId]);
+            Log::error('Error generating blog statistics: ' . $e->getMessage(), [
+                'user_id' => $userId,
+                'trace' => $e->getTraceAsString()
+            ]);
             return [
-                'total_blogs' => 0,
-                'published_blogs' => 0,
-                'draft_blogs' => 0,
+                'total' => 0,
+                'published' => 0,
+                'draft' => 0,
+                'archived' => 0,
+                'featured' => 0,
                 'total_views' => 0,
-                'featured_blogs' => 0,
             ];
         }
     }

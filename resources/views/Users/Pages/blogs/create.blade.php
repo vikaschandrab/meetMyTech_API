@@ -220,37 +220,23 @@
                                         <label for="content" class="form-label mb-0">
                                             Content <span class="text-danger">*</span>
                                         </label>
-                                        <div class="preview-toggle">
-                                            <div class="btn-group" role="group">
-                                                <input type="radio" class="btn-check" name="editorMode" id="writeMode" checked>
-                                                <label class="btn btn-outline-primary btn-sm" for="writeMode">Write</label>
-                                                
-                                                <input type="radio" class="btn-check" name="editorMode" id="previewMode">
-                                                <label class="btn btn-outline-primary btn-sm" for="previewMode">Preview</label>
-                                            </div>
-                                        </div>
                                     </div>
                                     
                                     <div class="editor-container">
+                                        <!-- Quill Editor -->
+                                        <div id="editor" style="height: 400px;"></div>
+                                        <!-- Hidden textarea to store content -->
                                         <textarea class="form-control @error('content') is-invalid @enderror" 
                                                   id="content" 
                                                   name="content" 
-                                                  rows="15" 
-                                                  placeholder="Start writing your blog content..."
+                                                  style="display: none;"
                                                   required>{{ old('content') }}</textarea>
-                                        
-                                        <div id="contentPreview" class="preview-content" style="display: none;">
-                                            <div class="text-muted text-center py-5">
-                                                <i data-feather="file-text" class="feather-lg mb-2"></i>
-                                                <p>Start writing to see preview</p>
-                                            </div>
-                                        </div>
                                     </div>
                                     
                                     @error('content')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="help-text">Support for Markdown formatting available</div>
+                                    <div class="help-text">Use the rich text editor to format your content with headings, lists, bold, italic, and more.</div>
                                 </div>
                             </div>
                         </div>
@@ -420,8 +406,43 @@
 @endsection
 
 @push('scripts')
+<!-- Quill.js Rich Text Editor -->
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Quill editor
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'align': [] }],
+                ['link', 'image', 'video'],
+                ['blockquote', 'code-block'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Start writing your blog content...'
+    });
+
+    // Set initial content if editing
+    var initialContent = document.getElementById('content').value;
+    if (initialContent) {
+        quill.root.innerHTML = initialContent;
+    }
+
+    // Update hidden textarea when content changes
+    quill.on('text-change', function() {
+        var html = quill.root.innerHTML;
+        document.getElementById('content').value = html;
+        autoSave();
+    });
+
     // Tag management
     const tagInput = document.getElementById('tagInput');
     const tagList = document.getElementById('tagList');
@@ -524,61 +545,18 @@ document.addEventListener('DOMContentLoaded', function() {
         previewImg.src = '';
     });
 
-    // Content preview toggle
-    const writeMode = document.getElementById('writeMode');
-    const previewMode = document.getElementById('previewMode');
-    const contentTextarea = document.getElementById('content');
-    const contentPreview = document.getElementById('contentPreview');
-
-    function updatePreview() {
-        const content = contentTextarea.value;
-        if (content.trim()) {
-            // Simple markdown-like preview (you can integrate a proper markdown parser)
-            let html = content
-                .replace(/\n/g, '<br>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code>$1</code>');
-            contentPreview.innerHTML = html;
-        } else {
-            contentPreview.innerHTML = `
-                <div class="text-muted text-center py-5">
-                    <i data-feather="file-text" class="feather-lg mb-2"></i>
-                    <p>Start writing to see preview</p>
-                </div>
-            `;
-        }
-        // Re-initialize feather icons
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-    }
-
-    writeMode.addEventListener('change', function() {
-        if (this.checked) {
-            contentTextarea.style.display = 'block';
-            contentPreview.style.display = 'none';
-        }
-    });
-
-    previewMode.addEventListener('change', function() {
-        if (this.checked) {
-            updatePreview();
-            contentTextarea.style.display = 'none';
-            contentPreview.style.display = 'block';
-        }
-    });
-
-    contentTextarea.addEventListener('input', updatePreview);
-
     // Form submission handling
     const blogForm = document.getElementById('blogForm');
     blogForm.addEventListener('submit', function(e) {
+        // Get content from Quill
+        var html = quill.root.innerHTML;
+        document.getElementById('content').value = html;
+        
         // Basic validation
         const title = document.getElementById('title').value.trim();
-        const content = document.getElementById('content').value.trim();
+        const content = html.trim();
         
-        if (!title || !content) {
+        if (!title || !content || content === '<p><br></p>') {
             e.preventDefault();
             Swal.fire({
                 title: 'Required Fields Missing',
@@ -610,8 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 30000); // Auto-save every 30 seconds
     }
 
-    // Initialize auto-save on content change
-    contentTextarea.addEventListener('input', autoSave);
+    // Initialize auto-save on title change
     document.getElementById('title').addEventListener('input', autoSave);
 });
 </script>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'profilePic',
         'js',
         'user_type',
+        'slug',
     ];
 
     /**
@@ -46,12 +48,57 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->slug)) {
+                $user->slug = $user->generateSlug($user->name);
+            }
+        });
+
+        static::updating(function ($user) {
+            if ($user->isDirty('name') && empty($user->slug)) {
+                $user->slug = $user->generateSlug($user->name);
+            }
+        });
+    }
+
+    /**
+     * Generate unique slug from name
+     */
+    public function generateSlug($name)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function detail()
     {
         return $this->hasOne(UserDetail::class);
     }
 
-    public function workExperiences()
+    public function WorkExperiences()
     {
         return $this->hasMany(WorkExperience::class);
     }
