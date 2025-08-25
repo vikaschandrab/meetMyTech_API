@@ -19,6 +19,14 @@ class UserSeeder extends Seeder
         $now = Carbon::now();
         DB::table('users')->insert([
             [
+                'name' => 'Admin User',
+                'email' => 'admin@meetmytech.com',
+                'password' => Hash::make('AdminMTech@2025!'),
+                'user_type' => 'admin',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
                 'name' => 'Jyothi A H',
                 'email' => 'ahjyothi.1994@gmail.com',
                 'password' => Hash::make('jAdmin1@3&4'), // Encrypt the password

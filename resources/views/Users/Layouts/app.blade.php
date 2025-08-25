@@ -11,17 +11,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="{{ asset('dashboard_css/img/icons/icon-48x48.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <title>@yield('title', config('app.name', 'Laravel'))</title>
+    <title>@yield('title', 'MeetMyTech')</title>
 
     <link href="{{ asset('dashboard_css/css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @stack('styles')
 </head>
 
@@ -39,7 +39,7 @@
     </div>
 
     <script src="{{ asset('dashboard_css/js/app.js') }}"></script>
-    
+
     {{-- Tawk.to Live Chat Integration --}}
     @php
         $siteSetting = App\Models\SiteSetting::where('user_id', Auth::id())->first();
@@ -47,7 +47,7 @@
     @if($siteSetting && $siteSetting->tawk_js)
         {!! $siteSetting->tawk_js !!}
     @endif
-    
+
     @stack('scripts')
 </body>
 

@@ -20,7 +20,7 @@ class ActivitiesService
         /** @var User $user */
         $user = Auth::user();
         $activities = $user->userActivity()->orderBy('created_at', 'desc')->get();
-        $professionalSkills = $user->userProfessionalSkill->first();
+        $professionalSkills = $user->userProfessionalSkills->first();
 
         return [
             'user' => $user,
@@ -61,7 +61,7 @@ class ActivitiesService
     {
         try {
             $activity = UserActivity::findOrFail($id);
-            
+
             // Ensure the activity belongs to the current user
             if ($activity->user_id !== Auth::id()) {
                 throw new Exception('Unauthorized to update this activity.');
@@ -89,7 +89,7 @@ class ActivitiesService
     {
         try {
             $activity = UserActivity::findOrFail($id);
-            
+
             // Ensure the activity belongs to the current user
             if ($activity->user_id !== Auth::id()) {
                 throw new Exception('Unauthorized to delete this activity.');
@@ -113,7 +113,7 @@ class ActivitiesService
         try {
             /** @var User $user */
             $user = Auth::user();
-            
+
             $professionalSkill = UserProfessionalSkill::firstOrNew(['user_id' => $user->id]);
             $professionalSkill->fill($data);
             $professionalSkill->save();
@@ -134,7 +134,7 @@ class ActivitiesService
     public function getActivity(int $id): UserActivity
     {
         $activity = UserActivity::findOrFail($id);
-        
+
         if ($activity->user_id !== Auth::id()) {
             throw new Exception('Unauthorized to access this activity.');
         }
@@ -150,7 +150,7 @@ class ActivitiesService
     public function getProfessionalSkillsWithDefaults(): array
     {
         $user = Auth::user();
-        $skills = $user->userProfessionalSkill->first();
+        $skills = $user->userProfessionalSkills->first();
 
         $defaultSkills = [
             'communication' => 80,

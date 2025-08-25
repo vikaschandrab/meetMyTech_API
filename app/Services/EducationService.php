@@ -8,7 +8,7 @@ class EducationService
 {
     public function getUserEducation($user)
     {
-        return $user->EducationDetail;
+        return $user->educationDetails;
     }
 
     public function addEducation($data)

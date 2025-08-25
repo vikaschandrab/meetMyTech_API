@@ -23,6 +23,9 @@ class HomeController extends Controller
                     ->where('status', 'published')
                     ->where('is_featured', true)
                     ->whereNotNull('published_at')
+                    ->whereHas('user', function($query) {
+                        $query->where('status', 'active');
+                    })
                     ->orderBy('published_at', 'desc')
                     ->limit(6)
                     ->get(),
@@ -31,22 +34,34 @@ class HomeController extends Controller
                 'latestBlogs' => Blog::with(['user:id,name,slug'])
                     ->where('status', 'published')
                     ->whereNotNull('published_at')
+                    ->whereHas('user', function($query) {
+                        $query->where('status', 'active');
+                    })
                     ->orderBy('published_at', 'desc')
                     ->limit(8)
                     ->get(),
 
                 // Get platform statistics
                 'stats' => [
-                    'total_users' => User::count(),
-                    'total_blogs' => Blog::where('status', 'published')->count(),
-                    'total_views' => Blog::sum('views_count'),
-                    'active_writers' => User::whereHas('blogs', function($query) {
-                        $query->where('status', 'published');
-                    })->count(),
+                    'total_users' => User::where('status', 'active')->count(),
+                    'total_blogs' => Blog::where('status', 'published')
+                        ->whereHas('user', function($query) {
+                            $query->where('status', 'active');
+                        })->count(),
+                    'total_views' => Blog::whereHas('user', function($query) {
+                            $query->where('status', 'active');
+                        })->sum('views_count'),
+                    'active_writers' => User::where('status', 'active')
+                        ->whereHas('blogs', function($query) {
+                            $query->where('status', 'published');
+                        })->count(),
                 ],
 
                 // Get top contributors (users with most published blogs)
                 'topContributors' => User::select('id', 'name', 'slug', 'profilePic')
+                    ->where('status', 'active')
+                    ->whereNotNull('slug')
+                    ->where('slug', '!=', '')
                     ->withCount(['blogs' => function($query) {
                         $query->where('status', 'published');
                     }])
@@ -70,6 +85,9 @@ class HomeController extends Controller
     {
         $blogs = Blog::where('status', 'published')
             ->whereNotNull('tags')
+            ->whereHas('user', function($query) {
+                $query->where('status', 'active');
+            })
             ->pluck('tags');
 
         $allTags = [];
@@ -92,7 +110,10 @@ class HomeController extends Controller
     {
         $query = Blog::with(['user:id,name,slug'])
             ->where('status', 'published')
-            ->whereNotNull('published_at');
+            ->whereNotNull('published_at')
+            ->whereHas('user', function($q) {
+                $q->where('status', 'active');
+            });
 
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {

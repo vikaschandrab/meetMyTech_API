@@ -13,6 +13,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfilePageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,30 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
         Route::get('/{slug}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('toggle-featured');
     });
 
+});
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // User Management
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/create', [AdminController::class, 'createUser'])->name('create-user');
+    Route::post('/users', [AdminController::class, 'storeUser'])->name('store-user');
+    Route::get('/users/{id}', [AdminController::class, 'userDetails'])->name('user-details');
+    Route::post('/users/{id}/status', [AdminController::class, 'updateUserStatus'])->name('user-status');
+
+    // Blog Management
+    Route::get('/blogs', [AdminController::class, 'blogs'])->name('blogs');
+    Route::get('/blogs/create', [AdminController::class, 'createBlog'])->name('create-blog');
+    Route::post('/blogs', [AdminController::class, 'storeBlog'])->name('store-blog');
+    Route::get('/blogs/{id}/edit', [AdminController::class, 'editBlog'])->name('edit-blog');
+    Route::put('/blogs/{id}', [AdminController::class, 'updateBlog'])->name('update-blog');
+    Route::delete('/blogs/{id}', [AdminController::class, 'deleteBlog'])->name('delete-blog');
+
+    // Settings & Logs
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+    Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
 });
 
 Route::prefix('blogs')->name('blogs.')->group(function () {

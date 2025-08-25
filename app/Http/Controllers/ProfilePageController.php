@@ -21,12 +21,17 @@ class ProfilePageController extends Controller
 
     public function show($slug)
     {
-        $UserDetails = User::with(['SiteSettings', 'userActivity', 'detail', 'UserProfessionalSkill'])
+        $UserDetails = User::with(['SiteSettings', 'userActivity', 'detail', 'userProfessionalSkills'])
             ->where('slug', $slug)
             ->first();
 
         if (!$UserDetails) {
             abort(404, 'User not found');
+        }
+
+        // Check if user account is active
+        if ($UserDetails->status !== 'active') {
+            abort(403, 'This profile is not available. The user account is inactive.');
         }
 
         // Get the first site setting record (assuming one per user)
@@ -77,8 +82,8 @@ class ProfilePageController extends Controller
             }
         }
 
-        // Get user professional skill record (hasOne relationship)
-        $userProfessionalSkill = $UserDetails->UserProfessionalSkill;
+        // Get user professional skill record (hasMany relationship)
+        $userProfessionalSkill = $UserDetails->userProfessionalSkills;
 
         // Add user professional skill as properties to the user object for backward compatibility
         if ($userProfessionalSkill) {
@@ -103,7 +108,7 @@ class ProfilePageController extends Controller
             }
         }
 
-        $EducationDetails = $UserDetails->EducationDetail()->orderBy('created_at', 'desc')->get();
+        $EducationDetails = $UserDetails->educationDetails()->orderBy('created_at', 'desc')->get();
 
         $WorkExperiences = $UserDetails->WorkExperiences()
             ->orderByRaw('to_date IS NULL DESC')
@@ -136,14 +141,22 @@ class ProfilePageController extends Controller
             }
 
             // Add authorSlug to the main blog object
-            $blog->load('user:id,name,email,slug');
+            $blog->load('user:id,name,email,slug,status');
             $blog->authorSlug = $blog->user->slug;
 
+            // Check if the blog author's account is active
+            if ($blog->user->status !== 'active') {
+                abort(404, 'Blog not available. Author account is inactive.');
+            }
+
             // Get related blogs by same author (excluding current blog)
-            $relatedBlogs = Blog::with('user:id,name,email,slug')
+            $relatedBlogs = Blog::with('user:id,name,email,slug,status')
                 ->where('user_id', $blog->user_id)
                 ->where('id', '!=', $blog->id)
                 ->where('status', 'published')
+                ->whereHas('user', function($query) {
+                    $query->where('status', 'active');
+                })
                 ->orderBy('published_at', 'desc')
                 ->limit(4)
                 ->get()

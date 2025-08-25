@@ -3,6 +3,26 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+
+// Test route to check admin login status
+Route::get('/test-admin-login', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        return response()->json([
+            'logged_in' => true,
+            'name' => $user->name,
+            'email' => $user->email,
+            'user_type' => $user->user_type,
+            'message' => 'User is logged in successfully'
+        ]);
+    } else {
+        return response()->json([
+            'logged_in' => false,
+            'message' => 'User is not logged in'
+        ]);
+    }
+});
 
 // Test route to check user slugs
 Route::get('/test-users', function () {
@@ -89,17 +109,17 @@ Route::get('/test-email-debug', function () {
             'from_address' => config('mail.from.address'),
             'from_name' => config('mail.from.name'),
         ];
-        
+
         // Try to create a transport to test connection
         $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
             config('mail.mailers.smtp.host'),
             config('mail.mailers.smtp.port'),
             config('mail.mailers.smtp.encryption') === 'tls'
         );
-        
+
         $transport->setUsername(config('mail.mailers.smtp.username'));
         $transport->setPassword(config('mail.mailers.smtp.password'));
-        
+
         // Test simple mail send
         Mail::raw('This is a test email from MeetMyTech', function($message) {
             $message->to('admin@meetmytech.com')
@@ -130,13 +150,13 @@ Route::get('/test-forgot-password-email', function () {
         'name' => 'Test User',
         'email' => 'test@example.com'
     ];
-    
+
     $testData = [
         'user' => $testUser,
         'newPassword' => 'TestPass123!',
         'loginUrl' => route('login')
     ];
-    
+
     return view('emails.forgot-password', $testData);
 });
 
@@ -147,19 +167,19 @@ Route::get('/test-send-forgot-password', function () {
             'name' => 'Test User',
             'email' => 'admin@meetmytech.com' // Send to your own email for testing
         ];
-        
+
         $testData = [
             'user' => $testUser,
             'newPassword' => 'TestPass123!',
             'loginUrl' => route('login')
         ];
-        
+
         Mail::send('emails.forgot-password', $testData, function($message) use ($testUser) {
             $message->to($testUser->email)
                     ->from('admin@meetmytech.com', 'MeetMyTech Support')
                     ->subject('Test: Your New Password - MeetMyTech');
         });
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Test forgot password email sent successfully!'
