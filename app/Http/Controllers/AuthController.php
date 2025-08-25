@@ -33,8 +33,8 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
 
-            // Check user_type
-            if ($user->user_type !== 'user') {
+            // Check user_type - allow both user and admin
+            if (!in_array($user->user_type, ['user', 'admin'])) {
                 Auth::logout(); // logout immediately
 
                 LoggingService::logSecurity('warning', 'Unauthorized user type attempted login', [
@@ -43,6 +43,19 @@ class AuthController extends Controller
                 ]);
 
                 return redirect()->back()->withErrors(['email' => 'Unauthorized user type.']);
+            }
+
+            // Check if user account is active
+            if ($user->status !== 'active') {
+                Auth::logout(); // logout immediately
+
+                LoggingService::logSecurity('warning', 'Inactive user attempted login', [
+                    'email' => $request->email,
+                    'user_id' => $user->id,
+                    'status' => $user->status
+                ]);
+
+                return redirect()->back()->withErrors(['email' => 'Your account is inactive. Please contact support for assistance.']);
             }
 
             // Regenerate session to prevent fixation
@@ -57,7 +70,12 @@ class AuthController extends Controller
             session()->flash('message', 'Welcome back! You have been successfully logged in.');
             session()->flash('message_type', 'success');
 
-            return redirect()->intended('/dashboard'); // or your target route
+            // Redirect based on user type
+            if ($user->user_type === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/dashboard');
+            }
         }
 
         // If login failed

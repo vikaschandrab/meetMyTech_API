@@ -6,18 +6,32 @@
     <title>MeetMyTech - Showcase Your Tech Journey & Share Knowledge</title>
     <meta name="description" content="MeetMyTech is a platform for tech professionals to showcase their portfolios and share knowledge through blogs. Connect, learn, and grow with the tech community.">
     <meta name="keywords" content="tech portfolio, programming blogs, developer showcase, technology, coding, web development">
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%232563eb'%3E&lt;/&gt;%3C/text%3E%3C/svg%3E" type="image/svg+xml">
-    
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68ac1b458a4c631923aa5b33/1j3g4l2jb';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-color: #2563eb;
@@ -168,11 +182,11 @@
             <a class="navbar-brand text-primary" href="{{ route('home') }}">
                 <i class="fas fa-code me-2"></i>MeetMyTech
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -201,7 +215,7 @@
                         Showcase Your <span class="text-warning">Tech Journey</span> & Share Knowledge
                     </h1>
                     <p class="lead mb-5">
-                        MeetMyTech is the perfect platform for tech professionals to create stunning portfolios, 
+                        MeetMyTech is the perfect platform for tech professionals to create stunning portfolios,
                         share insights through blogs, and connect with like-minded developers worldwide.
                     </p>
                     <div class="d-flex flex-wrap gap-3">
@@ -451,12 +465,12 @@
                     <div class="contributor-card">
                         <div class="mb-3">
                             @if($contributor->profilePic)
-                                <img src="{{ asset('storage/'.$contributor->profilePic) }}" 
-                                     alt="{{ $contributor->name }}" 
-                                     class="rounded-circle" 
+                                <img src="{{ asset('storage/'.$contributor->profilePic) }}"
+                                     alt="{{ $contributor->name }}"
+                                     class="rounded-circle"
                                      style="width: 80px; height: 80px; object-fit: cover; border: 3px solid var(--primary-color);">
                             @else
-                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" 
+                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white"
                                      style="width: 80px; height: 80px; margin: 0 auto; font-size: 2rem; font-weight: bold;">
                                     {{ strtoupper(substr($contributor->name, 0, 1)) }}
                                 </div>
@@ -465,7 +479,11 @@
                         <h6 class="mb-2">{{ $contributor->name }}</h6>
                         <small class="text-muted">{{ $contributor->blogs_count }} {{ Str::plural('blog', $contributor->blogs_count) }}</small>
                         <div class="mt-2">
-                            <a href="{{ route('profile.show', $contributor->slug) }}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                            @if($contributor->slug)
+                                <a href="{{ route('profile.show', $contributor->slug) }}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                            @else
+                                <span class="btn btn-outline-secondary btn-sm disabled">No Profile</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -544,7 +562,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+
     <script>
         // Initialize AOS
         AOS.init({

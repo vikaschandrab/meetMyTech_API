@@ -27,6 +27,7 @@ class User extends Authenticatable
         'js',
         'user_type',
         'slug',
+        'status',
     ];
 
     /**
@@ -98,7 +99,12 @@ class User extends Authenticatable
         return $this->hasOne(UserDetail::class);
     }
 
-    public function WorkExperiences()
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
+
+    public function workExperiences()
     {
         return $this->hasMany(WorkExperience::class);
     }
@@ -108,12 +114,17 @@ class User extends Authenticatable
         return $this->hasMany(UserActivity::class);
     }
 
-    public function UserProfessionalSkill()
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    public function userProfessionalSkills()
     {
         return $this->hasMany(UserProfessionalSkill::class);
     }
 
-    public function EducationDetail(){
+    public function educationDetails(){
         return $this->hasMany(EducationDetail::class);
     }
 

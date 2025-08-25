@@ -38,7 +38,7 @@ class AboutService
         try {
             /** @var User $user */
             $user = Auth::user();
-            
+
             // Ensure user_details exists
             $details = $user->detail()->firstOrCreate([]);
 
@@ -80,7 +80,7 @@ class AboutService
         $path = $user->name . '/resumes/' . $filename;
 
         // Store the file
-        $file->storeAs('public/' . dirname($path), basename($filename));
+        $file->storeAs(dirname($path), basename($filename), 'public');
 
         return $path;
     }

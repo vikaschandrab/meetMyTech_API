@@ -18,9 +18,19 @@ class EnsureUserType
     public function handle($request, Closure $next)
     {
         if (Auth::check() && Auth::user()->user_type === 'user') {
+            // Check if user account is active
+            if (Auth::user()->status !== 'active') {
+                Auth::logout();
+                return redirect('/login')->withErrors(['email' => 'Your account is inactive. Please contact support.']);
+            }
             return $next($request);
         }
 
-        return redirect('/login')->withErrors(['email' => 'Access denied.']);
+        // If admin user tries to access regular dashboard, redirect to admin panel
+        if (Auth::check() && Auth::user()->user_type === 'admin') {
+            return redirect()->route('admin.dashboard')->with('info', 'Redirected to Admin Panel.');
+        }
+
+        return redirect('/login')->withErrors(['email' => 'Unauthorized user type.']);
     }
 }

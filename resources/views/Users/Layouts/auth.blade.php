@@ -14,8 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%232563eb'%3E&lt;/&gt;%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
     <!-- Page Title -->
     <title>@yield('title', config('app.name', 'Laravel'))</title>
