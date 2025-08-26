@@ -10,66 +10,33 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.event_name == 'push'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSHKEY }}
-          script: |
-            echo "🚀 Starting MeetMyTech Auto Deployment..."
-            
-            # Navigate to project directory
-            cd /var/www/laravel
-            
-            # Pull latest changes
-            echo "📥 Pulling latest code..."
-            git fetch origin
-            git reset --hard origin/main
-            
-            # Install/Update Composer dependencies
-            echo "📦 Updating Composer dependencies..."
-            composer install --no-dev --optimize-autoloader --no-interaction
-            
-            # Run database migrations
-            echo "🗄️  Running database migrations..."
-            php artisan migrate --force
-            
-            # Clear all caches
-            echo "🧹 Clearing caches..."
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
-            php artisan cache:clear
-            
-            # Optimize application
-            echo "⚡ Optimizing application..."
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            
-            # Link storage
-            echo "🔗 Linking storage..."
-            php artisan storage:link
-            
-            # Set file permissions
-            echo "🔧 Setting file permissions..."
-            sudo chown -R www-data:www-data /var/www/laravel
-            sudo chmod -R 755 /var/www/laravel/storage
-            sudo chmod -R 755 /var/www/laravel/bootstrap/cache
-            sudo chmod -R 755 /var/www/laravel/public
-            
-            # Restart services
-            echo "🔄 Restarting services..."
-            sudo systemctl restart apache2
-            sudo systemctl restart php8.2-fpm || sudo systemctl restart php8.1-fpm || true
-            
-            echo "✅ Deployment completed successfully!"
+      - name: Deploy Laravel Application
+        run: |
+          echo "🚀 Starting MeetMyTech Auto Deployment..."
+          cd /var/www/laravel
+          echo "📥 Pulling latest code..."
+          git fetch origin && git reset --hard origin/main
+          echo "📦 Updating Composer dependencies..."
+          composer install --no-dev --optimize-autoloader --no-interaction
+          echo "🗄️ Running database migrations..."
+          php artisan migrate --force
+          echo "🧹 Clearing caches..."
+          php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan cache:clear
+          echo "⚡ Optimizing application..."
+          php artisan config:cache && php artisan route:cache && php artisan view:cache
+          echo "🔗 Linking storage..."
+          php artisan storage:link
+          echo "🔧 Setting file permissions..."
+          sudo chown -R www-data:www-data /var/www/laravel
+          sudo chmod -R 755 /var/www/laravel/storage /var/www/laravel/bootstrap/cache /var/www/laravel/public
+          echo "🔄 Restarting services..."
+          sudo systemctl restart apache2
+          sudo systemctl restart php8.2-fpm || sudo systemctl restart php8.1-fpm || true
+          echo "✅ Deployment completed successfully!"

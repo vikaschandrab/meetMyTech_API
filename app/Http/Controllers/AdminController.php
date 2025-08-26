@@ -260,9 +260,125 @@ class AdminController extends Controller
     /**
      * Display system logs
      */
-    public function logs()
+    public function logs(Request $request)
     {
-        $logs = UserActivity::with('user')->latest()->paginate(50);
-        return view('admin.logs', compact('logs'));
+        $logsPath = storage_path('logs');
+        $activityFilter = $request->get('activity', 'all');
+        $dateFilter = $request->get('date', 'all');
+        
+        // Get all custom log files
+        $logFiles = glob($logsPath . '/*.log');
+        $customLogs = [];
+        $activities = [];
+        
+        foreach ($logFiles as $file) {
+            $filename = basename($file);
+            
+            // Skip laravel.log as it's the default log
+            if ($filename === 'laravel.log') {
+                continue;
+            }
+            
+            // Extract activity name and date from filename (e.g., authentication-2025-08-26.log)
+            if (preg_match('/^(.+)-(\d{4}-\d{2}-\d{2})\.log$/', $filename, $matches)) {
+                $activityName = $matches[1];
+                $logDate = $matches[2];
+                
+                // Add to activities list for filter
+                if (!in_array($activityName, $activities)) {
+                    $activities[] = $activityName;
+                }
+                
+                // Apply filters
+                if ($activityFilter !== 'all' && $activityFilter !== $activityName) {
+                    continue;
+                }
+                
+                if ($dateFilter !== 'all' && $dateFilter !== $logDate) {
+                    continue;
+                }
+                
+                // Read log file content
+                if (file_exists($file) && is_readable($file)) {
+                    $content = file_get_contents($file);
+                    $lines = explode("\n", trim($content));
+                    
+                    foreach ($lines as $line) {
+                        if (!empty(trim($line))) {
+                            // Parse log line (assuming format: [timestamp] level: message)
+                            if (preg_match('/^\[([^\]]+)\]\s+(\w+):\s+(.+)$/', $line, $logMatches)) {
+                                $customLogs[] = [
+                                    'activity' => $activityName,
+                                    'date' => $logDate,
+                                    'timestamp' => $logMatches[1] ?? null,
+                                    'level' => $logMatches[2] ?? 'info',
+                                    'message' => $logMatches[3] ?? $line,
+                                    'filename' => $filename,
+                                    'raw_line' => $line
+                                ];
+                            } else {
+                                // Fallback for lines that don't match the pattern
+                                $customLogs[] = [
+                                    'activity' => $activityName,
+                                    'date' => $logDate,
+                                    'timestamp' => null,
+                                    'level' => 'info',
+                                    'message' => $line,
+                                    'filename' => $filename,
+                                    'raw_line' => $line
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Sort logs by timestamp (newest first)
+        usort($customLogs, function($a, $b) {
+            $timeA = $a['timestamp'] ? strtotime($a['timestamp']) : 0;
+            $timeB = $b['timestamp'] ? strtotime($b['timestamp']) : 0;
+            return $timeB - $timeA;
+        });
+        
+        // Group logs by activity for better organization
+        $groupedLogs = [];
+        foreach ($customLogs as $log) {
+            $groupedLogs[$log['activity']][] = $log;
+        }
+        
+        // Paginate custom logs
+        $perPage = 50;
+        $currentPage = request()->get('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $paginatedLogs = array_slice($customLogs, $offset, $perPage);
+        
+        // Get available dates for filter
+        $availableDates = [];
+        foreach ($logFiles as $file) {
+            $filename = basename($file);
+            if (preg_match('/^.+-(\d{4}-\d{2}-\d{2})\.log$/', $filename, $matches)) {
+                $date = $matches[1];
+                if (!in_array($date, $availableDates)) {
+                    $availableDates[] = $date;
+                }
+            }
+        }
+        sort($availableDates);
+        $availableDates = array_reverse($availableDates); // Newest first
+        
+        // Also get database logs for comparison
+        $databaseLogs = UserActivity::with('user')->latest()->take(20)->get();
+        
+        return view('admin.logs', compact(
+            'customLogs', 
+            'groupedLogs', 
+            'paginatedLogs', 
+            'activities', 
+            'availableDates',
+            'activityFilter', 
+            'dateFilter',
+            'databaseLogs'
+        ));
     }
 }
