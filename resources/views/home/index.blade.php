@@ -480,7 +480,7 @@
                         <small class="text-muted">{{ $contributor->blogs_count }} {{ Str::plural('blog', $contributor->blogs_count) }}</small>
                         <div class="mt-2">
                             @if($contributor->slug)
-                                <a href="{{ route('profile.show', $contributor->slug) }}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                                <a href="{{ \App\Helpers\UrlHelper::profileSubdomain($contributor->slug) }}" class="btn btn-outline-primary btn-sm" target="_blank">View Profile</a>
                             @else
                                 <span class="btn btn-outline-secondary btn-sm disabled">No Profile</span>
                             @endif

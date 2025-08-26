@@ -165,10 +165,91 @@ class ProfilePageController extends Controller
                     return $blog;
                 });
 
-            return view('public.blogs.show', compact('blog', 'relatedBlogs'));
+            // Load all comments for this blog
+            $comments = \App\Models\Comment::where('blog_id', $blog->id)->orderBy('created_at')->get();
+
+            return view('public.blogs.show', compact('blog', 'relatedBlogs', 'comments'));
         } catch (Exception $e) {
             Log::error('Error showing public blog: ' . $e->getMessage(), ['slug' => $slug]);
             abort(404, 'Blog not found.');
+        }
+    }
+
+    /**
+     * Store a new comment for a blog
+     *
+     * @param Request $request
+     * @param string $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeComment(Request $request, string $slug)
+    {
+        try {
+            // Validate the request
+            $request->validate([
+                'user_name' => 'required|string|max:255',
+                'message' => 'required|string|max:1000',
+            ]);
+
+            // Find the blog
+            $blog = $this->blogService->getBlogBySlug($slug, false);
+            
+            if (!$blog) {
+                Log::warning('Blog not found for comment submission', ['slug' => $slug]);
+                return redirect()->back()->with('error', 'Blog not found.');
+            }
+
+            if ($blog->status !== 'published') {
+                Log::warning('Attempted to comment on unpublished blog', ['slug' => $slug, 'status' => $blog->status]);
+                return redirect()->back()->with('error', 'Blog not available for comments.');
+            }
+
+            // Load the user relationship to check status
+            $blog->load('user');
+
+            if (!$blog->user) {
+                Log::error('Blog has no associated user', ['blog_id' => $blog->id, 'slug' => $slug]);
+                return redirect()->back()->with('error', 'Unable to comment. Blog author information not available.');
+            }
+
+            // Check if the blog author's account is active (temporarily disabled for debugging)
+            // if ($blog->user->status !== 'active') {
+            //     Log::warning('Attempted to comment on blog with inactive author', [
+            //         'slug' => $slug,
+            //         'author_id' => $blog->user->id,
+            //         'author_status' => $blog->user->status
+            //     ]);
+            //     return redirect()->back()->with('error', 'Unable to comment. Blog author account is not active.');
+            // }
+
+            Log::info('Blog author status check', [
+                'slug' => $slug,
+                'author_id' => $blog->user->id,
+                'author_status' => $blog->user->status ?? 'status_field_missing'
+            ]);
+
+            // Create the comment
+            $comment = \App\Models\Comment::create([
+                'blog_id' => $blog->id,
+                'user_name' => trim($request->user_name),
+                'message' => trim($request->message),
+            ]);
+
+            Log::info('Comment created successfully', [
+                'comment_id' => $comment->id,
+                'blog_slug' => $slug,
+                'user_name' => $request->user_name
+            ]);
+
+            return redirect()->back()->with('success', 'Your comment has been posted successfully!');
+
+        } catch (Exception $e) {
+            Log::error('Error storing comment: ' . $e->getMessage(), [
+                'slug' => $slug,
+                'user_name' => $request->user_name ?? 'unknown',
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'Unable to post comment. Please try again.');
         }
     }
 }

@@ -76,7 +76,7 @@ class BlogService
     public function getBlogBySlug(string $slug, bool $incrementViews = false)
     {
         try {
-            $blog = Blog::with('user:id,name,email')
+            $blog = Blog::with('user:id,name,email,status')
                        ->where('slug', $slug)
                        ->first();
 

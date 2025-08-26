@@ -119,6 +119,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
 Route::prefix('blogs')->name('blogs.')->group(function () {
     Route::get('/{slug}', [ProfilePageController::class, 'publicShow'])->name('show');
+    Route::post('/{slug}/comments', [ProfilePageController::class, 'storeComment'])->name('comments.store');
 });
 
 // Contact Routes (must be before catch-all route)

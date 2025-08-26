@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Blogs - MeetMyTech</title>
     <meta name="description" content="Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.">
-    
+
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%232563eb'%3E&lt;/&gt;%3C/text%3E%3C/svg%3E" type="image/svg+xml">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-color: #2563eb;
@@ -120,11 +120,11 @@
             <a class="navbar-brand text-primary fw-bold" href="{{ route('home') }}">
                 <i class="fas fa-code me-2"></i>MeetMyTech
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -169,10 +169,10 @@
                             </h5>
                             <form method="GET" action="{{ route('home.all-blogs') }}">
                                 <div class="input-group">
-                                    <input type="text" 
-                                           name="search" 
-                                           class="form-control search-box" 
-                                           placeholder="Search blogs..." 
+                                    <input type="text"
+                                           name="search"
+                                           class="form-control search-box"
+                                           placeholder="Search blogs..."
                                            value="{{ request('search') }}">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-search"></i>
@@ -216,13 +216,13 @@
                                 <i class="fas fa-tags me-2 text-primary"></i>Popular Tags
                             </h5>
                             <div class="mb-3">
-                                <a href="{{ route('home.all-blogs', array_merge(request()->except('tag'), [])) }}" 
+                                <a href="{{ route('home.all-blogs', array_merge(request()->except('tag'), [])) }}"
                                    class="tag-filter {{ !request('tag') ? 'active' : '' }}">
                                     All Topics
                                 </a>
                             </div>
                             @foreach($popularTags as $tag => $count)
-                                <a href="{{ route('home.all-blogs', array_merge(request()->except('tag'), ['tag' => $tag])) }}" 
+                                <a href="{{ route('home.all-blogs', array_merge(request()->except('tag'), ['tag' => $tag])) }}"
                                    class="tag-filter {{ request('tag') == $tag ? 'active' : '' }}">
                                     {{ $tag }} ({{ $count }})
                                 </a>
@@ -313,13 +313,13 @@
                                                 <span class="badge bg-warning text-dark ms-auto">Featured</span>
                                             @endif
                                         </div>
-                                        
+
                                         <h5 class="card-title mb-3">
                                             <a href="{{ route('blogs.show', $blog->slug) }}" class="text-decoration-none text-dark">
                                                 {{ $blog->title }}
                                             </a>
                                         </h5>
-                                        
+
                                         <p class="card-text text-muted flex-grow-1">
                                             {{ Str::limit($blog->description, 120) }}
                                         </p>
@@ -337,7 +337,7 @@
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-user-circle text-muted me-2"></i>
                                                 <small class="text-muted">
-                                                    <a href="{{ route('profile.show', $blog->user->slug) }}" class="text-decoration-none text-muted">
+                                                    <a href="{{ \App\Helpers\UrlHelper::profileSubdomain($blog->user->slug) }}" class="text-decoration-none text-muted" target="_blank">
                                                         {{ $blog->user->name }}
                                                     </a>
                                                 </small>
