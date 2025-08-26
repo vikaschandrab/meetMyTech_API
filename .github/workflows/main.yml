@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - Blog-and-profile-finished-code
   pull_request:
     branches:
       - main
@@ -34,7 +33,7 @@ jobs:
             # Pull latest changes
             echo "📥 Pulling latest code..."
             git fetch origin
-            git reset --hard origin/$(git branch --show-current)
+            git reset --hard origin/main
             
             # Install/Update Composer dependencies
             echo "📦 Updating Composer dependencies..."
