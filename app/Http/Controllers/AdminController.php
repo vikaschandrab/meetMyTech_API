@@ -25,9 +25,9 @@ class AdminController extends Controller
     public function dashboard()
     {
         $stats = [
-            'total_users' => User::count(),
+            'total_users' => User::where('user_type', 'user')->count(),
             'total_blogs' => Blog::count(),
-            'recent_users' => User::latest()->take(5)->get(),
+            'recent_users' => User::where('user_type', 'user')->latest()->take(5)->get(),
             'recent_blogs' => Blog::latest()->take(5)->get(),
             'user_activities' => UserActivity::with('user')->latest()->take(10)->get(),
         ];
@@ -40,9 +40,11 @@ class AdminController extends Controller
      */
     public function users()
     {
-        $users = User::with(['activities' => function($query) {
-            $query->latest()->take(3);
-        }])->paginate(20);
+        $users = User::where('user_type', 'user')
+                    ->with(['activities' => function($query) {
+                        $query->latest()->take(3);
+                    }])
+                    ->paginate(20);
 
         return view('admin.users', compact('users'));
     }
