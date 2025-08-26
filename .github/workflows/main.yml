@@ -1,4 +1,5 @@
-name: Backend-Deploy
+name: Laravel-Deploy
+
 on:
   push:
     branches:
@@ -6,30 +7,20 @@ on:
   pull_request:
     branches:
       - main
-#on:
-#  workflow_dispatch:
+
 jobs:
-  #deploy:
-    #runs-on: ubuntu-latest
-    #steps:
-      #- uses: actions/checkout@v2
-      #- name: Deploy to server
-        #uses: appleboy/ssh-action@master
-        #with:
-          #host: ${{ secrets.HOST }}
-          #username: ${{ secrets.USERNAME }}
-          #port: ${{ secrets.PORT }}
-          #key: ${{ secrets.SSHKEY }}
-          #script: "cd /var/www/html && git pull"
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: restart the server
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: "cd /var/www/html/meetMyTech_API/ && ./deploy.sh"
+          script: "cd /var/www/laravel && ./deploy.sh"

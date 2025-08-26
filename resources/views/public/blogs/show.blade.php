@@ -101,6 +101,215 @@
         font-weight: 600;
     }
 
+    /* Comments Section Styling */
+    .comments-section {
+        background-color: #f8f9fa;
+        padding: 2rem 0;
+        border-radius: 15px;
+        margin-top: 3rem;
+    }
+
+    .comment-form .card {
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .comment-form .card-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .comment-form .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #fff !important;
+        color: #2c3e50 !important;
+    }
+
+    .comment-form .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+        transform: translateY(-2px);
+        background-color: #fff !important;
+        color: #2c3e50 !important;
+    }
+
+    .comment-form .form-control::placeholder {
+        color: #6c757d !important;
+        opacity: 0.7;
+    }
+
+    .comment-form .btn-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .comment-form .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    }
+
+    /* Individual Comment Styling */
+    .comment-item {
+        animation: fadeInUp 0.6s ease;
+        margin-bottom: 1.5rem;
+    }
+
+    .comment-item .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        background: #fff;
+    }
+
+    .comment-item .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .comment-item .card-body {
+        padding: 1.5rem;
+    }
+
+    .comment-avatar {
+        flex-shrink: 0;
+    }
+
+    .comment-avatar .rounded-circle {
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        border: 3px solid #fff;
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .comment-author {
+        font-size: 16px;
+        color: #007bff !important;
+        font-weight: 700;
+    }
+
+    .comment-date {
+        font-size: 13px;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .comment-message {
+        margin-top: 0.75rem;
+        line-height: 1.7;
+        color: #2c3e50;
+    }
+
+    .comment-message p {
+        font-size: 15px;
+        margin-bottom: 0;
+        word-wrap: break-word;
+    }
+
+    /* Empty comments state */
+    .empty-comments {
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+
+    .empty-comments i {
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .empty-comments h5 {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    /* Character counter styling */
+    #charCount {
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    /* Form labels */
+    .comment-form .form-label {
+        color: #2c3e50;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    /* Alert styling */
+    .comment-form .alert {
+        border: none;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .comment-form .alert-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+
+    .comment-form .alert-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Form input overrides to ensure visibility */
+    .comment-form input[type="text"],
+    .comment-form textarea {
+        background-color: #ffffff !important;
+        color: #2c3e50 !important;
+        -webkit-text-fill-color: #2c3e50 !important;
+    }
+
+    .comment-form input[type="text"]:focus,
+    .comment-form textarea:focus,
+    .comment-form input[type="text"]:active,
+    .comment-form textarea:active {
+        background-color: #ffffff !important;
+        color: #2c3e50 !important;
+        -webkit-text-fill-color: #2c3e50 !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .comment-form .card-body {
+            padding: 1.25rem;
+        }
+
+        .comment-item .card-body {
+            padding: 1.25rem;
+        }
+
+        .comment-avatar .rounded-circle {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 16px !important;
+        }
+    }
+
     .blog-content img {
         max-width: 100%;
         height: auto;
@@ -333,6 +542,144 @@
     @endif
 </div>
 
+{{-- Public Comments Section --}}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Comments Header -->
+            <div class="d-flex align-items-center mb-4">
+                <h3 class="mb-0 me-3">
+                    <i class="fas fa-comments text-primary me-2"></i>
+                    Discussion & Comments
+                </h3>
+                <span class="badge bg-secondary">{{ count($comments) }}</span>
+            </div>
+
+            <!-- Comment Form -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-pen me-2"></i>
+                        Join the Discussion
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('blogs.comments.store', $blog->slug) }}" method="POST" class="comment-form" id="commentForm">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="user_name" class="form-label fw-bold">
+                                    <i class="fas fa-user me-1"></i>
+                                    Your Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control @error('user_name') is-invalid @enderror" 
+                                       id="user_name" name="user_name" value="{{ old('user_name') }}" 
+                                       placeholder="Enter your name" required maxlength="255"
+                                       style="background-color: #fff !important; color: #2c3e50 !important;">
+                                @error('user_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label fw-bold">
+                                <i class="fas fa-comment-dots me-1"></i>
+                                Your Comment <span class="text-danger">*</span>
+                            </label>
+                            <textarea class="form-control @error('message') is-invalid @enderror" 
+                                      id="message" name="message" rows="4" 
+                                      placeholder="Share your thoughts about this blog post..." 
+                                      required maxlength="1000"
+                                      style="background-color: #fff !important; color: #2c3e50 !important;">{{ old('message') }}</textarea>
+                            @error('message')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Be respectful and constructive in your comments
+                                </small>
+                                <small class="text-muted fw-bold" id="charCount">0/1000</small>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane me-2"></i>Post Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Comments Display -->
+            <div class="comments-list">
+                @forelse($comments as $comment)
+                    <div class="comment-item mb-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <!-- Avatar -->
+                                    <div class="comment-avatar me-3">
+                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold" 
+                                             style="width: 48px; height: 48px; font-size: 18px;">
+                                            {{ strtoupper(substr($comment->user_name, 0, 1)) }}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Comment Content -->
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="comment-author mb-0 text-primary fw-bold">
+                                                {{ $comment->user_name }}
+                                            </h6>
+                                            <small class="comment-date text-muted">
+                                                <i class="fas fa-clock me-1"></i>
+                                                {{ $comment->created_at->format('M d, Y \a\t g:i A') }}
+                                            </small>
+                                        </div>
+                                        <div class="comment-message">
+                                            <p class="mb-0 text-dark">{{ $comment->message }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5">
+                        <div class="empty-comments">
+                            <i class="fas fa-comments text-muted mb-3" style="font-size: 4rem; opacity: 0.3;"></i>
+                            <h5 class="text-muted mb-2">No comments yet</h5>
+                            <p class="text-muted">Be the first to start the discussion!</p>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
 <style>
 /* Hide skip link for accessibility unless focused */
 .skip-link {
@@ -554,3 +901,98 @@
 }
 </style>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Character count for comment textarea
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submitBtn');
+    const commentForm = document.getElementById('commentForm');
+    
+    if (messageTextarea && charCount) {
+        function updateCharCount() {
+            const currentLength = messageTextarea.value.length;
+            charCount.textContent = currentLength + '/1000';
+            
+            // Change color when approaching limit
+            if (currentLength > 900) {
+                charCount.classList.add('text-danger');
+                charCount.classList.remove('text-warning', 'text-muted');
+            } else if (currentLength > 800) {
+                charCount.classList.add('text-warning');
+                charCount.classList.remove('text-danger', 'text-muted');
+            } else {
+                charCount.classList.add('text-muted');
+                charCount.classList.remove('text-danger', 'text-warning');
+            }
+        }
+        
+        // Update on input
+        messageTextarea.addEventListener('input', updateCharCount);
+        messageTextarea.addEventListener('keyup', updateCharCount);
+        messageTextarea.addEventListener('paste', function() {
+            setTimeout(updateCharCount, 10);
+        });
+        
+        // Initial count (for old values)
+        updateCharCount();
+    }
+    
+    // Form submission handling
+    if (commentForm && submitBtn) {
+        commentForm.addEventListener('submit', function(e) {
+            const userName = document.getElementById('user_name').value.trim();
+            const message = messageTextarea.value.trim();
+            
+            if (!userName || !message) {
+                e.preventDefault();
+                alert('Please fill in both name and comment fields.');
+                return false;
+            }
+            
+            if (message.length > 1000) {
+                e.preventDefault();
+                alert('Comment is too long. Please keep it under 1000 characters.');
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
+        });
+    }
+    
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            if (bootstrap && bootstrap.Alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            } else {
+                alert.style.display = 'none';
+            }
+        }, 5000);
+    });
+    
+    // Fix for input visibility - ensure text is visible
+    const formInputs = document.querySelectorAll('.comment-form input, .comment-form textarea');
+    formInputs.forEach(function(input) {
+        input.style.backgroundColor = '#fff';
+        input.style.color = '#2c3e50';
+        
+        input.addEventListener('focus', function() {
+            this.style.backgroundColor = '#fff';
+            this.style.color = '#2c3e50';
+        });
+        
+        input.addEventListener('input', function() {
+            this.style.backgroundColor = '#fff';
+            this.style.color = '#2c3e50';
+        });
+    });
+});
+</script>
+@endpush
