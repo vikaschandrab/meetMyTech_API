@@ -343,7 +343,10 @@ class AdminController extends Controller
         
         // Group logs by activity for better organization
         $groupedLogs = [];
-        foreach ($customLogs as $log) {
+        foreach ($customLogs as &$log) {
+            $log['activity_icon'] = $this->getActivityIcon($log['activity']);
+            $log['activity_color'] = $this->getActivityColor($log['activity']);
+            $log['level_color'] = $this->getLevelColor($log['level']);
             $groupedLogs[$log['activity']][] = $log;
         }
         
@@ -380,5 +383,57 @@ class AdminController extends Controller
             'dateFilter',
             'databaseLogs'
         ));
+    }
+
+    /**
+     * Helper function to get activity icon
+     */
+    private function getActivityIcon($activity)
+    {
+        $icons = [
+            'authentication' => 'user-shield',
+            'blog' => 'blog',
+            'dashboard' => 'tachometer-alt',
+            'database' => 'database',
+            'profile' => 'user-edit',
+            'security' => 'shield-alt',
+            'site_settings' => 'cogs',
+        ];
+        return $icons[$activity] ?? 'file-alt';
+    }
+
+    /**
+     * Helper function to get activity color
+     */
+    private function getActivityColor($activity)
+    {
+        $colors = [
+            'authentication' => 'primary',
+            'blog' => 'success',
+            'dashboard' => 'info',
+            'database' => 'warning',
+            'profile' => 'secondary',
+            'security' => 'danger',
+            'site_settings' => 'dark',
+        ];
+        return $colors[$activity] ?? 'light';
+    }
+
+    /**
+     * Helper function to get log level color
+     */
+    private function getLevelColor($level)
+    {
+        $colors = [
+            'debug' => 'secondary',
+            'info' => 'info',
+            'notice' => 'primary',
+            'warning' => 'warning',
+            'error' => 'danger',
+            'critical' => 'danger',
+            'alert' => 'danger',
+            'emergency' => 'danger',
+        ];
+        return $colors[strtolower($level)] ?? 'light';
     }
 }

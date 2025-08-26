@@ -128,7 +128,7 @@
             <div class="card h-100">
                 <div class="card-header bg-light">
                     <h6 class="mb-0">
-                        <i class="fas fa-{{ $this->getActivityIcon($activity) }} me-2"></i>
+                        <i class="fas fa-{{ $logs[0]['activity_icon'] ?? 'file-alt' }} me-2"></i>
                         {{ ucfirst(str_replace('_', ' ', $activity)) }}
                         <span class="badge bg-primary ms-2">{{ count($logs) }}</span>
                     </h6>
@@ -141,7 +141,7 @@
                                 <small class="text-truncate flex-grow-1 me-2">
                                     {{ Str::limit($log['message'], 50) }}
                                 </small>
-                                <span class="badge bg-{{ $this->getLevelColor($log['level']) }} text-xs">
+                                <span class="badge bg-{{ $log['level_color'] ?? 'light' }} text-xs">
                                     {{ $log['level'] }}
                                 </span>
                             </div>
@@ -203,13 +203,13 @@
                         @foreach($paginatedLogs as $log)
                             <tr>
                                 <td>
-                                    <span class="badge bg-{{ $this->getActivityColor($log['activity']) }}">
-                                        <i class="fas fa-{{ $this->getActivityIcon($log['activity']) }} me-1"></i>
+                                    <span class="badge bg-{{ $log['activity_color'] ?? 'light' }}">
+                                        <i class="fas fa-{{ $log['activity_icon'] ?? 'file-alt' }} me-1"></i>
                                         {{ ucfirst(str_replace('_', ' ', $log['activity'])) }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-{{ $this->getLevelColor($log['level']) }}">
+                                    <span class="badge bg-{{ $log['level_color'] ?? 'light' }}">
                                         {{ strtoupper($log['level']) }}
                                     </span>
                                 </td>
@@ -460,46 +460,3 @@ function getLevelColor(level) {
 }
 </style>
 @endsection
-
-@php
-// Helper functions that should ideally be in the controller
-function getActivityIcon($activity) {
-    $icons = [
-        'authentication' => 'user-shield',
-        'blog' => 'blog',
-        'dashboard' => 'tachometer-alt',
-        'database' => 'database',
-        'profile' => 'user-edit',
-        'security' => 'shield-alt',
-        'site_settings' => 'cogs',
-    ];
-    return $icons[$activity] ?? 'file-alt';
-}
-
-function getActivityColor($activity) {
-    $colors = [
-        'authentication' => 'primary',
-        'blog' => 'success',
-        'dashboard' => 'info',
-        'database' => 'warning',
-        'profile' => 'secondary',
-        'security' => 'danger',
-        'site_settings' => 'dark',
-    ];
-    return $colors[$activity] ?? 'light';
-}
-
-function getLevelColor($level) {
-    $colors = [
-        'debug' => 'secondary',
-        'info' => 'info',
-        'notice' => 'primary',
-        'warning' => 'warning',
-        'error' => 'danger',
-        'critical' => 'danger',
-        'alert' => 'danger',
-        'emergency' => 'danger',
-    ];
-    return $colors[strtolower($level)] ?? 'light';
-}
-@endphp
