@@ -13,9 +13,7 @@
                 {{-- Header Section --}}
                 <div class="text-center mb-4">
                     <div class="mb-3">
-                        <h2 class="text-primary fw-bold" style="font-size: 2rem;">
-                            <i class="fas fa-code me-2"></i>MeetMyTech
-                        </h2>
+                        <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 64px; width: auto; margin-bottom: 16px;">
                     </div>
                     <h1 class="h2 fw-bold text-dark">{{ __('Forgot Password?') }}</h1>
                     <p class="lead text-muted">

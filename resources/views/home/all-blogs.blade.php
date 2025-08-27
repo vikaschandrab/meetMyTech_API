@@ -7,8 +7,8 @@
     <meta name="description" content="Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.">
 
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%232563eb'%3E&lt;/&gt;%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
+    <link rel="shortcut icon" href="{{ asset('meetmytech_favicon.jpg') }}" />
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -118,7 +118,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
             <a class="navbar-brand text-primary fw-bold" href="{{ route('home') }}">
-                <i class="fas fa-code me-2"></i>MeetMyTech
+                <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 32px; width: auto; margin-right: 8px;">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

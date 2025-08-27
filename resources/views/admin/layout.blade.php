@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Panel') - MeetMyTech</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -60,16 +60,9 @@
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
                         <div class="mb-3">
-                            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                                 style="width: 60px; height: 60px;">
-                                <span style="font-size: 24px; font-weight: bold; color: #667eea;">MT</span>
-                            </div>
+                            <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 48px; width: auto; border-radius: 8px;">
                         </div>
-                        <h5 class="text-white mb-1">MeetMyTech</h5>
                         <small class="text-light">Admin Panel</small>
-                        <div class="mt-2">
-                            <small class="text-light">{{ Auth::user()->name }}</small>
-                        </div>
                     </div>
 
                     <ul class="nav flex-column">

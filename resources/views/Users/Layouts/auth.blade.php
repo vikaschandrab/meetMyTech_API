@@ -14,8 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
+    <link rel="shortcut icon" href="{{ asset('meetmytech_favicon.jpg') }}" />
 
     <!-- Page Title -->
     <title>@yield('title', config('app.name', 'Laravel'))</title>
