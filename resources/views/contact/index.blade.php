@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Start Your Tech Journey | MeetMyTech</title>
     <meta name="description" content="Ready to showcase your tech journey? Contact MeetMyTech to get started with your professional portfolio and blog platform.">
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%232563eb'%3E&lt;/&gt;%3C/text%3E%3C/svg%3E" type="image/svg+xml">
-    
+    <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
+    <link rel="shortcut icon" href="{{ asset('meetmytech_favicon.jpg') }}" />
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary-color: #2563eb;
@@ -132,14 +132,14 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand text-primary fw-bold" href="{{ route('home') }}">
-                <i class="fas fa-code me-2"></i>MeetMyTech
+             <a class="navbar-brand text-primary fw-bold" href="{{ route('home') }}">
+                <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 32px; width: auto; margin-right: 8px;">
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -165,7 +165,7 @@
                         Ready to Start Your <span class="text-warning">Tech Journey?</span>
                     </h1>
                     <p class="lead mb-4">
-                        Join thousands of tech professionals who are showcasing their skills and sharing knowledge on MeetMyTech. 
+                        Join thousands of tech professionals who are showcasing their skills and sharing knowledge on MeetMyTech.
                         Let's create your professional presence together!
                     </p>
                     <div class="row g-4 mt-4">
@@ -224,18 +224,18 @@
 
                         <form action="{{ route('contact.submit') }}" method="POST">
                             @csrf
-                            
+
                             <div class="row g-3">
                                 <!-- First Name -->
                                 <div class="col-md-6">
                                     <label for="first_name" class="form-label fw-semibold">
                                         <i class="fas fa-user me-2 text-primary"></i>First Name *
                                     </label>
-                                    <input type="text" 
-                                           class="form-control @error('first_name') is-invalid @enderror" 
-                                           id="first_name" 
-                                           name="first_name" 
-                                           value="{{ old('first_name') }}" 
+                                    <input type="text"
+                                           class="form-control @error('first_name') is-invalid @enderror"
+                                           id="first_name"
+                                           name="first_name"
+                                           value="{{ old('first_name') }}"
                                            required>
                                     @error('first_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -247,11 +247,11 @@
                                     <label for="last_name" class="form-label fw-semibold">
                                         <i class="fas fa-user me-2 text-primary"></i>Last Name *
                                     </label>
-                                    <input type="text" 
-                                           class="form-control @error('last_name') is-invalid @enderror" 
-                                           id="last_name" 
-                                           name="last_name" 
-                                           value="{{ old('last_name') }}" 
+                                    <input type="text"
+                                           class="form-control @error('last_name') is-invalid @enderror"
+                                           id="last_name"
+                                           name="last_name"
+                                           value="{{ old('last_name') }}"
                                            required>
                                     @error('last_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -263,11 +263,11 @@
                                     <label for="personal_email" class="form-label fw-semibold">
                                         <i class="fas fa-envelope me-2 text-primary"></i>Personal Email *
                                     </label>
-                                    <input type="email" 
-                                           class="form-control @error('personal_email') is-invalid @enderror" 
-                                           id="personal_email" 
-                                           name="personal_email" 
-                                           value="{{ old('personal_email') }}" 
+                                    <input type="email"
+                                           class="form-control @error('personal_email') is-invalid @enderror"
+                                           id="personal_email"
+                                           name="personal_email"
+                                           value="{{ old('personal_email') }}"
                                            required>
                                     @error('personal_email')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -279,11 +279,11 @@
                                     <label for="professional_email" class="form-label fw-semibold">
                                         <i class="fas fa-briefcase me-2 text-primary"></i>Professional Email
                                     </label>
-                                    <input type="email" 
-                                           class="form-control @error('professional_email') is-invalid @enderror" 
-                                           id="professional_email" 
-                                           name="professional_email" 
-                                           value="{{ old('professional_email') }}" 
+                                    <input type="email"
+                                           class="form-control @error('professional_email') is-invalid @enderror"
+                                           id="professional_email"
+                                           name="professional_email"
+                                           value="{{ old('professional_email') }}"
                                            placeholder="If different from personal">
                                     @error('professional_email')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -295,11 +295,11 @@
                                     <label for="current_organization" class="form-label fw-semibold">
                                         <i class="fas fa-building me-2 text-primary"></i>Current Organization *
                                     </label>
-                                    <input type="text" 
-                                           class="form-control @error('current_organization') is-invalid @enderror" 
-                                           id="current_organization" 
-                                           name="current_organization" 
-                                           value="{{ old('current_organization') }}" 
+                                    <input type="text"
+                                           class="form-control @error('current_organization') is-invalid @enderror"
+                                           id="current_organization"
+                                           name="current_organization"
+                                           value="{{ old('current_organization') }}"
                                            placeholder="Company, Freelancer, Student, etc."
                                            required>
                                     @error('current_organization')
@@ -312,11 +312,11 @@
                                     <label for="position" class="form-label fw-semibold">
                                         <i class="fas fa-id-badge me-2 text-primary"></i>Current Position *
                                     </label>
-                                    <input type="text" 
-                                           class="form-control @error('position') is-invalid @enderror" 
-                                           id="position" 
-                                           name="position" 
-                                           value="{{ old('position') }}" 
+                                    <input type="text"
+                                           class="form-control @error('position') is-invalid @enderror"
+                                           id="position"
+                                           name="position"
+                                           value="{{ old('position') }}"
                                            placeholder="e.g., Senior Developer, Student, CEO"
                                            required>
                                     @error('position')
@@ -329,10 +329,10 @@
                                     <label for="technologies" class="form-label fw-semibold">
                                         <i class="fas fa-code me-2 text-primary"></i>Technologies You Work With *
                                     </label>
-                                    <textarea class="form-control @error('technologies') is-invalid @enderror" 
-                                              id="technologies" 
-                                              name="technologies" 
-                                              rows="4" 
+                                    <textarea class="form-control @error('technologies') is-invalid @enderror"
+                                              id="technologies"
+                                              name="technologies"
+                                              rows="4"
                                               placeholder="e.g., JavaScript, Python, React, Laravel, AWS, Docker, etc. Tell us about your tech stack and what you're passionate about."
                                               required>{{ old('technologies') }}</textarea>
                                     @error('technologies')

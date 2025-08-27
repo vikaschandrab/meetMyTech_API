@@ -11,7 +11,29 @@ const mix = require('laravel-mix');
  |
  */
 
+// Main application files
 mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]);
+
+// Page-specific CSS files
+mix.postCss('resources/css/pages/dashboard.css', 'public/css/pages')
+    .postCss('resources/css/pages/profile.css', 'public/css/pages')
+    .postCss('resources/css/pages/experience.css', 'public/css/pages');
+
+// Component CSS files
+mix.postCss('resources/css/components/modals.css', 'public/css/components');
+
+// Page-specific JS files
+mix.js('resources/js/pages/dashboard.js', 'public/js/pages')
+    .js('resources/js/pages/profile.js', 'public/js/pages')
+    .js('resources/js/pages/experience.js', 'public/js/pages');
+
+// Component JS files
+mix.js('resources/js/components/modals.js', 'public/js/components');
+
+// Enable versioning for cache busting in production
+if (mix.inProduction()) {
+    mix.version();
+}
