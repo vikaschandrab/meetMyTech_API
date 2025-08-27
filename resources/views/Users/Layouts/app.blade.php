@@ -21,6 +21,10 @@
 
     <link href="{{ asset('dashboard_css/css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    {{-- Common Component Styles --}}
+    <link href="{{ asset('css/components/modals.css') }}" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('styles')
@@ -40,6 +44,9 @@
     </div>
 
     <script src="{{ asset('dashboard_css/js/app.js') }}"></script>
+
+    {{-- Common Component Scripts --}}
+    <script src="{{ asset('js/components/modals.js') }}"></script>
 
     {{-- Tawk.to Live Chat Integration --}}
     @php

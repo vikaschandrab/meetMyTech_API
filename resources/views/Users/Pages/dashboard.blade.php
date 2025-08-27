@@ -3,86 +3,7 @@
 @section('title', 'Dashboard | ' . Auth::user()->name)
 
 @push('styles')
-<style>
-    .stat-card {
-        transition: transform 0.2s ease-in-out;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-2px);
-    }
-    
-    .stat {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .stat.text-primary {
-        background-color: rgba(13, 110, 253, 0.1);
-    }
-    
-    .stat.text-success {
-        background-color: rgba(25, 135, 84, 0.1);
-    }
-    
-    .stat.text-warning {
-        background-color: rgba(255, 193, 7, 0.1);
-    }
-    
-    .stat.text-danger {
-        background-color: rgba(220, 53, 69, 0.1);
-    }
-    
-    .chart {
-        height: 200px;
-    }
-    
-    .chart-sm {
-        height: 150px;
-    }
-    
-    .chart-lg {
-        height: 250px;
-    }
-    
-    .chart-xs {
-        height: 100px;
-    }
-    
-    .activity-item {
-        border-left: 3px solid #e9ecef;
-        padding-left: 1rem;
-        margin-bottom: 1rem;
-        position: relative;
-    }
-    
-    .activity-item:before {
-        content: '';
-        position: absolute;
-        left: -6px;
-        top: 10px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #007bff;
-    }
-    
-    .activity-item.success:before {
-        background-color: #28a745;
-    }
-    
-    .activity-item.warning:before {
-        background-color: #ffc107;
-    }
-    
-    .activity-item.danger:before {
-        background-color: #dc3545;
-    }
-</style>
+<link href="{{ asset('css/pages/dashboard.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -343,6 +264,8 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('js/pages/dashboard.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Feather icons
@@ -426,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-{{-- Success/Error Messages --}}
+{{-- Session Messages --}}
 @if(session('success'))
 <script>
     Swal.fire({

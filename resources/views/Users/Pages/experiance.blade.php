@@ -3,85 +3,7 @@
 @section('title', 'Work Experience | ' . Auth::user()->name)
 
 @push('styles')
-<style>
-    .experience-card {
-        transition: all 0.3s ease;
-        border-left: 4px solid transparent;
-    }
-    
-    .experience-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        border-left-color: #007bff;
-    }
-    
-    .experience-meta {
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-    
-    .experience-position {
-        color: #495057;
-        font-weight: 600;
-    }
-    
-    .experience-organization {
-        color: #007bff;
-        font-weight: 500;
-    }
-    
-    .experience-period {
-        background: #f8f9fa;
-        border-radius: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.85rem;
-        border: 1px solid #e9ecef;
-    }
-    
-    .experience-duration {
-        background: linear-gradient(45deg, #28a745, #20c997);
-        color: white;
-        border-radius: 1rem;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: #6c757d;
-    }
-    
-    .empty-state i {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
-    }
-    
-    .timeline-indicator {
-        width: 12px;
-        height: 12px;
-        background: #007bff;
-        border-radius: 50%;
-        margin-right: 0.5rem;
-        flex-shrink: 0;
-        margin-top: 0.25rem;
-    }
-    
-    .current-position {
-        background: #28a745;
-    }
-    
-    .responsibilities-preview {
-        max-height: 4.5rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-    }
-</style>
+<link href="{{ asset('css/pages/experience.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -256,7 +178,7 @@
                                                 </p>
                                             </div>
                                             @if(strlen($experience->roles_and_responsibilities ?? '') > 200)
-                                                <button class="btn btn-sm btn-link p-0 mt-1" type="button" 
+                                                <button class="btn btn-sm btn-link p-0 mt-1" type="button"
                                                         data-bs-toggle="collapse" data-bs-target="#responsibilities-{{ $experience->id }}">
                                                     Read more
                                                 </button>
@@ -295,64 +217,24 @@
 @endsection
 
 @push('scripts')
-{{-- Success/Error Messages --}}
+<script src="{{ asset('js/pages/experience.js') }}"></script>
+
+{{-- Session Messages --}}
 @if(session('success'))
 <script>
-    Swal.fire({
-        title: 'Success!',
-        text: "{{ session('success') }}",
-        icon: 'success',
-        confirmButtonText: 'OK'
-    });
+    ExperienceMessages.showSuccess("{{ session('success') }}");
 </script>
 @endif
 
 @if(session('error'))
 <script>
-    Swal.fire({
-        title: 'Error!',
-        text: "{{ session('error') }}",
-        icon: 'error',
-        confirmButtonText: 'OK'
-    });
+    ExperienceMessages.showError("{{ session('error') }}");
 </script>
 @endif
 
 @if($errors->any())
 <script>
-    Swal.fire({
-        title: 'Validation Error!',
-        text: "{{ $errors->first() }}",
-        icon: 'error',
-        confirmButtonText: 'OK'
-    });
+    ExperienceMessages.showValidationError("{{ $errors->first() }}");
 </script>
 @endif
-
-{{-- Delete Confirmation --}}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle delete forms with SweetAlert
-    const deleteForms = document.querySelectorAll('.delete-form');
-    deleteForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this work experience!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-</script>
 @endpush
