@@ -3,7 +3,7 @@
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ route('dashboard') }}">
             <span class="align-middle">
-                <i class="fas fa-code me-2"></i>MeetMyTech
+                <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 32px; width: auto; margin-right: 8px;">
             </span>
         </a>
 

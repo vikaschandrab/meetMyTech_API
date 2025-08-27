@@ -8,8 +8,8 @@
     <meta name="keywords" content="tech portfolio, programming blogs, developer showcase, technology, coding, web development">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
+    <link rel="shortcut icon" href="{{ asset('meetmytech_favicon.jpg') }}" />
 
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
@@ -180,7 +180,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
             <a class="navbar-brand text-primary" href="{{ route('home') }}">
-                <i class="fas fa-code me-2"></i>MeetMyTech
+                <img src="{{ asset('meetmytech_logo.jpg') }}" alt="MeetMyTech" style="height: 32px; width: auto; margin-right: 8px;">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
