@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use App\Helpers\FormatHelper;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Register services
+        $this->app->singleton(\App\Services\HomeService::class);
+        $this->app->singleton(\App\Services\AdminService::class);
     }
 
     /**
@@ -23,6 +27,28 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Register Blade directives for helpers
+        Blade::directive('formatDate', function ($expression) {
+            return "<?php echo App\Helpers\FormatHelper::formatDate($expression); ?>";
+        });
+
+        Blade::directive('formatDateTime', function ($expression) {
+            return "<?php echo App\Helpers\FormatHelper::formatDateTime($expression); ?>";
+        });
+
+        Blade::directive('formatNumber', function ($expression) {
+            return "<?php echo App\Helpers\FormatHelper::formatNumber($expression); ?>";
+        });
+
+        Blade::directive('timeAgo', function ($expression) {
+            return "<?php echo App\Helpers\FormatHelper::timeAgo($expression); ?>";
+        });
+
+        Blade::directive('truncate', function ($expression) {
+            $params = explode(',', $expression, 2);
+            $text = $params[0];
+            $limit = $params[1] ?? 100;
+            return "<?php echo App\Helpers\FormatHelper::truncate($text, $limit); ?>";
+        });
     }
 }

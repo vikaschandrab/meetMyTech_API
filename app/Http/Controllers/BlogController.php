@@ -32,7 +32,7 @@ class BlogController extends Controller
     {
         try {
             $userId = Auth::id();
-            
+
             if (!$userId) {
                 return redirect()->route('login')->with('error', 'Please log in to access your blogs.');
             }
@@ -63,11 +63,11 @@ class BlogController extends Controller
                 'user_id' => Auth::id(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             LoggingService::logError($e, 'blog', [
                 'action' => 'blog_index_failed'
             ]);
-            
+
             return redirect()->back()->with('error', 'Failed to load blogs. Please try again.');
         }
     }
@@ -94,8 +94,20 @@ class BlogController extends Controller
             $blog = $this->blogService->createBlog($request->validated());
 
             if ($blog) {
-                $message = $blog->status === 'published' ? 'Blog published successfully!' : 'Blog saved as draft!';
-                return redirect()->route('blogs.show', $blog->slug)->with('success', $message);
+                $action = $request->input('action', 'save');
+
+                if ($blog->status === 'published') {
+                    $message = 'Blog published successfully!';
+                    if ($action === 'save_continue') {
+                        return redirect()->route('blogs.edit', $blog->slug)->with('success', $message);
+                    } else {
+                        return redirect()->route('blogs.show', $blog->slug)->with('success', $message);
+                    }
+                } else {
+                    // For drafts, always go to edit page
+                    $message = 'Blog saved as draft!';
+                    return redirect()->route('blogs.edit', $blog->slug)->with('success', $message);
+                }
             } else {
                 return redirect()->back()->withInput()->with('error', 'Failed to create blog. Please try again.');
             }
@@ -106,7 +118,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Display the specified blog
+     * Display the specified blog (preview for owners, public view for published)
      *
      * @param string $slug
      * @return \Illuminate\View\View
@@ -114,7 +126,9 @@ class BlogController extends Controller
     public function show(string $slug)
     {
         try {
-            $blog = $this->blogService->getBlogBySlug($slug, true); // Increment views
+            // For drafts, don't increment views. For published blogs by owner, don't increment
+            $shouldIncrementViews = true;
+            $blog = $this->blogService->getBlogBySlug($slug, false); // Don't increment yet
 
             if (!$blog) {
                 return redirect()->route('blogs.index')->with('error', 'Blog not found.');
@@ -123,6 +137,11 @@ class BlogController extends Controller
             // Check if user can view this blog
             if ($blog->status !== 'published' && $blog->user_id !== Auth::id()) {
                 return redirect()->route('blogs.index')->with('error', 'Blog not found.');
+            }
+
+            // Only increment views for published blogs and if viewer is not the owner
+            if ($blog->status === 'published' && $blog->user_id !== Auth::id()) {
+                $blog->incrementViews();
             }
 
             return view('Users.Pages.blogs.show', compact('blog'));
@@ -183,8 +202,20 @@ class BlogController extends Controller
             $updatedBlog = $this->blogService->updateBlog($blog, $request->validated());
 
             if ($updatedBlog) {
-                $message = $updatedBlog->status === 'published' ? 'Blog updated and published!' : 'Blog updated successfully!';
-                return redirect()->route('blogs.show', $updatedBlog->slug)->with('success', $message);
+                $action = $request->input('action', 'save');
+
+                if ($updatedBlog->status === 'published') {
+                    $message = 'Blog updated and published!';
+                    if ($action === 'save_continue') {
+                        return redirect()->route('blogs.edit', $updatedBlog->slug)->with('success', $message);
+                    } else {
+                        return redirect()->route('blogs.show', $updatedBlog->slug)->with('success', $message);
+                    }
+                } else {
+                    // For drafts, stay on edit page
+                    $message = 'Blog updated successfully!';
+                    return redirect()->route('blogs.edit', $updatedBlog->slug)->with('success', $message);
+                }
             } else {
                 return redirect()->back()->withInput()->with('error', 'Failed to update blog. Please try again.');
             }
