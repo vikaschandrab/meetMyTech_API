@@ -85,6 +85,7 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
         Route::get('/create', [BlogController::class, 'create'])->name('create');
         Route::post('/', [BlogController::class, 'store'])->name('store');
         Route::get('/{slug}/edit', [BlogController::class, 'edit'])->name('edit');
+        Route::get('/{slug}/preview', [BlogController::class, 'show'])->name('show');
         Route::put('/{slug}', [BlogController::class, 'update'])->name('update');
         Route::delete('/{slug}', [BlogController::class, 'destroy'])->name('destroy');
         Route::get('/{slug}/duplicate', [BlogController::class, 'duplicate'])->name('duplicate');
