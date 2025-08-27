@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use App\Services\DesignService;
 
 class ContactController extends Controller
 {
@@ -14,7 +15,10 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('contact.index');
+        // Session-based design selection for contact page
+        $selectedDesign = DesignService::getContactDesign();
+
+        return view('contact.' . $selectedDesign);
     }
 
     /**
@@ -39,7 +43,7 @@ class ContactController extends Controller
 
         try {
             $data = $request->all();
-            
+
             // Send email to contact.us@meetmytech.com
             Mail::send('emails.contact-inquiry', ['contactData' => $data], function($message) use ($data) {
                 $message->to('contact.us@meetmytech.com')
@@ -55,7 +59,7 @@ class ContactController extends Controller
             });
 
             return back()->with('success', 'Thank you for your interest! We have received your inquiry and will get back to you within 24 hours.');
-            
+
         } catch (\Exception $e) {
             Log::error('Contact form error: ' . $e->getMessage());
             return back()->with('error', 'Sorry, there was an error sending your message. Please try again or contact us directly at contact.us@meetmytech.com');

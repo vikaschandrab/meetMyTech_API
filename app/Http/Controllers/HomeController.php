@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\HomeService;
+use App\Services\DesignService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -27,8 +28,11 @@ class HomeController extends Controller
     public function index()
     {
         $data = $this->homeService->getHomepageData();
-        
-        return view('home.index', $data);
+
+        // Session-based design template selection for homepage
+        $selectedDesign = DesignService::getHomepageDesign();
+
+        return view('home.' . $selectedDesign, $data);
     }
 
     /**
@@ -39,6 +43,9 @@ class HomeController extends Controller
         $blogs = $this->homeService->getFilteredBlogs($request);
         $popularTags = $this->homeService->getPopularTags();
 
-        return view('home.all-blogs', compact('blogs', 'popularTags'));
+        // Session-based design template selection
+        $selectedDesign = DesignService::getBlogListingDesign();
+
+        return view('home.' . $selectedDesign, compact('blogs', 'popularTags'));
     }
 }

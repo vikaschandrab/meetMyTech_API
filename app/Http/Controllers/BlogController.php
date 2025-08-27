@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Blog;
 use App\Services\BlogService;
 use App\Services\LoggingService;
+use App\Services\DesignService;
 use App\Http\Requests\BlogRequest;
 use App\Http\Requests\BlogSearchRequest;
 use Exception;
@@ -142,6 +143,18 @@ class BlogController extends Controller
             // Only increment views for published blogs and if viewer is not the owner
             if ($blog->status === 'published' && $blog->user_id !== Auth::id()) {
                 $blog->incrementViews();
+            }
+
+            // If user is viewing their own blog (preview mode), use admin view
+            if ($blog->user_id === Auth::id()) {
+                return view('Users.Pages.blogs.show', compact('blog'));
+            }
+
+            // For public viewing of published blogs, use session-based design template selection
+            if ($blog->status === 'published') {
+                $selectedDesign = DesignService::getBlogDetailDesign();
+
+                return view('home.' . strtolower($selectedDesign), compact('blog'));
             }
 
             return view('Users.Pages.blogs.show', compact('blog'));

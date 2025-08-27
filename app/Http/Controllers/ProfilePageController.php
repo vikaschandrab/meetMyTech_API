@@ -9,6 +9,7 @@ use Exception;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Log;
 use App\Services\BlogService;
+use App\Services\DesignService;
 
 class ProfilePageController extends Controller
 {
@@ -121,7 +122,10 @@ class ProfilePageController extends Controller
             ->orderBy('published_at', 'desc')
             ->get();
 
-        return view("ProfileWebsite.Design_1", ['UserDetails' => $UserDetails, 'EducationDetails' => $EducationDetails, 'WorkExperiences' => $WorkExperiences, 'blogs' => $blogs]);
+        // Session-based design selection for profile page
+        $selectedDesign = DesignService::getProfileDesign();
+
+        return view("ProfileWebsite.{$selectedDesign}", ['UserDetails' => $UserDetails, 'EducationDetails' => $EducationDetails, 'WorkExperiences' => $WorkExperiences, 'blogs' => $blogs]);
 
     }
 
@@ -168,7 +172,10 @@ class ProfilePageController extends Controller
             // Load all comments for this blog
             $comments = \App\Models\Comment::where('blog_id', $blog->id)->orderBy('created_at')->get();
 
-            return view('public.blogs.show', compact('blog', 'relatedBlogs', 'comments'));
+            // Session-based design template selection for public blog viewing
+            $selectedDesign = DesignService::getBlogDetailDesign();
+
+            return view('home.' . $selectedDesign, compact('blog', 'relatedBlogs', 'comments'));
         } catch (Exception $e) {
             Log::error('Error showing public blog: ' . $e->getMessage(), ['slug' => $slug]);
             abort(404, 'Blog not found.');
@@ -193,7 +200,7 @@ class ProfilePageController extends Controller
 
             // Find the blog
             $blog = $this->blogService->getBlogBySlug($slug, false);
-            
+
             if (!$blog) {
                 Log::warning('Blog not found for comment submission', ['slug' => $slug]);
                 return redirect()->back()->with('error', 'Blog not found.');

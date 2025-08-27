@@ -127,5 +127,13 @@ Route::prefix('blogs')->name('blogs.')->group(function () {
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
+// Design Management Routes (for testing and admin purposes)
+Route::prefix('design')->name('design.')->group(function () {
+    Route::get('/info', [\App\Http\Controllers\DesignController::class, 'info'])->name('info');
+    Route::get('/reset', [\App\Http\Controllers\DesignController::class, 'reset'])->name('reset');
+    Route::get('/set/{design}', [\App\Http\Controllers\DesignController::class, 'set'])->name('set')->where('design', '[1-3]');
+    Route::get('/test', [\App\Http\Controllers\DesignController::class, 'test'])->name('test');
+});
+
 // Route for user profiles based on username (catch-all - must be last)
 Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');

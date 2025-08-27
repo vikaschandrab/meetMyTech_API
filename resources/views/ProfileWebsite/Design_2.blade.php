@@ -1,69 +1,88 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    @php
+    use Illuminate\Support\Str;
+@endphp
 
 <head>
-        <title>B Vikas Chandra - Personal CV/Resume </title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content=" skilled PHP developer with expertise in crafting dynamic and efficient web applications. With a keen eye for detail and a passion for problem-solving, Vikas excels in leveraging PHP frameworks such as Laravel, Symfony, and CodeIgniter to develop robust and scalable solutions. His proficiency extends to database management systems like MySQL and MongoDB, enabling him to design data-driven applications seamlessly. Vikas is adept at implementing best practices in coding standards, ensuring maintainability and scalability of projects. With a strong understanding of frontend technologies like HTML, CSS, and JavaScript, Vikas collaborates effectively with cross-functional teams to deliver high-quality software solutions. His dedication to staying updated with the latest trends and technologies in PHP development ensures that his projects are always at the forefront of innovation." />
-        <meta name="keywords" content="Vikas Chandra
-        ,PHP developer
-        ,Web development
-        ,PHP frameworks
-        ,Laravel
-        ,Symfony
-        ,CodeIgniter
-        ,MySQL
-        ,Database management
-        ,Backend development
-        ,Frontend technologies
-        ,HTML
-        ,CSS
-        ,JavaScript
-        ,Coding standards
-        ,Scalability
-        ,Maintainability
-        ,Innovation"
-        ,Cross-functional collaboration. " />
-        <meta name="developer" content="B Vikas Chandra">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- FAV AND ICONS   -->
-        <link rel="shortcut icon" href="{{ asset('vikas_css/images/favicon.ico') }}">
-        <link rel="shortcut icon" href="{{asset('vikas_css/images/my-icon.png')}}">
-        <link rel="shortcut icon" sizes="72x72" href="{{asset('vikas_css/images/my-icon-72x72.png')}}">
-        <link rel="shortcut icon" sizes="114x114" href="{{asset('vikas_css/images/my-icon-114x114.png')}}">
+    {{-- SEO Meta Tags --}}
+    <title>{{ $UserDetails->name }} - Personal CV/Resume</title>
+    @if($UserDetails->seo_description)
+    <meta name="description" content="{{ $UserDetails->seo_description }}">
+    @endif
+    @if($UserDetails->seo_keywords)
+    <meta name="keywords" content="{{ $UserDetails->seo_keywords }}">
+    @endif
+    <meta name="author" content="{{ $UserDetails->name }}">
+    <meta name="robots" content="index, follow">
 
-        <!-- Google Font-->
-        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css')}}">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/bootstrap.min.css')}}">
-        <!-- Animate CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/animate.css')}}">
-        <!-- Owl Carousel CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/owl.css')}}">
-        <!-- Fancybox-->
-        <link rel="stylesheet" href="{{asset('vikas_css/plugins/css/jquery.fancybox.min.css')}}">
+    {{-- Open Graph Meta Tags --}}
+    <meta property="og:title" content="{{ $UserDetails->name }} - Personal CV/Resume">
+    @if ($UserDetails->seo_description)
+    <meta property="og:description" content="{{ $UserDetails->seo_description }}">
+    @endif
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if($UserDetails->profilePic)
+    <meta property="og:image" content="{{ asset('storage/'.$UserDetails->profilePic) }}">
+    @endif
 
-        <!-- Custom CSS-->
-        <link rel="stylesheet" href="{{asset('vikas_css/css/styles.css')}}">
-        <link rel="stylesheet" href="{{asset('vikas_css/css/responsive.css')}}">
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $UserDetails->name }} - Personal CV/Resume">
+    <meta name="twitter:description" content="Skilled PHP developer with 7+ years of experience in web development">
+    @if($UserDetails->profilePic)
+    <meta name="twitter:image" content="{{ asset('storage/'.$UserDetails->profilePic) }}">
+    @endif
 
-        <!-- Colors -->
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/blue.css')}}" title="blue">
-        <link rel="stylesheet" href="{{asset('vikas_css/css/colors/defauld.css')}}" title="defauld">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/green.css')}}" title="green">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/blue-munsell.css')}}" title="blue-munsell">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/orange.css')}}" title="orange">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/purple.css')}}" title="purple">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/slate.css')}}" title="slate">
-        <link rel="alternate stylesheet" href="{{asset('vikas_css/css/colors/yellow.css')}}" title="yellow">
+    {{-- Favicons --}}
+    @if($UserDetails->logo_16_14_ico && $UserDetails->logo_16_14_png && $UserDetails->logo_72_72_png && $UserDetails->logo_114_114_png)
+    <link rel="icon" type="image/x-icon" href="{{ asset('storage/'.$UserDetails->logo_16_14_ico) }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('storage/'.$UserDetails->logo_16_14_png) }}">
+    <link rel="icon" type="image/png" sizes="72x72" href="{{ asset('storage/'.$UserDetails->logo_72_72_png) }}">
+    <link rel="icon" type="image/png" sizes="114x114" href="{{ asset('storage/'.$UserDetails->logo_114_114_png) }}">
+    <link rel="apple-touch-icon" href="{{ asset('storage/'.$UserDetails->logo_114_114_png) }}">
+    @endif
 
-    </head>
-    <body class="dark-vertion black-bg">
+    {{-- Preconnect for performance --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    {{-- External Stylesheets --}}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+    {{-- Stylesheets --}}
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/owl.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/jquery.fancybox.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/css/styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/css/responsive.css') }}">
+        <link rel="stylesheet" href="{{ asset('vikas_css/css/blog-section.css') }}">
+    @endpush
+
+    {{-- Color Themes --}}
+    @stack('color-themes')
+    <link rel="stylesheet" href="{{ asset('vikas_css/css/colors/defauld.css') }}" title="default">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/blue.css') }}" title="blue">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/green.css') }}" title="green">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/blue-munsell.css') }}" title="blue-munsell">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/orange.css') }}" title="orange">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/purple.css') }}" title="purple">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/slate.css') }}" title="slate">
+    <link rel="alternate stylesheet" href="{{ asset('vikas_css/css/colors/yellow.css') }}" title="yellow">
+
+    @stack('styles')
+</head>
+    {{-- <body class="white-version black-bg" data-spy="scroll" data-target="#navbar" data-offset="50"> --}}
+    <body class="dark-vertion black-bg" data-spy="scroll" data-target="#navbar" data-offset="50">
 <main>
 <!-- Start Loader -->
         <div class="section-loader">
@@ -84,9 +103,11 @@
             <div class="container">
                 <div class="row">
                     <nav class="navbar navbar-expand-lg mh-nav nav-btn">
+                        @if($UserDetails->logo_png)
                         <a class="navbar-brand" href="#">
-                            <img src="{{asset('vikas_css/images/My_logo.png')}}" alt="Vikas" class="img-fluid" width="64px">
+                            <img src="{{ asset('storage/'.$UserDetails->logo_png) }}" alt="{{ $UserDetails->name }}" class="img-fluid" width="64px">
                         </a>
+                        @endif
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon icon"></span>
                         </button>
@@ -104,6 +125,9 @@
                                 </li>
                                 <li class="nav-item">
                                    <a class="nav-link" href="#mh-experience">Experiences</a>
+                                </li>
+                                <li class="nav-item">
+                                   <a class="nav-link" href="#mh-blogs">Blogs</a>
                                 </li>
                                 <li class="nav-item">
                                    <a class="nav-link" href="#mh-contact">Contact</a>
@@ -130,33 +154,57 @@
                                     <span>Hello I'm called</span>
                                 </div>
 
-                                <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">B Vikas Chandra</h2>
-                                <h4 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">Software Developer</h4>
+                                <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">{{ $UserDetails->name }}</h2>
+                                <h4 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
+                                    @if($WorkExperiences && $WorkExperiences->count() > 0)
+                                        {{ $WorkExperiences->first()->position }}
+                                        @if($WorkExperiences->first()->to_date === null)
+                                            <small class="text-muted"> (Current)</small>
+                                        @endif
+                                    @else
+                                        Software Developer
+                                    @endif
+                                </h4>
 
                                 <ul>
-                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s"><i class="fa fa-envelope"></i><a href="mailto:">chandravikasa38@gmail.com</a></li>
-                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.5s"><i class="fa fa-phone"></i><a href="callto:">+91 7411247463</a></li>
-                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s"><a href="https://maps.app.goo.gl/ArSiMv719yZbH2uz5"><i class="fa fa-map-marker"></i><address>Buyyanapragada House, DVR layout
-                                        Babusabpalaya, Hennur Gardens,
-                                        Bengaluru, Karnataka,
-                                        India - 560043</address></li></a>
+                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s"><i class="fa fa-envelope"></i><a href="mailto:">{{ $UserDetails->email }}</a></li>
+                                    @if(isset($UserDetails->contactNum) && !empty($UserDetails->contactNum))
+                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.5s"><i class="fa fa-phone"></i><a href="tel:{{ $UserDetails->contactNum }}">{{ $UserDetails->contactNum }}</a></li>
+                                    @endif
+                                    @if(isset($UserDetails->address) && !empty($UserDetails->address))
+                                    <li class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s"><i class="fa fa-map-marker"></i><address>{{ $UserDetails->address }}</address></li>
+                                    @endif
                                 </ul>
 
                                 <ul class="social-icon wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s">
-                                    <li><a href="https://www.facebook.com/vikas.chandra.39"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="https://www.instagram.com/vickey_vikas/"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="https://www.linkedin.com/in/vikas-chandra-258a48118/"><i class="fa fa-linkedin"></i></a></li>
-                                    <li><a href="https://api.whatsapp.com/send?phone=+917411247463&text=Write to me for more details &source=&data=&app_absent="><i class="fa fa-whatsapp"></i></a></li>
+                                    @php
+                                        $socialLinks = [
+                                            'facebook_profile' => ['icon' => 'fa-facebook', 'url' => $UserDetails->facebook_profile ?? null],
+                                            'instagram_profile' => ['icon' => 'fa-instagram', 'url' => $UserDetails->instagram_profile ?? null],
+                                            'linkedin_profile' => ['icon' => 'fa-linkedin', 'url' => $UserDetails->linkedin_profile ?? null],
+                                            'github_profile' => ['icon' => 'fa-github', 'url' => $UserDetails->github_profile ?? null],
+                                            'twitter_profile' => ['icon' => 'fa-twitter', 'url' => $UserDetails->twitter_profile ?? null],
+                                            'whatsapp_number' => ['icon' => 'fa-whatsapp', 'url' => isset($UserDetails->whatsapp_number) ? "https://api.whatsapp.com/send?phone=+91{$UserDetails->whatsapp_number}&text=Write to me for more details" : null]
+                                        ];
+                                    @endphp
+
+                                    @foreach($socialLinks as $platform => $data)
+                                        @if($data['url'])
+                                            <li><a href="{{ $data['url'] }}" target="_blank" rel="noopener noreferrer"><i class="fa {{ $data['icon'] }}"></i></a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
+                        @if($UserDetails->profilePic)
                         <div class="col-sm-6">
                             <div class="hero-img wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">
                                 <div class="img-border">
-                                    <img src="{{asset('vikas_css/images/my_image.png')}}" alt="Vikas"  class="img-fluid">
+                                    <img src="{{ asset('storage/'.$UserDetails->profilePic) }}" alt="Vikas"  class="img-fluid">
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -178,26 +226,24 @@
                     <div class="col-sm-12 col-md-6">
                         <div class="mh-about-inner">
                             <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.1s">About Me</h2>
-                            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">Hello, I’m a Vikas, Software Developer.
-                                Open-minded and experienced developer with 7+ years of experience with Web Development.
-                                I am a positive, empathic, and communicative developer</p>
+                            @if($UserDetails->about)
+                            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">{{ $UserDetails->about }}</p>
+                            @endif
+                            @if($UserDetails->technologies)
                             <div class="mh-about-tag wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
                                 <ul>
-                                    <li><span>HTML</span></li>
-                                    <li><span>CSS</span></li>
-                                    <li><span>JavaScript</span></li>
-                                    <li><span>AJAX</span></li>
-                                    <li><span>php</span></li>
-                                    <li><span>Laravel</span></li>
-                                    <li><span>Vue.js</span></li>
-                                    <li><span>React Native</span></li>
-                                    <li><span>MySQL</span></li>
-                                    <li><span>Logo Design</span></li>
-                                    <li><span>UI Design</span></li>
+                                    @php
+                                        $technologies = explode(',', $UserDetails->technologies);
+                                    @endphp
+                                    @foreach($technologies as $technology)
+                                        <li><span>{{ trim($technology) }}</span></li>
+                                    @endforeach
                                 </ul>
                             </div>
-                            <!-- <a href="https://resume.io/r/RGs81g8eO" class="btn btn-fill wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s">My CV <i class="fa fa-download"></i></a> -->
-                            <a href="https://app.resumegiants.com/share/4f448de794774423b4d4174e4e547fce" class="btn btn-fill wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s" target="_blank">My CV <i class="fa fa-download"></i></a>
+                            @endif
+                            @if($UserDetails->resume_filename)
+                            <a href="{{ asset('storage/'.$UserDetails->resume_filename) }}" class="btn btn-fill wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s" target="_blank">My CV <i class="fa fa-download"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -212,36 +258,22 @@
         <section class="mh-service">
             <div class="container">
                 <div class="row section-separator">
+                    @if(isset($UserDetails->action) && is_array($UserDetails->action) && isset($UserDetails->description) && is_array($UserDetails->description))
                     <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
                         <h3>What I do</h3>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
-                            <i class="fa fa-apple purple-color"></i>
-                            <h3>Logo Design</h3>
-                            <p>
-                                A symbol or design that represents your whole
-                                brand or business is the core responsibility of
-                                every smart designer. A powerful logo can communicate
-                                the strength and credibility of your business and can
-                                also attract potential opportunities and customers into it. <br><br><br>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.5s">
-                            <i class="fa fa-code iron-color"></i>
-                            <h3>Web Development</h3>
-                            <p>
-                                 A great website starts with a seamless user experience.
-                               A flawless digital interface is key to making a lasting
-                               impression on online visitors, especially those comparing
-                               multiple businesses before making a choice. Through thoughtful
-                               development, we ensure your users feel comfortable, engaged,
-                                and confident while navigating your web pages.
-                            </p>
-                        </div>
-                    </div>
+                        @foreach($UserDetails->action as $index => $action)
+                            @if(isset($UserDetails->description[$index]))
+                                <div class="col-sm-6">
+                                    <div class="mh-service-item shadow-1 dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="{{ 0.3 + ($index * 0.2) }}s">
+                                            <i class="fa fa-code iron-color"></i>
+                                        <h3>{{ $action }}</h3>
+                                        <p>{{ $UserDetails->description[$index] }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </section>
@@ -467,30 +499,42 @@
                             <div class="mh-professional-skills wow fadeInUp align" data-wow-duration="0.8s" data-wow-delay="0.5s">
                                 <h3>Professional Skills</h3>
                                 <ul class="mh-professional-progress">
+                                    @if($UserDetails->communication)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="90"></div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->communication }}"></div>
                                         <div class="pr-skill-name">Communication</div>
                                     </li>
+                                    @endif
+                                    @if($UserDetails->team_work)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="90"></div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->team_work }}"></div>
                                         <div class="pr-skill-name">Team Work</div>
                                     </li>
+                                    @endif
+                                    @if($UserDetails->project_management)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="95"></div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->project_management }}"></div>
                                         <div class="pr-skill-name">Project Management</div>
                                     </li>
+                                    @endif
+                                    @if($UserDetails->creativity)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="95"></div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->creativity }}"></div>
                                         <div class="pr-skill-name">Creativity</div>
                                     </li>
+                                    @endif
+                                    @if($UserDetails->team_management)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="85"></div>
-                                        <div class="pr-skill-name">Time Management</div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->team_management }}"></div>
+                                        <div class="pr-skill-name">Team Management</div>
                                     </li>
+                                    @endif
+                                    @if($UserDetails->active_participation)
                                     <li>
-                                        <div class="mh-progress mh-progress-circle" data-progress="100"></div>
+                                        <div class="mh-progress mh-progress-circle" data-progress="{{ $UserDetails->active_participation }}"></div>
                                         <div class="pr-skill-name">Active Participation</div>
                                     </li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -509,95 +553,134 @@
                 <div class="container">
                     <div class="row section-separator">
                         <div class="col-sm-12 col-md-6">
+                            @if($EducationDetails && $EducationDetails->count() > 0)
                             <div class="mh-education">
                                 <h3 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">Education</h3>
+                                @foreach ($EducationDetails as $education)
                                 <div class="mh-education-deatils">
-                                    <!-- Education Institutes-->
                                     <div class="mh-education-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
-                                        <h4>Bachelor of Engineering From <a href="https://www.hmsit.ac.in/" target="_blank">Hms Institute of Technology</a></h4>
-                                        <div class="mh-eduyear">2011-2015</div>
-                                        <p>Dynamic and results-oriented professional with a Bachelor of Engineering degree in
-                                            Electronics and Communication from Visvesvaraya Technological University in 2015.
-                                            Possessing a strong foundation in coding, seeking to leverage skills and knowledge to contribute effectively in a challenging environment.</p>
+                                        @if($education->degree || $education->university)
+                                        <h4>{{ $education->degree }} From {{ $education->university }}</h4>
+                                        @endif
+                                        @if($education->from_date && $education->to_date)
+                                        <div class="mh-eduyear">{{ $education->from_date }} to {{ $education->to_date }}</div>
+                                        @endif
+                                        @if($education->description)
+                                        <p>{{ $education->description }}</p>
+                                        @endif
                                     </div>
-                                    <!-- Education Institutes-->
-                                    <div class="mh-education-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.5s">
-                                        <h4>Master of Technology From <a href="https://www.shrideviengineering.org/" target="_blank">Shridevi Institute of Engineering & Technology (SIET)</a></h4>
-                                        <div class="mh-eduyear">2005-2008</div>
-                                        <p>A comprehensive and rigorous program in VLSI Design and Embedded Systems,
-                                            completed with distinction. Acquired advanced knowledge and practical
-                                            skills in designing Very Large Scale Integration (VLSI) circuits and systems,
-                                            as well as developing embedded systems for various applications. </p>
-                                    </div>
-                                </div>
+                                </div><br>
+                                @endforeach
                             </div>
+                            @endif
                         </div>
                         <div class="col-sm-12 col-md-6">
+                            @if($WorkExperiences && $WorkExperiences->count() > 0)
                             <div class="mh-work">
                                  <h3>Work Experience</h3>
+                                 @foreach ($WorkExperiences as $work)
                                 <div class="mh-experience-deatils">
-                                    <!-- Education Institutes-->
-                                    <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.6s; animation-name: fadeInUp;">
-                                        <h4>Logo Design <a href="https://www.nxtgio.com/" target="_blank">nxtGIO Technologies LLP</a></h4>
-                                        <div class="mh-eduyear">2017-2022</div>
-                                        <span>Responsibility :</span>
-                                        <ul class="work-responsibility">
-                                            <li><i class="fa fa-circle"></i>Designing Logo for companies with golden ratio</li>
-                                            <!-- <li><i class="fa fa-circle"></i>Project Management</li> -->
-                                        </ul>
-                                    </div>
-                                    <!-- Education Institutes-->
-                                    <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
-                                        <h4>Software Developer <a href="https://www.nxtgio.com/" target="_blank">nxtGIO Technologies LLP</a></h4>
-                                        <div class="mh-eduyear">2017-2022</div>
+                                    {{-- <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
+
+                                        <h4>{{ $work->position }} at {{ $work->organization }}</h4>
+                                        <div class="mh-eduyear">{{ $work->from_date }} to {{ $work->to_date }}</div>
                                         <span>Roles &amp; Responsibility :</span>
-                                        <ul class="work-responsibility">
-                                            <li><i class="fa fa-circle"></i>Collaborate with design teams to implement user interface
-                                                 components using HTML, CSS, JavaScript, and jQuery. Ensure responsive design for
-                                                 optimal user experience across devices.</li>
-                                            <li><i class="fa fa-circle"></i>Project Management</li>
-                                            <li>Utilize PHP programming language and MySQL database management for server-side development, implementing complex business logic and database interactions.
-                                                Framework Expertise: Apply expertise in Laravel framework for rapid development of web applications, adhering to best practices and design patterns.</li>
-                                        </ul>
-                                    </div>
+                                         @if($work->roles_and_responsibilities)
+                                        <p>{{ $work->roles_and_responsibilities }}</p>
+                                        @endif
+                                    </div> --}}
                                     <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
-                                        <h4>Senior Software Developer <a href="https://www.zibtek.com/" target="_blank">Zibtek</a></h4>
-                                        <div class="mh-eduyear">2022-2024</div>
+                                        @if($work->position && $work->organization)
+                                        <h4>{{ $work->position }} at {{ $work->organization }}</h4>
+                                        @endif
+                                        @if($work->from_date)
+                                        <div class="mh-eduyear">{{ $work->from_date }} to {{ $work->to_date ? $work->to_date : 'till date' }}</div>
+                                        @endif
                                         <span>Roles &amp; Responsibility :</span>
-                                        <ul class="work-responsibility">
-                                            <li><i class="fa fa-circle"></i>Develop and maintain robust web applications using Laravel framework,
-                                                        ensuring high performance, scalability, and security.</li>
-                                            <li><i class="fa fa-circle"></i>Collaborate with design teams to implement user interface components using HTML,
-                                                CSS, JavaScript, and jQuery. Ensure responsive design for optimal user experience across devices.</li>
-                                            <li><i class="fa fa-circle"></i> Utilize PHP programming language and MySQL database management for server-side development, implementing complex business logic and database interactions.
-                                                Framework Expertise: Apply expertise in Laravel framework for rapid development of web applications, adhering to best practices and design patterns.</li>
-                                            <li><i class="fa fa-circle"></i> Customize WordPress themes and plugins to meet client specifications, including theme development, plugin integration, and customization of functionalities.</li>
-                                            <li><i class="fa fa-circle"></i> Optimize database queries, implement caching mechanisms, and employ performance tuning techniques to enhance application speed and efficiency.</li>
-                                            <li><i class="fa fa-circle"></i> Interact with clients to understand project requirements, provide regular updates on project progress, and offer technical support and troubleshooting assistance as needed.</li>
-                                            <li><i class="fa fa-circle"></i> Maintain clear and comprehensive documentation for codebase, APIs, and technical processes, ensuring ease of understanding for team members and stakeholders.</li>
-                                            <li><i class="fa fa-circle"></i> Stay updated with the latest web development trends, technologies, and best practices, and actively seek opportunities for professional growth and skill enhancement.</li>
-                                        </ul>
+                                         @if($work->roles_and_responsibilities)
+                                        <p>{{ $work->roles_and_responsibilities }}</p>
+                                        @endif
                                     </div>
-                                    <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
-                                        <h4>Software Developer II <a href="https://www.mrisoftware.com/" target="_blank">MRI Software India Pvt Ltd</a></h4>
-                                        <div class="mh-eduyear">2024-Till Now</div>
-                                        <span>Roles &amp; Responsibility :</span>
-                                        <ul class="work-responsibility">
-                                            <li><i class="fa fa-circle"></i>Design, develop, and maintain software applications according to business needs.</li>
-                                            <li><i class="fa fa-circle"></i>Write clean, efficient, and well-documented code.</li>
-                                            <li><i class="fa fa-circle"></i>Collaborate with cross-functional teams, including designers, product managers, and other developers.</li>
-                                            <li><i class="fa fa-circle"></i>Debug, test, and troubleshoot software to ensure optimal functionality and performance.</li>
-                                            <li><i class="fa fa-circle"></i>Stay updated with emerging technologies and industry trends to incorporate best practices.</li>
-                                            <li><i class="fa fa-circle"></i>Participate in code reviews and provide constructive feedback to team members.</li>
-                                            <li><i class="fa fa-circle"></i>Analyze user requirements and translate them into technical solutions.</li>
-                                            <li><i class="fa fa-circle"></i>Continuously improve and optimize existing software systems.</li>
-                                            <li><i class="fa fa-circle"></i>Ensure applications meet security and data protection standards.</li>
-                                            <li><i class="fa fa-circle"></i>Prepare technical documentation for reference and reporting.</li>
-                                        </ul>
+                                </div><br>
+                                @endforeach
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--
+        ===================
+           BLOGS
+        ===================
+        -->
+        <section class="mh-blog" id="mh-blogs">
+            <div class="container">
+                <div class="row section-separator">
+                    <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
+                        <h3>Latest Blogs</h3>
+                    </div>
+                    <div class="col-sm-12">
+                        @if($blogs && $blogs->count() > 0)
+                            <div class="mh-blog-slider owl-carousel wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
+                                @foreach($blogs as $blog)
+                                <!-- Blog Item -->
+                                <div class="item">
+                                    <div class="mh-blog-item dark-bg shadow-1">
+                                        <div class="blog-inner">
+                                            <div class="mh-blog-img">
+                                                <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">
+                                                    @if($blog->featured_image)
+                                                        <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}" class="img-fluid">
+                                                    @else
+                                                        <img src="{{asset('vikas_css/images/contact.gif')}}" alt="{{ $blog->title }}" class="img-fluid">
+                                                    @endif
+                                                </a>
+                                            </div>
+                                            <div class="mh-blog-info">
+                                                <div class="mh-blog-meta">
+                                                    <span class="blog-date">{{ $blog->published_at ? $blog->published_at->format('d M, Y') : $blog->created_at->format('d M, Y') }}</span>
+                                                    @if($blog->tags && is_array($blog->tags) && count($blog->tags) > 0)
+                                                        <span class="blog-category">{{ $blog->tags[0] }}</span>
+                                                    @endif
+                                                    @if($blog->reading_time)
+                                                        <span class="blog-reading-time">{{ $blog->reading_time }} min read</span>
+                                                    @endif
+                                                </div>
+                                                <h3><a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">{{ $blog->title }}</a></h3>
+                                                <p>{{ Str::limit($blog->description, 120, '...') }}</p>
+                                                <div class="mh-blog-footer">
+                                                    <div class="blog-read-more">
+                                                        <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="btn btn-outline">Read More</a>
+                                                    </div>
+                                                    @if($blog->views_count)
+                                                        <div class="blog-views">
+                                                            <span><i class="fa fa-eye"></i> {{ $blog->views_count }} views</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="mh-no-blogs text-center wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
+                                <div class="no-blogs-content">
+                                    <div class="no-blogs-icon">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </div>
+                                    <h4>No Blogs Available</h4>
+                                    <p class="text-muted">I haven't published any blog posts yet. Stay tuned for upcoming articles where I'll share insights about web development, programming tips, and industry best practices.</p>
+                                    <div class="coming-soon-badge">
+                                        <span class="badge-text">Coming Soon</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -787,12 +870,9 @@
                                             </div>
                                             <div class="each-info media-body">
                                                 <h4>Address</h4>
-                                                <a href="https://maps.app.goo.gl/ArSiMv719yZbH2uz5" target="_blank"><address>
-                                                    Buyyanapragada House, DVR layout
-                                                    Babusabpalaya, Hennur Gardens,
-                                                    Bengaluru, Karnataka,
-                                                    India - 560043
-                                                </address></a>
+                                                <address>
+                                                    {{ $UserDetails->address ? $UserDetails->address : 'Not Available' }}
+                                                </address>
                                             </div>
                                         </div>
                                     </div>
@@ -803,11 +883,11 @@
                                             </div>
                                             <div class="each-info media-body">
                                                 <h4>Email</h4>
-                                                <a href="mailto:chandravikasa38@gmail.com">chandravikasa38@gmail.com</a><br>
-                                                <a href="sendtovikaschandra@gmail.com">sendtovikaschandra@gmail.com</a>
+                                                <a href="mailto:{{ $UserDetails->email }}">{{ $UserDetails->email }}</a><br>
                                             </div>
                                         </div>
                                     </div>
+                                    @if($UserDetails->contactNum)
                                     <div class="col-sm-12 xs-no-padding">
                                         <div class="mh-address-footer-item media dark-bg shadow-1 wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">
                                             <div class="each-icon">
@@ -815,31 +895,14 @@
                                             </div>
                                             <div class="each-info media-body">
                                                 <h4>Phone</h4>
-                                                <a href="callto:+91 7411247463">+91 7411247463</a><br>
-                                                <!-- <a href="callto:(880)-8976-987">(880)-8976-987</a> -->
+                                                <a href="callto:{{ $UserDetails->contactNum }}">{{ $UserDetails->contactNum }}</a><br>
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <div class="col-sm-12 col-md-6 wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
                                     <img src="{{asset('vikas_css/images/contact.gif')}}" alt="contact_me" class="img-fluid">
-                                </div>
-                                <div class="col-sm-12 mh-copyright wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
-                                    <div class="row">
-                                        <!-- <div class="col-sm-6">
-                                            <div class="text-left text-xs-center">
-                                                <p>All right reserved Siful Islam @ 2018</p>
-                                            </div>
-                                        </div> -->
-                                        <div class="col-sm-6">
-                                            <ul class="social-icon">
-                                                <li><a href="https://www.facebook.com/vikas.chandra.39"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="https://www.instagram.com/vickey_vikas/"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="https://www.linkedin.com/in/vikas-chandra-258a48118/"><i class="fa fa-linkedin"></i></a></li>
-                                    <li><a href="https://api.whatsapp.com/send?phone=+917411247463&text=Write to me for more details &source=&data=&app_absent="><i class="fa fa-whatsapp"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -847,6 +910,15 @@
                 </div>
             </div>
         </footer>
+
+        <!-- Website Attribution -->
+        <div class="website-attribution text-center" style="background: #000; padding: 15px 0; margin-top: 30px;">
+            <div class="container">
+                <p style="color: #999; margin: 0; font-size: 14px;">
+                    Developed and maintained by <a href="https://meetmytech.com" target="_blank" style="color: #f9bf3b; text-decoration: none;">meetmytech.com</a>
+                </p>
+            </div>
+        </div>
 
     <!--
     ==============
@@ -877,28 +949,20 @@
     <!-- Fancybox js-->
     <script src="{{asset('vikas_css/plugins/js/jquery.fancybox.min.js')}}"></script>
     <!-- Map api -->
-    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;key=AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;key=AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc" async defer></script>
     <!-- isotope js-->
     <script src="{{asset('vikas_css/plugins/js/isotope.pkgd.js')}}"></script>
     <script src="{{asset('vikas_css/plugins/js/packery-mode.pkgd.js')}}"></script>
     <!-- Custom Scripts-->
     <script src="{{asset('vikas_css/js/map-init.js')}}"></script>
     <script src="{{asset('vikas_css/js/custom-scripts.js')}}"></script>
+    <script src="{{asset('vikas_css/js/blog-carousel.js')}}"></script>
 
 
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/63aecf8047425128790ad5e8/1glhdl4dc';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    {{-- Dynamic Footer Script --}}
+    @if(isset($UserDetails->tawk_js) && !empty($UserDetails->tawk_js))
+        {!! $UserDetails->tawk_js !!}
+    @endif
 </main>
 </body>
 

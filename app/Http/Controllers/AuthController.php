@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\LoggingService;
+use App\Services\DesignService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,7 +16,11 @@ class AuthController extends Controller
 
     public function index(){
         LoggingService::logAuth('login_page_view', 'User viewed login page');
-        return view('Users.login');
+
+        // Session-based design selection for login page
+        $selectedDesign = DesignService::getLoginDesign();
+
+        return view('Users.' . $selectedDesign);
     }
 
     public function login(Request $request)
@@ -113,7 +118,11 @@ class AuthController extends Controller
     public function showForgotPasswordForm()
     {
         LoggingService::logAuth('forgot_password_page_view', 'User viewed forgot password page');
-        return view('Users.forgot-password');
+
+        // Session-based design selection for forgot password page
+        $selectedDesign = DesignService::getForgotPasswordDesign();
+
+        return view('Users.' . $selectedDesign);
     }
 
     /**
