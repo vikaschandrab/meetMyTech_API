@@ -63,7 +63,7 @@ class Blog extends Model
         static::creating(function ($blog) {
             if (empty($blog->slug)) {
                 $blog->slug = Str::slug($blog->title);
-                
+
                 // Ensure slug is unique
                 $originalSlug = $blog->slug;
                 $count = 1;
@@ -140,16 +140,35 @@ class Blog extends Model
         $wordCount = str_word_count(strip_tags($content));
         $averageWordsPerMinute = 200; // Average reading speed
         $minutes = ceil($wordCount / $averageWordsPerMinute);
-        
+
         return $minutes . ' min read';
     }
 
     /**
-     * Increment the views count.
+     * Increment the views count only if not viewed in current session.
      */
     public function incrementViews()
     {
-        $this->increment('views_count');
+        // Create a unique session key for this blog
+        $sessionKey = 'blog_viewed_' . $this->id;
+
+        // Check if this blog has been viewed in the current session
+        if (!session()->has($sessionKey)) {
+            // Mark as viewed in this session
+            session()->put($sessionKey, true);
+
+            // Increment the view count
+            $this->increment('views_count');
+
+            // Log the view for analytics (optional)
+            \Illuminate\Support\Facades\Log::info('Blog view incremented', [
+                'blog_id' => $this->id,
+                'blog_slug' => $this->slug,
+                'session_id' => session()->getId(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
+        }
     }
 
     /**

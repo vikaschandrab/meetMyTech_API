@@ -64,6 +64,20 @@
                                 @enderror
                             </div>
 
+                            {{-- Honeypot (Anti-spam) --}}
+                            @honeypot
+
+                            {{-- Google reCAPTCHA --}}
+                            <div class="mb-3 text-center">
+                                <div class="d-flex justify-content-center">
+                                    {!! NoCaptcha::renderJs() !!}
+                                    {!! NoCaptcha::display() !!}
+                                </div>
+                                @error('g-recaptcha-response')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="d-grid mb-4">
                                 <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="fas fa-paper-plane me-2"></i>{{ __('Send New Password') }}
@@ -109,6 +123,9 @@
 @endsection
 
 @push('styles')
+<!-- Google reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
     .min-vh-100 {
         min-height: 100vh;

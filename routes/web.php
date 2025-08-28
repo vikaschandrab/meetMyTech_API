@@ -31,12 +31,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-blogs');
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login.submit')
+    ->middleware(['throttle:5,10', \Spatie\Honeypot\ProtectAgainstSpam::class]);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Forgot Password Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password.submit');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
+    ->name('forgot-password.submit')
+    ->middleware(['throttle:3,15', \Spatie\Honeypot\ProtectAgainstSpam::class]);
 
 
 Route::get('/health', [\App\Http\Controllers\HealthCheckController::class, 'index']);
@@ -120,12 +124,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
 Route::prefix('blogs')->name('blogs.')->group(function () {
     Route::get('/{slug}', [ProfilePageController::class, 'publicShow'])->name('show');
-    Route::post('/{slug}/comments', [ProfilePageController::class, 'storeComment'])->name('comments.store');
+    Route::post('/{slug}/comments', [ProfilePageController::class, 'storeComment'])
+        ->name('comments.store')
+        ->middleware(['throttle:10,15', \Spatie\Honeypot\ProtectAgainstSpam::class]);
 });
 
 // Contact Routes (must be before catch-all route)
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/contact', [ContactController::class, 'submit'])
+    ->name('contact.submit')
+    ->middleware([
+        'throttle:5,10', // 5 requests per 10 minutes
+        \Spatie\Honeypot\ProtectAgainstSpam::class
+    ]);
 
 // Route for user profiles based on username (catch-all - must be last)
 Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
