@@ -23,6 +23,13 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'g-recaptcha-response' => 'required|captcha',
+        ], [
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'password.required' => 'Password is required.',
+            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
         ]);
 
         LoggingService::logAuth('login_attempt', 'User attempting to login', [
@@ -122,7 +129,13 @@ class AuthController extends Controller
     public function forgotPassword(Request $request)
     {
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'g-recaptcha-response' => 'required|captcha',
+        ], [
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
         ]);
 
         try {

@@ -22,7 +22,7 @@ class ContactController extends Controller
      */
     public function submit(Request $request)
     {
-        // Validate the form data
+        // Validate the form data including reCAPTCHA
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -31,6 +31,10 @@ class ContactController extends Controller
             'current_organization' => 'required|string|max:255',
             'position' => 'required|string|max:255',
             'technologies' => 'required|string|max:1000',
+            'g-recaptcha-response' => 'required|captcha',
+        ], [
+            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
         ]);
 
         if ($validator->fails()) {
@@ -39,7 +43,7 @@ class ContactController extends Controller
 
         try {
             $data = $request->all();
-            
+
             // Send email to contact.us@meetmytech.com
             Mail::send('emails.contact-inquiry', ['contactData' => $data], function($message) use ($data) {
                 $message->to('contact.us@meetmytech.com')
@@ -55,7 +59,7 @@ class ContactController extends Controller
             });
 
             return back()->with('success', 'Thank you for your interest! We have received your inquiry and will get back to you within 24 hours.');
-            
+
         } catch (\Exception $e) {
             Log::error('Contact form error: ' . $e->getMessage());
             return back()->with('error', 'Sorry, there was an error sending your message. Please try again or contact us directly at contact.us@meetmytech.com');

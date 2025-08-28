@@ -55,6 +55,20 @@
         </a>
     </div>
 
+    {{-- Honeypot (Anti-spam) --}}
+    @honeypot
+
+    {{-- Google reCAPTCHA --}}
+    <div class="mb-3 text-center">
+        <div class="d-flex justify-content-center">
+            {!! NoCaptcha::renderJs() !!}
+            {!! NoCaptcha::display() !!}
+        </div>
+        @error('g-recaptcha-response')
+            <div class="text-danger small mt-2">{{ $message }}</div>
+        @enderror
+    </div>
+
     {{-- Submit Button --}}
     <div class="d-grid gap-2">
         <button type="submit" class="btn btn-lg btn-primary">

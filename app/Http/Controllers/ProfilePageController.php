@@ -185,15 +185,23 @@ class ProfilePageController extends Controller
     public function storeComment(Request $request, string $slug)
     {
         try {
-            // Validate the request
+            // Validate the request including reCAPTCHA
             $request->validate([
                 'user_name' => 'required|string|max:255',
                 'message' => 'required|string|max:1000',
+                'g-recaptcha-response' => 'required|captcha',
+            ], [
+                'user_name.required' => 'Please enter your name.',
+                'user_name.max' => 'Name must not exceed 255 characters.',
+                'message.required' => 'Please enter your comment.',
+                'message.max' => 'Comment must not exceed 1000 characters.',
+                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+                'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
             ]);
 
             // Find the blog
             $blog = $this->blogService->getBlogBySlug($slug, false);
-            
+
             if (!$blog) {
                 Log::warning('Blog not found for comment submission', ['slug' => $slug]);
                 return redirect()->back()->with('error', 'Blog not found.');

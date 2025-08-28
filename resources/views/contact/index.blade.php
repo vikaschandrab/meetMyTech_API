@@ -15,6 +15,9 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <style>
         :root {
             --primary-color: #2563eb;
@@ -337,6 +340,20 @@
                                               required>{{ old('technologies') }}</textarea>
                                     @error('technologies')
                                         <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Honeypot (Anti-spam) -->
+                                @honeypot
+
+                                <!-- Google reCAPTCHA -->
+                                <div class="col-12 text-center">
+                                    <div class="d-flex justify-content-center">
+                                        {!! NoCaptcha::renderJs() !!}
+                                        {!! NoCaptcha::display() !!}
+                                    </div>
+                                    @error('g-recaptcha-response')
+                                        <div class="text-danger small mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
 

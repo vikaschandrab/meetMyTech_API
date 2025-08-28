@@ -3,6 +3,9 @@
 @section('title', $blog->title)
 
 @push('styles')
+<!-- Google reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
     /* TinyMCE Content Styling */
     .blog-content {
@@ -618,6 +621,20 @@
                                 </small>
                                 <small class="text-muted fw-bold" id="charCount">0/1000</small>
                             </div>
+                        </div>
+
+                        <!-- Honeypot (Anti-spam) -->
+                        @honeypot
+
+                        <!-- Google reCAPTCHA -->
+                        <div class="mb-3 text-center">
+                            <div class="d-flex justify-content-center">
+                                {!! NoCaptcha::renderJs() !!}
+                                {!! NoCaptcha::display() !!}
+                            </div>
+                            @error('g-recaptcha-response')
+                                <div class="text-danger small mt-2">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="text-end">
