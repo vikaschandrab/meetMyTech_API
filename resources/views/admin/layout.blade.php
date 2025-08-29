@@ -85,6 +85,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.subscribers') ? 'active' : '' }}"
+                               href="{{ route('admin.subscribers') }}">
+                                <i class="fas fa-envelope me-2"></i>Subscribers
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.logs') ? 'active' : '' }}"
                                href="{{ route('admin.logs') }}">
                                 <i class="fas fa-file-alt me-2"></i>Activity Logs

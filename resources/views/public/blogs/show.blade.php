@@ -14,7 +14,7 @@
         font-size: 16px;
     }
 
-    .blog-content h1, .blog-content h2, .blog-content h3, 
+    .blog-content h1, .blog-content h2, .blog-content h3,
     .blog-content h4, .blog-content h5, .blog-content h6 {
         margin-top: 2rem;
         margin-bottom: 1rem;
@@ -296,6 +296,60 @@
         -webkit-text-fill-color: #2c3e50 !important;
     }
 
+    /* Subscription form input visibility fixes */
+    .subscription-form input[type="email"],
+    .subscription-form input {
+        background-color: #ffffff !important;
+        color: #2c3e50 !important;
+        -webkit-text-fill-color: #2c3e50 !important;
+        border: 2px solid #dee2e6 !important;
+        font-size: 16px !important;
+        padding: 12px 16px !important;
+        border-radius: 8px !important;
+    }
+
+    .subscription-form input[type="email"]:focus,
+    .subscription-form input:focus {
+        background-color: #ffffff !important;
+        color: #2c3e50 !important;
+        -webkit-text-fill-color: #2c3e50 !important;
+        border-color: #007bff !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+        outline: none !important;
+    }
+
+    .subscription-form input::placeholder {
+        color: #6c757d !important;
+        opacity: 1 !important;
+    }
+
+    .subscription-form .form-label {
+        color: #2c3e50 !important;
+        font-weight: 600 !important;
+        margin-bottom: 8px !important;
+        display: block !important;
+        font-size: 14px !important;
+    }
+
+    .subscription-form .form-label i {
+        color: #007bff !important;
+    }
+
+    /* Subscription section text visibility */
+    .subscription-section .lead,
+    .subscription-section p {
+        color: #2c3e50 !important;
+        font-weight: 500 !important;
+    }
+
+    .subscription-section .text-muted {
+        color: #495057 !important;
+    }
+
+    .subscription-section .card-body {
+        background-color: #ffffff !important;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .comment-form .card-body {
@@ -346,12 +400,770 @@
         border-top: 2px solid #dee2e6;
     }
 
+    /* Compact Share & Engage Section */
+    .compact-share-engage-bar {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border: 1px solid #e9ecef;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .compact-share-engage-bar:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .share-section, .engage-section {
+        padding: 0.5rem 0;
+    }
+
+    .share-label, .engage-label {
+        color: #2c3e50 !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .share-label i, .engage-label i {
+        color: #007bff !important;
+    }
+
+    /* Compact Share Buttons */
+    .share-buttons-compact {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .share-btn-compact {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .share-btn-compact::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .share-btn-compact:hover::before {
+        opacity: 1;
+    }
+
+    .share-btn-compact:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .share-btn-compact.twitter {
+        background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
+    }
+
+    .share-btn-compact.facebook {
+        background: linear-gradient(135deg, #4267B2 0%, #365899 100%);
+    }
+
+    .share-btn-compact.linkedin {
+        background: linear-gradient(135deg, #0077B5 0%, #005885 100%);
+    }
+
+    .share-btn-compact.whatsapp {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    }
+
+    /* Compact Engage Buttons */
+    .engage-buttons-compact {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .engage-btn-compact {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .engage-btn-compact:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .subscribe-compact {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: #fff;
+    }
+
+    .subscribe-compact:hover {
+        background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+        color: #fff;
+    }
+
+    .comment-compact {
+        background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+        color: #fff;
+    }
+
+    .comment-compact:hover {
+        background: linear-gradient(135deg, #0056b3 0%, #520dc2 100%);
+        color: #fff;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        margin-top: 1.25rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .stat-compact {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6c757d;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .stat-compact i {
+        color: #007bff;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive Design for Compact Version */
+    @media (max-width: 768px) {
+        .compact-share-engage-bar {
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .share-section, .engage-section {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .share-buttons-compact, .engage-buttons-compact {
+            justify-content: center;
+        }
+
+        .stats-bar {
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .stat-compact {
+            font-size: 0.8rem;
+        }
+
+        .share-btn-compact {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+        }
+
+        .engage-btn-compact {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    /* Animation */
+    .compact-share-engage-bar {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    /* Elegant Modal Styles */
+    .elegant-modal {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        max-width: 500px;
+        margin: 1.75rem auto;
+    }
+
+    .elegant-modal .modal-header {
+        border: none;
+        padding: 1.5rem 1.5rem 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .elegant-modal .modal-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        pointer-events: none;
+    }
+
+    .modal-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-right: 1rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-title-section {
+        flex: 1;
+    }
+
+    .elegant-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem 0;
+        color: white;
+    }
+
+    .modal-subtitle {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .elegant-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        font-size: 14px;
+    }
+
+    .elegant-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+
+    .elegant-body {
+        padding: 1.5rem;
+        background: #fafbfc;
+    }
+
+    .elegant-form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .elegant-label {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .required-star {
+        color: #e74c3c;
+        margin-left: 0.25rem;
+    }
+
+    .elegant-input-wrapper {
+        position: relative;
+    }
+
+    .elegant-input, .elegant-textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        background: white;
+        color: #2c3e50;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        outline: none;
+        font-family: inherit;
+    }
+
+    .elegant-input:focus, .elegant-textarea:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .elegant-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .input-focus-line {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .elegant-input:focus + .input-focus-line,
+    .elegant-textarea:focus + .input-focus-line {
+        width: 100%;
+    }
+
+    .elegant-form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .elegant-hint {
+        color: #6c757d;
+        font-size: 0.8rem;
+    }
+
+    .elegant-counter {
+        color: #667eea;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .elegant-error {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+        display: block;
+    }
+
+    .elegant-captcha {
+        text-align: center;
+        margin: 1.25rem 0;
+    }
+
+    .captcha-wrapper {
+        display: inline-block;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .elegant-alert {
+        padding: 0.875rem 1rem;
+        border-radius: 10px;
+        border: none;
+        margin: 0.875rem 0;
+        font-size: 0.85rem;
+    }
+
+    .elegant-alert-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .elegant-alert-error {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .elegant-footer {
+        padding: 1.25rem 1.5rem 1.5rem;
+        border: none;
+        background: #fafbfc;
+        gap: 0.75rem;
+    }
+
+    .elegant-btn-secondary {
+        background: #e9ecef;
+        color: #6c757d;
+        border: none;
+        padding: 0.6rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .elegant-btn-secondary:hover {
+        background: #dee2e6;
+        color: #495057;
+        transform: translateY(-2px);
+    }
+
+    .elegant-btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-size: 0.9rem;
+    }
+
+    .elegant-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+
+    /* Subscription Modal Specific Styles */
+    .subscription-modal .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .subscription-icon-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .subscription-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        position: relative;
+        z-index: 2;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .subscription-rings {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .ring {
+        position: absolute;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .ring-1 {
+        width: 80px;
+        height: 80px;
+        animation: pulse 2s infinite;
+    }
+
+    .ring-2 {
+        width: 100px;
+        height: 100px;
+        animation: pulse 2s infinite 0.5s;
+    }
+
+    .ring-3 {
+        width: 120px;
+        height: 120px;
+        animation: pulse 2s infinite 1s;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+        70% {
+            opacity: 0.3;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.4);
+        }
+    }
+
+    .subscription-title-section {
+        text-align: center;
+    }
+
+    .subscription-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        color: white;
+    }
+
+    .subscription-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .subscription-body {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #fafbfc 0%, #f8f9fa 100%);
+    }
+
+    .subscription-intro {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
+        background: white !important;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .intro-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: white;
+        margin: 0 auto 0.875rem;
+    }
+
+    .intro-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2c3e50 !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .intro-text {
+        color: #495057 !important;
+        line-height: 1.6;
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 500 !important;
+    }
+
+    .email-input {
+        position: relative;
+    }
+
+    .email-icon {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .elegant-input:focus ~ .email-icon {
+        color: #667eea;
+    }
+
+    .subscription-features {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        padding: 0.875rem;
+        background: white !important;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        margin-right: 0.875rem;
+        color: white;
+    }
+
+    .feature-icon.rocket {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    .feature-icon.shield {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .feature-icon.unsubscribe {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .feature-content h6 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #2c3e50 !important;
+        margin-bottom: 0.25rem;
+    }
+
+    .feature-content p {
+        font-size: 0.8rem;
+        color: #495057 !important;
+        margin: 0;
+        font-weight: 500 !important;
+    }
+
+    .subscription-footer {
+        padding: 1.25rem 1.5rem 1.5rem;
+        background: linear-gradient(135deg, #fafbfc 0%, #f8f9fa 100%);
+        border: none;
+        gap: 0.75rem;
+    }
+
+    .elegant-btn-subscription {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-size: 0.9rem;
+    }
+
+    .elegant-btn-subscription:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        color: white;
+    }
+
+    .btn-shimmer {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .elegant-btn-subscription:hover .btn-shimmer {
+        left: 100%;
+    }
+
+    /* Responsive adjustments for modals */
+    @media (max-width: 768px) {
+        .elegant-modal {
+            margin: 1rem;
+            max-width: calc(100% - 2rem);
+        }
+
+        .elegant-modal .modal-header,
+        .elegant-body,
+        .elegant-footer {
+            padding: 1.25rem;
+        }
+
+        .subscription-features {
+            gap: 0.5rem;
+        }
+
+        .feature-item {
+            padding: 0.625rem;
+        }
+
+        .feature-icon {
+            width: 35px;
+            height: 35px;
+            font-size: 14px;
+            margin-right: 0.75rem;
+        }
+
+        .modal-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        .elegant-title {
+            font-size: 1.1rem;
+        }
+
+        .subscription-title {
+            font-size: 1.25rem;
+        }
+
+        .intro-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .blog-content {
             font-size: 15px;
         }
-        
+
         .blog-content h1 { font-size: 2rem; }
         .blog-content h2 { font-size: 1.75rem; }
         .blog-content h3 { font-size: 1.5rem; }
@@ -453,41 +1265,92 @@
                     {!! $blog->content !!}
                 </div>
 
-                <!-- Share Section -->
-                <div class="border-top pt-4 mb-5">
-                    <h5 class="font-weight-bold mb-3">Share this article</h5>
-                    <div class="d-flex flex-wrap">
-                        <a
-                            href="https://twitter.com/intent/tweet?text={{ urlencode($blog->title) }}&url={{ urlencode(request()->url()) }}"
-                            target="_blank"
-                            class="btn btn-primary mr-2 mb-2"
-                        >
-                            <i class="fa fa-twitter"></i> Twitter
-                        </a>
+                <!-- Compact Share & Engage Section -->
+                <div class="compact-share-engage-bar">
+                    <div class="row align-items-center">
+                        <!-- Share Section -->
+                        <div class="col-md-6">
+                            <div class="share-section">
+                                <h6 class="share-label">
+                                    <i class="fas fa-share-alt me-2"></i>Share this article
+                                </h6>
+                                <div class="share-buttons-compact">
+                                    <a href="https://twitter.com/intent/tweet?text={{ urlencode($blog->title) }}&url={{ urlencode(request()->url()) }}"
+                                       target="_blank"
+                                       class="share-btn-compact twitter"
+                                       title="Share on Twitter"
+                                       data-bs-toggle="tooltip">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
+                                       target="_blank"
+                                       class="share-btn-compact facebook"
+                                       title="Share on Facebook"
+                                       data-bs-toggle="tooltip">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->url()) }}"
+                                       target="_blank"
+                                       class="share-btn-compact linkedin"
+                                       title="Share on LinkedIn"
+                                       data-bs-toggle="tooltip">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a href="https://wa.me/?text={{ urlencode($blog->title . ' - ' . request()->url()) }}"
+                                       target="_blank"
+                                       class="share-btn-compact whatsapp"
+                                       title="Share on WhatsApp"
+                                       data-bs-toggle="tooltip">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
-                        <a
-                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
-                            target="_blank"
-                            class="btn btn-primary mr-2 mb-2"
-                        >
-                            <i class="fa fa-facebook"></i> Facebook
-                        </a>
+                        <!-- Engage Section -->
+                        <div class="col-md-6">
+                            <div class="engage-section">
+                                <h6 class="engage-label">
+                                    <i class="fas fa-heart me-2"></i>Join the conversation
+                                </h6>
+                                <div class="engage-buttons-compact">
+                                    <button type="button"
+                                            class="engage-btn-compact subscribe-compact"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#subscriptionModal"
+                                            title="Subscribe to updates"
+                                            data-bs-toggle="tooltip">
+                                        <i class="fas fa-bell me-1"></i>
+                                        <span>Subscribe</span>
+                                    </button>
+                                    <button type="button"
+                                            class="engage-btn-compact comment-compact"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#commentModal"
+                                            title="Add a comment"
+                                            data-bs-toggle="tooltip">
+                                        <i class="fas fa-comment me-1"></i>
+                                        <span>Comment</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <a
-                            href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->url()) }}"
-                            target="_blank"
-                            class="btn btn-primary mr-2 mb-2"
-                        >
-                            <i class="fa fa-linkedin"></i> LinkedIn
-                        </a>
-
-                        <a
-                            href="https://wa.me/?text={{ urlencode($blog->title . ' - ' . request()->url()) }}"
-                            target="_blank"
-                            class="btn btn-success mr-2 mb-2"
-                        >
-                            <i class="fa fa-whatsapp"></i> WhatsApp
-                        </a>
+                    <!-- Stats Bar -->
+                    <div class="stats-bar">
+                        <div class="stat-compact">
+                            <i class="fas fa-eye"></i>
+                            <span>{{ $blog->views_count }} views</span>
+                        </div>
+                        <div class="stat-compact">
+                            <i class="fas fa-comments"></i>
+                            <span>{{ count($comments) }} comments</span>
+                        </div>
+                        <div class="stat-compact">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ $blog->published_at->format('M d, Y') }}</span>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -545,105 +1408,22 @@
     @endif
 </div>
 
-{{-- Public Comments Section --}}
+{{-- Comments Display Section --}}
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <!-- Comments Header -->
-            <div class="d-flex align-items-center mb-4">
-                <h3 class="mb-0 me-3">
-                    <i class="fas fa-comments text-primary me-2"></i>
-                    Discussion & Comments
-                </h3>
-                <span class="badge bg-secondary">{{ count($comments) }}</span>
-            </div>
-
-            <!-- Comment Form -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-pen me-2"></i>
-                        Join the Discussion
-                    </h5>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                    <h3 class="mb-0 me-3">
+                        <i class="fas fa-comments text-primary me-2"></i>
+                        Comments
+                    </h3>
+                    <span class="badge bg-secondary">{{ count($comments) }}</span>
                 </div>
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('blogs.comments.store', $blog->slug) }}" method="POST" class="comment-form" id="commentForm">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="user_name" class="form-label fw-bold">
-                                    <i class="fas fa-user me-1"></i>
-                                    Your Name <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control @error('user_name') is-invalid @enderror" 
-                                       id="user_name" name="user_name" value="{{ old('user_name') }}" 
-                                       placeholder="Enter your name" required maxlength="255"
-                                       style="background-color: #fff !important; color: #2c3e50 !important;">
-                                @error('user_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="message" class="form-label fw-bold">
-                                <i class="fas fa-comment-dots me-1"></i>
-                                Your Comment <span class="text-danger">*</span>
-                            </label>
-                            <textarea class="form-control @error('message') is-invalid @enderror" 
-                                      id="message" name="message" rows="4" 
-                                      placeholder="Share your thoughts about this blog post..." 
-                                      required maxlength="1000"
-                                      style="background-color: #fff !important; color: #2c3e50 !important;">{{ old('message') }}</textarea>
-                            @error('message')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div class="d-flex justify-content-between mt-2">
-                                <small class="text-muted">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    Be respectful and constructive in your comments
-                                </small>
-                                <small class="text-muted fw-bold" id="charCount">0/1000</small>
-                            </div>
-                        </div>
-
-                        <!-- Honeypot (Anti-spam) -->
-                        @honeypot
-
-                        <!-- Google reCAPTCHA -->
-                        <div class="mb-3 text-center">
-                            <div class="d-flex justify-content-center">
-                                {!! NoCaptcha::renderJs() !!}
-                                {!! NoCaptcha::display() !!}
-                            </div>
-                            @error('g-recaptcha-response')
-                                <div class="text-danger small mt-2">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary" id="submitBtn">
-                                <i class="fas fa-paper-plane me-2"></i>Post Comment
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
+                    <i class="fas fa-plus me-2"></i>Add Comment
+                </button>
             </div>
 
             <!-- Comments Display -->
@@ -655,12 +1435,12 @@
                                 <div class="d-flex align-items-start">
                                     <!-- Avatar -->
                                     <div class="comment-avatar me-3">
-                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold" 
+                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold"
                                              style="width: 48px; height: 48px; font-size: 18px;">
                                             {{ strtoupper(substr($comment->user_name, 0, 1)) }}
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Comment Content -->
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -686,9 +1466,237 @@
                             <i class="fas fa-comments text-muted mb-3" style="font-size: 4rem; opacity: 0.3;"></i>
                             <h5 class="text-muted mb-2">No comments yet</h5>
                             <p class="text-muted">Be the first to start the discussion!</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
+                                <i class="fas fa-comment me-2"></i>Add First Comment
+                            </button>
                         </div>
                     </div>
                 @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Comment Modal -->
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content elegant-modal">
+            <div class="modal-header elegant-header">
+                <div class="modal-icon">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <div class="modal-title-section">
+                    <h5 class="modal-title elegant-title" id="commentModalLabel">
+                        Share Your Thoughts
+                    </h5>
+                    <p class="modal-subtitle">Join the conversation and let us know what you think</p>
+                </div>
+                <button type="button" class="btn-close elegant-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body elegant-body">
+                @if(session('success'))
+                    <div class="alert elegant-alert elegant-alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert elegant-alert elegant-alert-error alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                <form action="{{ route('blogs.comments.store', $blog->slug) }}" method="POST" class="elegant-form" id="commentForm">
+                    @csrf
+                    <div class="elegant-form-group">
+                        <label for="modal_user_name" class="elegant-label">
+                            <i class="fas fa-user me-2"></i>
+                            Your Name <span class="required-star">*</span>
+                        </label>
+                        <div class="elegant-input-wrapper">
+                            <input type="text" class="elegant-input @error('user_name') is-invalid @enderror"
+                                   id="modal_user_name" name="user_name" value="{{ old('user_name') }}"
+                                   placeholder="Enter your full name" required maxlength="255">
+                            <div class="input-focus-line"></div>
+                        </div>
+                        @error('user_name')
+                            <div class="elegant-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="elegant-form-group">
+                        <label for="modal_message" class="elegant-label">
+                            <i class="fas fa-comment-dots me-2"></i>
+                            Your Comment <span class="required-star">*</span>
+                        </label>
+                        <div class="elegant-input-wrapper">
+                            <textarea class="elegant-textarea @error('message') is-invalid @enderror"
+                                      id="modal_message" name="message" rows="6"
+                                      placeholder="Share your thoughts, insights, or questions about this blog post..."
+                                      required maxlength="1000">{{ old('message') }}</textarea>
+                            <div class="input-focus-line"></div>
+                        </div>
+                        @error('message')
+                            <div class="elegant-error">{{ $message }}</div>
+                        @enderror
+                        <div class="elegant-form-footer">
+                            <small class="elegant-hint">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                Be respectful and constructive in your comments
+                            </small>
+                            <small class="elegant-counter" id="modalCharCount">0/1000</small>
+                        </div>
+                    </div>
+
+                    <!-- Honeypot (Anti-spam) -->
+                    @honeypot
+
+                    <!-- Google reCAPTCHA -->
+                    <div class="elegant-captcha">
+                        <div class="captcha-wrapper">
+                            {!! NoCaptcha::renderJs() !!}
+                            {!! NoCaptcha::display() !!}
+                        </div>
+                        @error('g-recaptcha-response')
+                            <div class="elegant-error mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer elegant-footer">
+                <button type="button" class="btn elegant-btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <button type="submit" form="commentForm" class="btn elegant-btn-primary" id="modalSubmitBtn">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    <span>Post Comment</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Subscription Modal -->
+<div class="modal fade" id="subscriptionModal" tabindex="-1" aria-labelledby="subscriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content elegant-modal subscription-modal">
+            <div class="modal-header subscription-header">
+                <div class="subscription-icon-wrapper">
+                    <div class="subscription-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="subscription-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                </div>
+                <div class="subscription-title-section">
+                    <h5 class="subscription-title">
+                        Stay in the Loop
+                    </h5>
+                    <p class="subscription-subtitle">Get notified when we publish amazing new content</p>
+                </div>
+                <button type="button" class="btn-close elegant-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body subscription-body">
+                <div class="subscription-intro">
+                    <div class="intro-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h6 class="intro-title">Join Our Community</h6>
+                    <p class="intro-text">
+                        Be the first to know about our latest insights, tutorials, and industry updates.
+                        No spam, just quality content delivered to your inbox.
+                    </p>
+                </div>
+
+                <!-- Subscription Form -->
+                <form id="modalSubscriptionForm" class="subscription-form-elegant">
+                    @csrf
+                    <div class="elegant-form-group">
+                        <label for="modal_subscription_email" class="elegant-label">
+                            <i class="fas fa-envelope me-2"></i>
+                            Email Address
+                        </label>
+                        <div class="elegant-input-wrapper email-input">
+                            <input type="email"
+                                   class="elegant-input"
+                                   id="modal_subscription_email"
+                                   name="email"
+                                   placeholder="your.email@example.com"
+                                   required>
+                            <div class="input-focus-line"></div>
+                            <div class="email-icon">
+                                <i class="fas fa-at"></i>
+                            </div>
+                        </div>
+                        <div class="elegant-error" style="display: none;"></div>
+                    </div>
+
+                    <!-- reCAPTCHA -->
+                    <div class="elegant-captcha subscription-captcha">
+                        <div class="captcha-wrapper">
+                            {!! NoCaptcha::renderJs() !!}
+                            {!! NoCaptcha::display() !!}
+                        </div>
+                        <div class="elegant-error" id="modalRecaptchaError" style="display: none;"></div>
+                    </div>
+
+                    <!-- Success/Error Messages -->
+                    <div id="modalSubscriptionMessage" class="elegant-alert" style="display: none;"></div>
+                </form>
+
+                <!-- Features Grid -->
+                <div class="subscription-features">
+                    <div class="feature-item">
+                        <div class="feature-icon rocket">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h6>Latest Content First</h6>
+                            <p>Get exclusive early access to our newest posts</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon shield">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h6>Zero Spam Promise</h6>
+                            <p>Only valuable content, never promotional junk</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon unsubscribe">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h6>Easy Unsubscribe</h6>
+                            <p>Leave anytime with a single click</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer subscription-footer">
+                <button type="button" class="btn elegant-btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Maybe Later
+                </button>
+                <button type="submit" form="modalSubscriptionForm" class="btn elegant-btn-subscription" id="modalSubscribeBtn">
+                    <div class="btn-content">
+                        <i class="fas fa-bell me-2"></i>
+                        <span class="btn-text">Subscribe Now</span>
+                    </div>
+                    <div class="btn-shimmer"></div>
+                </button>
             </div>
         </div>
     </div>
@@ -922,65 +1930,71 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Character count for comment textarea
-    const messageTextarea = document.getElementById('message');
-    const charCount = document.getElementById('charCount');
-    const submitBtn = document.getElementById('submitBtn');
-    const commentForm = document.getElementById('commentForm');
-    
-    if (messageTextarea && charCount) {
-        function updateCharCount() {
-            const currentLength = messageTextarea.value.length;
-            charCount.textContent = currentLength + '/1000';
-            
-            // Change color when approaching limit
-            if (currentLength > 900) {
-                charCount.classList.add('text-danger');
-                charCount.classList.remove('text-warning', 'text-muted');
-            } else if (currentLength > 800) {
-                charCount.classList.add('text-warning');
-                charCount.classList.remove('text-danger', 'text-muted');
-            } else {
-                charCount.classList.add('text-muted');
-                charCount.classList.remove('text-danger', 'text-warning');
+    // Character count for comment textarea (both original and modal)
+    const messageTextareas = ['message', 'modal_message'];
+    const charCounts = ['charCount', 'modalCharCount'];
+
+    messageTextareas.forEach((textareaId, index) => {
+        const textarea = document.getElementById(textareaId);
+        const charCount = document.getElementById(charCounts[index]);
+
+        if (textarea && charCount) {
+            function updateCharCount() {
+                const currentLength = textarea.value.length;
+                charCount.textContent = currentLength + '/1000';
+
+                // Change color when approaching limit
+                if (currentLength > 900) {
+                    charCount.classList.add('text-danger');
+                    charCount.classList.remove('text-warning', 'text-muted');
+                } else if (currentLength > 800) {
+                    charCount.classList.add('text-warning');
+                    charCount.classList.remove('text-danger', 'text-muted');
+                } else {
+                    charCount.classList.add('text-muted');
+                    charCount.classList.remove('text-danger', 'text-warning');
+                }
             }
+
+            // Update on input
+            textarea.addEventListener('input', updateCharCount);
+            textarea.addEventListener('keyup', updateCharCount);
+            textarea.addEventListener('paste', function() {
+                setTimeout(updateCharCount, 10);
+            });
+
+            // Initial count
+            updateCharCount();
         }
-        
-        // Update on input
-        messageTextarea.addEventListener('input', updateCharCount);
-        messageTextarea.addEventListener('keyup', updateCharCount);
-        messageTextarea.addEventListener('paste', function() {
-            setTimeout(updateCharCount, 10);
-        });
-        
-        // Initial count (for old values)
-        updateCharCount();
-    }
-    
-    // Form submission handling
-    if (commentForm && submitBtn) {
+    });
+
+    // Form submission handling for modal comment form
+    const commentForm = document.getElementById('commentForm');
+    const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+
+    if (commentForm && modalSubmitBtn) {
         commentForm.addEventListener('submit', function(e) {
-            const userName = document.getElementById('user_name').value.trim();
-            const message = messageTextarea.value.trim();
-            
+            const userName = document.getElementById('modal_user_name').value.trim();
+            const message = document.getElementById('modal_message').value.trim();
+
             if (!userName || !message) {
                 e.preventDefault();
                 alert('Please fill in both name and comment fields.');
                 return false;
             }
-            
+
             if (message.length > 1000) {
                 e.preventDefault();
                 alert('Comment is too long. Please keep it under 1000 characters.');
                 return false;
             }
-            
+
             // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
+            modalSubmitBtn.disabled = true;
+            modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
         });
     }
-    
+
     // Auto-hide alerts after 5 seconds
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(function(alert) {
@@ -993,22 +2007,168 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     });
-    
+
     // Fix for input visibility - ensure text is visible
-    const formInputs = document.querySelectorAll('.comment-form input, .comment-form textarea');
+    const formInputs = document.querySelectorAll('.comment-form input, .comment-form textarea, .subscription-form input');
     formInputs.forEach(function(input) {
         input.style.backgroundColor = '#fff';
         input.style.color = '#2c3e50';
-        
+        input.style.webkitTextFillColor = '#2c3e50';
+
         input.addEventListener('focus', function() {
             this.style.backgroundColor = '#fff';
             this.style.color = '#2c3e50';
+            this.style.webkitTextFillColor = '#2c3e50';
         });
-        
+
         input.addEventListener('input', function() {
             this.style.backgroundColor = '#fff';
             this.style.color = '#2c3e50';
+            this.style.webkitTextFillColor = '#2c3e50';
         });
+    });
+
+    // Ensure form labels are visible
+    const formLabels = document.querySelectorAll('.subscription-form .form-label, .comment-form .form-label');
+    formLabels.forEach(function(label) {
+        label.style.color = '#2c3e50';
+        label.style.fontWeight = '600';
+        label.style.display = 'block';
+    });
+
+    // Modal Subscription Form Handler
+    const modalSubscriptionForm = document.getElementById('modalSubscriptionForm');
+    const modalSubscribeBtn = document.getElementById('modalSubscribeBtn');
+    const modalSubscriptionMessage = document.getElementById('modalSubscriptionMessage');
+
+    if (modalSubscriptionForm) {
+        modalSubscriptionForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const email = formData.get('email');
+
+            // Reset previous states
+            modalSubscriptionMessage.style.display = 'none';
+            modalSubscribeBtn.disabled = true;
+            modalSubscribeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Subscribing...';
+
+            // Clear previous validation errors
+            document.getElementById('modal_subscription_email').classList.remove('is-invalid');
+            document.getElementById('modalRecaptchaError').textContent = '';
+
+            try {
+                const response = await fetch('{{ route("blog.subscribe") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Show success message
+                    modalSubscriptionMessage.className = 'alert alert-success';
+                    modalSubscriptionMessage.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        ${data.message}
+                    `;
+                    modalSubscriptionMessage.style.display = 'block';
+
+                    // Reset form
+                    modalSubscriptionForm.reset();
+
+                    // Reset reCAPTCHA
+                    if (typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset();
+                    }
+
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
+                        modal.hide();
+                    }, 3000);
+                } else {
+                    // Show error message
+                    modalSubscriptionMessage.className = 'alert alert-danger';
+                    modalSubscriptionMessage.innerHTML = `
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${data.message || 'An error occurred. Please try again.'}
+                    `;
+                    modalSubscriptionMessage.style.display = 'block';
+
+                    // Handle validation errors
+                    if (data.errors) {
+                        if (data.errors.email) {
+                            document.getElementById('modal_subscription_email').classList.add('is-invalid');
+                            document.querySelector('#modal_subscription_email + .invalid-feedback').textContent = data.errors.email[0];
+                        }
+                        if (data.errors['g-recaptcha-response']) {
+                            document.getElementById('modalRecaptchaError').textContent = data.errors['g-recaptcha-response'][0];
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Subscription error:', error);
+                modalSubscriptionMessage.className = 'alert alert-danger';
+                modalSubscriptionMessage.innerHTML = `
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    Network error. Please check your connection and try again.
+                `;
+                modalSubscriptionMessage.style.display = 'block';
+            } finally {
+                // Reset button
+                modalSubscribeBtn.disabled = false;
+                modalSubscribeBtn.innerHTML = '<i class="fas fa-bell me-2"></i><span class="btn-text">Subscribe Now</span>';
+
+                // Auto-hide message after 8 seconds
+                setTimeout(() => {
+                    if (modalSubscriptionMessage.style.display !== 'none') {
+                        modalSubscriptionMessage.style.display = 'none';
+                    }
+                }, 8000);
+            }
+        });
+    }
+
+    // Reset modals when they're closed
+    document.getElementById('commentModal').addEventListener('hidden.bs.modal', function() {
+        // Reset form
+        const form = this.querySelector('form');
+        if (form) form.reset();
+
+        // Reset button
+        if (modalSubmitBtn) {
+            modalSubmitBtn.disabled = false;
+            modalSubmitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Post Comment';
+        }
+
+        // Reset character count
+        const charCount = document.getElementById('modalCharCount');
+        if (charCount) charCount.textContent = '0/1000';
+    });
+
+    document.getElementById('subscriptionModal').addEventListener('hidden.bs.modal', function() {
+        // Reset form
+        const form = this.querySelector('form');
+        if (form) form.reset();
+
+        // Reset button
+        if (modalSubscribeBtn) {
+            modalSubscribeBtn.disabled = false;
+            modalSubscribeBtn.innerHTML = '<i class="fas fa-bell me-2"></i><span class="btn-text">Subscribe Now</span>';
+        }
+
+        // Hide messages
+        if (modalSubscriptionMessage) {
+            modalSubscriptionMessage.style.display = 'none';
+        }
+
+        // Reset validation errors
+        document.getElementById('modal_subscription_email').classList.remove('is-invalid');
+        document.getElementById('modalRecaptchaError').textContent = '';
     });
 });
 </script>

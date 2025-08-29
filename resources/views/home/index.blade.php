@@ -538,8 +538,18 @@
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-4">
-                    <h6>Stay Updated</h6>
-                    <p class="text-muted small">Follow the latest trends and insights from our tech community.</p>
+                    <h6 class="text-warning mb-3">
+                        <i class="fas fa-bell me-2"></i>Stay Updated with Our Latest Blogs
+                    </h6>
+                    <p class="text-light mb-3">Get notified when we publish new tech insights, tutorials, and industry trends from our amazing community of developers.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('home.all-blogs') }}" class="btn btn-outline-warning btn-sm">
+                            <i class="fas fa-blog me-1"></i>Browse Blogs
+                        </a>
+                        <a href="{{ route('contact') }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-envelope me-1"></i>Subscribe
+                        </a>
+                    </div>
                 </div>
             </div>
             <hr class="my-4">
