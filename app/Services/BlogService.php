@@ -3,10 +3,13 @@
 namespace App\Services;
 
 use App\Models\Blog;
+use App\Models\BlogSubscriber;
 use App\Models\User;
+use App\Mail\NewBlogNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -131,6 +134,19 @@ class BlogService
             $blog = Blog::create($data);
 
             Log::info('Blog created successfully', ['blog_id' => $blog->id, 'user_id' => $userId]);
+
+            // Send email notifications to all subscribed users if blog is published
+            if ($blog->status === 'published') {
+                try {
+                    $this->sendNewBlogNotifications($blog);
+                } catch (Exception $e) {
+                    Log::error('Failed to send blog notifications: ' . $e->getMessage(), [
+                        'blog_id' => $blog->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Don't fail the blog creation if email fails
+                }
+            }
 
             return $blog;
         } catch (Exception $e) {
@@ -439,6 +455,63 @@ class BlogService
                 'featured' => 0,
                 'total_views' => 0,
             ];
+        }
+    }
+
+    /**
+     * Send email notifications to all subscribed users about a new blog
+     *
+     * @param Blog $blog
+     * @return void
+     */
+    private function sendNewBlogNotifications(Blog $blog)
+    {
+        try {
+            // Get all subscribed users
+            $subscribers = BlogSubscriber::subscribed()->get();
+            
+            if ($subscribers->isEmpty()) {
+                Log::info('No subscribers found for blog notification', ['blog_id' => $blog->id]);
+                return;
+            }
+
+            Log::info('Sending blog notifications', [
+                'blog_id' => $blog->id,
+                'subscriber_count' => $subscribers->count(),
+                'blog_title' => $blog->title
+            ]);
+
+            // Send email to each subscriber
+            foreach ($subscribers as $subscriber) {
+                try {
+                    Mail::to($subscriber->email)->send(new NewBlogNotification($blog, $subscriber));
+                    
+                    Log::debug('Blog notification sent', [
+                        'blog_id' => $blog->id,
+                        'subscriber_email' => $subscriber->email
+                    ]);
+                } catch (Exception $e) {
+                    Log::error('Failed to send email to subscriber', [
+                        'blog_id' => $blog->id,
+                        'subscriber_email' => $subscriber->email,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Continue sending to other subscribers
+                }
+            }
+
+            Log::info('Blog notification process completed', [
+                'blog_id' => $blog->id,
+                'total_subscribers' => $subscribers->count()
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Error in sendNewBlogNotifications: ' . $e->getMessage(), [
+                'blog_id' => $blog->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
     }
 }

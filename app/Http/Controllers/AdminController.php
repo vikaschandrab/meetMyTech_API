@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Blog;
+use App\Models\BlogSubscriber;
 use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -267,44 +268,44 @@ class AdminController extends Controller
         $logsPath = storage_path('logs');
         $activityFilter = $request->get('activity', 'all');
         $dateFilter = $request->get('date', 'all');
-        
+
         // Get all custom log files
         $logFiles = glob($logsPath . '/*.log');
         $customLogs = [];
         $activities = [];
-        
+
         foreach ($logFiles as $file) {
             $filename = basename($file);
-            
+
             // Skip laravel.log as it's the default log
             if ($filename === 'laravel.log') {
                 continue;
             }
-            
+
             // Extract activity name and date from filename (e.g., authentication-2025-08-26.log)
             if (preg_match('/^(.+)-(\d{4}-\d{2}-\d{2})\.log$/', $filename, $matches)) {
                 $activityName = $matches[1];
                 $logDate = $matches[2];
-                
+
                 // Add to activities list for filter
                 if (!in_array($activityName, $activities)) {
                     $activities[] = $activityName;
                 }
-                
+
                 // Apply filters
                 if ($activityFilter !== 'all' && $activityFilter !== $activityName) {
                     continue;
                 }
-                
+
                 if ($dateFilter !== 'all' && $dateFilter !== $logDate) {
                     continue;
                 }
-                
+
                 // Read log file content
                 if (file_exists($file) && is_readable($file)) {
                     $content = file_get_contents($file);
                     $lines = explode("\n", trim($content));
-                    
+
                     foreach ($lines as $line) {
                         if (!empty(trim($line))) {
                             // Parse log line (assuming format: [timestamp] level: message)
@@ -335,14 +336,14 @@ class AdminController extends Controller
                 }
             }
         }
-        
+
         // Sort logs by timestamp (newest first)
         usort($customLogs, function($a, $b) {
             $timeA = $a['timestamp'] ? strtotime($a['timestamp']) : 0;
             $timeB = $b['timestamp'] ? strtotime($b['timestamp']) : 0;
             return $timeB - $timeA;
         });
-        
+
         // Group logs by activity for better organization
         $groupedLogs = [];
         foreach ($customLogs as &$log) {
@@ -351,13 +352,13 @@ class AdminController extends Controller
             $log['level_color'] = $this->getLevelColor($log['level']);
             $groupedLogs[$log['activity']][] = $log;
         }
-        
+
         // Paginate custom logs
         $perPage = 50;
         $currentPage = request()->get('page', 1);
         $offset = ($currentPage - 1) * $perPage;
         $paginatedLogs = array_slice($customLogs, $offset, $perPage);
-        
+
         // Get available dates for filter
         $availableDates = [];
         foreach ($logFiles as $file) {
@@ -371,17 +372,17 @@ class AdminController extends Controller
         }
         sort($availableDates);
         $availableDates = array_reverse($availableDates); // Newest first
-        
+
         // Also get database logs for comparison
         $databaseLogs = UserActivity::with('user')->latest()->take(20)->get();
-        
+
         return view('admin.logs', compact(
-            'customLogs', 
-            'groupedLogs', 
-            'paginatedLogs', 
-            'activities', 
+            'customLogs',
+            'groupedLogs',
+            'paginatedLogs',
+            'activities',
             'availableDates',
-            'activityFilter', 
+            'activityFilter',
             'dateFilter',
             'databaseLogs'
         ));
@@ -437,5 +438,75 @@ class AdminController extends Controller
             'emergency' => 'danger',
         ];
         return $colors[strtolower($level)] ?? 'light';
+    }
+
+    /**
+     * Display blog subscribers management page
+     */
+    public function subscribers()
+    {
+        $subscribers = BlogSubscriber::orderBy('created_at', 'desc')->paginate(20);
+        $stats = [
+            'total_subscribers' => BlogSubscriber::count(),
+            'active_subscribers' => BlogSubscriber::subscribed()->count(),
+            'unsubscribed' => BlogSubscriber::where('is_subscribed', false)->count(),
+            'today_subscriptions' => BlogSubscriber::whereDate('created_at', today())->count(),
+        ];
+
+        return view('admin.subscribers', compact('subscribers', 'stats'));
+    }
+
+    /**
+     * Unsubscribe a user (admin action)
+     */
+    public function unsubscribeUser(Request $request, $id)
+    {
+        try {
+            $subscriber = BlogSubscriber::findOrFail($id);
+
+            if ($subscriber->is_subscribed) {
+                $subscriber->unsubscribe();
+                return back()->with('success', 'User has been unsubscribed successfully.');
+            }
+
+            return back()->with('info', 'User is already unsubscribed.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to unsubscribe user. Please try again.');
+        }
+    }
+
+    /**
+     * Resubscribe a user (admin action)
+     */
+    public function resubscribeUser(Request $request, $id)
+    {
+        try {
+            $subscriber = BlogSubscriber::findOrFail($id);
+
+            if (!$subscriber->is_subscribed) {
+                $subscriber->subscribe();
+                return back()->with('success', 'User has been resubscribed successfully.');
+            }
+
+            return back()->with('info', 'User is already subscribed.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to resubscribe user. Please try again.');
+        }
+    }
+
+    /**
+     * Delete a subscriber (admin action)
+     */
+    public function deleteSubscriber(Request $request, $id)
+    {
+        try {
+            $subscriber = BlogSubscriber::findOrFail($id);
+            $email = $subscriber->email;
+            $subscriber->delete();
+
+            return back()->with('success', "Subscriber {$email} has been deleted successfully.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete subscriber. Please try again.');
+        }
     }
 }

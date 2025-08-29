@@ -117,6 +117,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('/blogs/{id}', [AdminController::class, 'updateBlog'])->name('update-blog');
     Route::delete('/blogs/{id}', [AdminController::class, 'deleteBlog'])->name('delete-blog');
 
+    // Blog Subscribers Management
+    Route::get('/subscribers', [AdminController::class, 'subscribers'])->name('subscribers');
+    Route::post('/subscribers/{id}/unsubscribe', [AdminController::class, 'unsubscribeUser'])->name('unsubscribe-user');
+    Route::post('/subscribers/{id}/resubscribe', [AdminController::class, 'resubscribeUser'])->name('resubscribe-user');
+    Route::delete('/subscribers/{id}', [AdminController::class, 'deleteSubscriber'])->name('delete-subscriber');
+
     // Settings & Logs
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
     Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
@@ -137,6 +143,18 @@ Route::post('/contact', [ContactController::class, 'submit'])
         'throttle:5,10', // 5 requests per 10 minutes
         \Spatie\Honeypot\ProtectAgainstSpam::class
     ]);
+
+// Blog Subscription Routes
+Route::post('/blog/subscribe', [\App\Http\Controllers\BlogSubscriptionController::class, 'subscribe'])
+    ->name('blog.subscribe')
+    ->middleware([
+        'throttle:5,10', // 5 subscription attempts per 10 minutes
+        \Spatie\Honeypot\ProtectAgainstSpam::class
+    ]);
+Route::get('/blog/unsubscribe/{token}', [\App\Http\Controllers\BlogSubscriptionController::class, 'unsubscribe'])
+    ->name('blog.unsubscribe');
+Route::post('/blog/subscription-status', [\App\Http\Controllers\BlogSubscriptionController::class, 'status'])
+    ->name('blog.subscription.status');
 
 // Route for user profiles based on username (catch-all - must be last)
 Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
