@@ -26,6 +26,11 @@ use App\Http\Controllers\AdminController;
 |
 */
 
+Route::domain('{slug}.' . config('app.domain'))->group(function () {
+    Route::get('/', [ProfilePageController::class, 'show'])
+        ->name('profile.show');
+});
+
 // Homepage Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-blogs');
@@ -158,7 +163,3 @@ Route::post('/blog/subscription-status', [\App\Http\Controllers\BlogSubscription
 
 // Route for user profiles based on username (catch-all - must be last)
 // Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
-Route::domain('{slug}.' . config('app.domain'))->group(function () {
-    Route::get('/', [ProfilePageController::class, 'show'])
-        ->name('profile.show');
-});
