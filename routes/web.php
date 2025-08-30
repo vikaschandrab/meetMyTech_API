@@ -157,4 +157,8 @@ Route::post('/blog/subscription-status', [\App\Http\Controllers\BlogSubscription
     ->name('blog.subscription.status');
 
 // Route for user profiles based on username (catch-all - must be last)
-Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
+// Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
+Route::domain('{slug}.' . config('app.domain'))->group(function () {
+    Route::get('/', [ProfilePageController::class, 'show'])
+        ->name('profile.show');
+});
