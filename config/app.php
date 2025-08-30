@@ -2,8 +2,20 @@
 
 return [
 
-
     'domain' => env('APP_DOMAIN', 'localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Force HTTPS Configuration
+    |--------------------------------------------------------------------------
+    |
+    | When this value is true, the application will automatically redirect
+    | all HTTP requests to HTTPS. This is useful for production environments
+    | where SSL certificates are configured.
+    |
+    */
+
+    'force_https' => env('FORCE_HTTPS', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -178,6 +190,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\DatabaseLoggingServiceProvider::class,
+        App\Providers\SslServiceProvider::class,
 
     ],
 
