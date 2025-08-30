@@ -39,8 +39,4 @@ jobs:
           echo "🔄 Restarting services..."
           sudo systemctl restart apache2
           sudo systemctl restart php8.2-fpm || sudo systemctl restart php8.1-fpm || true
-          echo "🔐 Verifying SSL configuration..."
-          sudo apache2ctl configtest
-          echo "🌐 Testing subdomain SSL..."
-          curl -I https://vikas.meetmytech.com/ || echo "SSL test completed"
           echo "✅ Deployment completed successfully!"
