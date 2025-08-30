@@ -11,15 +11,10 @@ class UrlHelper
      * @param bool $secure
      * @return string
      */
-    public static function profileSubdomain($slug, $secure = null)
+    public static function profileSubdomain($slug, $secure = true)
     {
-        // Auto-detect secure protocol based on environment
-        if ($secure === null) {
-            $secure = app()->environment('production') || config('app.force_https', false);
-        }
-        
         $protocol = $secure ? 'https://' : 'http://';
-        $domain = config('app.domain', 'meetmytech.com');
+        $domain = env('APP_DOMAIN', 'meetmytech.com');
 
         return $protocol . $slug . '.' . $domain;
     }
