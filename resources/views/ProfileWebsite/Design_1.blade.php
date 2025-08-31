@@ -187,7 +187,7 @@
                                             'whatsapp_number' => ['icon' => 'fa-whatsapp', 'url' => isset($UserDetails->whatsapp_number) ? "https://api.whatsapp.com/send?phone=+91{$UserDetails->whatsapp_number}&text=Write to me for more details" : null]
                                         ];
                                     @endphp
-                                    
+
                                     @foreach($socialLinks as $platform => $data)
                                         @if($data['url'])
                                             <li><a href="{{ $data['url'] }}" target="_blank" rel="noopener noreferrer"><i class="fa {{ $data['icon'] }}"></i></a></li>
@@ -258,10 +258,10 @@
         <section class="mh-service">
             <div class="container">
                 <div class="row section-separator">
-                    @if(isset($UserDetails->action) && is_array($UserDetails->action) && isset($UserDetails->description) && is_array($UserDetails->description))   
+                    @if(isset($UserDetails->action) && is_array($UserDetails->action) && isset($UserDetails->description) && is_array($UserDetails->description))
                     <div class="col-sm-12 text-center section-title wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
                         <h3>What I do</h3>
-                    </div> 
+                    </div>
                         @foreach($UserDetails->action as $index => $action)
                             @if(isset($UserDetails->description[$index]))
                                 <div class="col-sm-6">
@@ -581,7 +581,7 @@
                                  @foreach ($WorkExperiences as $work)
                                 <div class="mh-experience-deatils">
                                     {{-- <div class="mh-work-item dark-bg wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.7s" style="visibility: visible; animation-duration: 0.8s; animation-delay: 0.7s; animation-name: fadeInUp;">
-                                        
+
                                         <h4>{{ $work->position }} at {{ $work->organization }}</h4>
                                         <div class="mh-eduyear">{{ $work->from_date }} to {{ $work->to_date }}</div>
                                         <span>Roles &amp; Responsibility :</span>
@@ -624,48 +624,132 @@
                     </div>
                     <div class="col-sm-12">
                         @if($blogs && $blogs->count() > 0)
-                            <div class="mh-blog-slider owl-carousel wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
-                                @foreach($blogs as $blog)
-                                <!-- Blog Item -->
-                                <div class="item">
-                                    <div class="mh-blog-item dark-bg shadow-1">
-                                        <div class="blog-inner">
-                                            <div class="mh-blog-img">
-                                                <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">
-                                                    @if($blog->featured_image)
-                                                        <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}" class="img-fluid">
-                                                    @else
-                                                        <img src="{{asset('vikas_css/images/contact.gif')}}" alt="{{ $blog->title }}" class="img-fluid">
-                                                    @endif
-                                                </a>
-                                            </div>
-                                            <div class="mh-blog-info">
-                                                <div class="mh-blog-meta">
-                                                    <span class="blog-date">{{ $blog->published_at ? $blog->published_at->format('d M, Y') : $blog->created_at->format('d M, Y') }}</span>
-                                                    @if($blog->tags && is_array($blog->tags) && count($blog->tags) > 0)
-                                                        <span class="blog-category">{{ $blog->tags[0] }}</span>
-                                                    @endif
-                                                    @if($blog->reading_time)
-                                                        <span class="blog-reading-time">{{ $blog->reading_time }} min read</span>
-                                                    @endif
+                            <!-- Desktop Blog Container -->
+                            <div class="desktop-blog-container">
+                                <div class="mh-blog-slider owl-carousel wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
+                                    @foreach($blogs as $blog)
+                                    <!-- Blog Item -->
+                                    <div class="item">
+                                        <div class="mh-blog-item dark-bg shadow-1">
+                                            <div class="blog-inner">
+                                                <div class="mh-blog-img">
+                                                    <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">
+                                                        @if($blog->featured_image)
+                                                            <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}" class="img-fluid">
+                                                        @else
+                                                            <img src="{{asset('vikas_css/images/contact.gif')}}" alt="{{ $blog->title }}" class="img-fluid">
+                                                        @endif
+                                                    </a>
                                                 </div>
-                                                <h3><a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">{{ $blog->title }}</a></h3>
-                                                <p>{{ Str::limit($blog->description, 120, '...') }}</p>
-                                                <div class="mh-blog-footer">
-                                                    <div class="blog-read-more">
-                                                        <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="btn btn-outline">Read More</a>
+                                                <div class="mh-blog-info">
+                                                    <div class="mh-blog-meta">
+                                                        <span class="blog-date">{{ $blog->published_at ? $blog->published_at->format('d M, Y') : $blog->created_at->format('d M, Y') }}</span>
+                                                        @if($blog->tags && is_array($blog->tags) && count($blog->tags) > 0)
+                                                            <span class="blog-category">{{ $blog->tags[0] }}</span>
+                                                        @endif
+                                                        @if($blog->reading_time)
+                                                            <span class="blog-reading-time">{{ $blog->reading_time }} min read</span>
+                                                        @endif
                                                     </div>
-                                                    @if($blog->views_count)
-                                                        <div class="blog-views">
-                                                            <span><i class="fa fa-eye"></i> {{ $blog->views_count }} views</span>
+                                                    <h3><a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">{{ Str::limit($blog->title, 60, '...') }}</a></h3>
+                                                    <p>{{ Str::limit($blog->description, 100, '...') }}</p>
+                                                    <div class="mh-blog-footer">
+                                                        <div class="blog-read-more">
+                                                            <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="btn btn-outline">Read More</a>
                                                         </div>
-                                                    @endif
+                                                        @if($blog->views_count)
+                                                            <div class="blog-views">
+                                                                <span><i class="fa fa-eye"></i> {{ $blog->views_count }} views</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
+                            </div>
+
+                            <!-- Mobile Blog Container -->
+                            <div class="mobile-blog-container">
+                                <div class="row">
+                                    @foreach($blogs->take(6) as $blog)
+                                    <div class="col-12 col-sm-6 mb-4">
+                                        <article class="card h-100 shadow-sm blog-card">
+                                            @if($blog->featured_image)
+                                                <img
+                                                    src="{{ asset('storage/' . $blog->featured_image) }}"
+                                                    alt="{{ $blog->title }}"
+                                                    class="card-img-top"
+                                                    style="height: 180px; object-fit: cover;"
+                                                >
+                                            @else
+                                                <div class="card-img-top bg-gradient d-flex align-items-center justify-content-center" style="height: 180px;">
+                                                    <span class="text-white h4 font-weight-bold">{{ substr($blog->title, 0, 1) }}</span>
+                                                </div>
+                                            @endif
+
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="blog-meta mb-3">
+                                                    <small class="text-muted d-block">
+                                                        <i class="fa fa-calendar"></i> {{ $blog->published_at ? $blog->published_at->format('M j, Y') : $blog->created_at->format('M j, Y') }}
+                                                        @if($blog->views_count)
+                                                            • <i class="fa fa-eye"></i> {{ $blog->views_count }} views
+                                                        @endif
+                                                    </small>
+                                                    @if($blog->reading_time)
+                                                        <small class="text-muted">
+                                                            <i class="fa fa-clock-o"></i> {{ $blog->reading_time }} min read
+                                                        </small>
+                                                    @endif
+                                                </div>
+
+                                                <h5 class="card-title">
+                                                    <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="text-decoration-none" style="color: #fff;">
+                                                        {{ Str::limit($blog->title, 60, '...') }}
+                                                    </a>
+                                                </h5>
+
+                                                @if($blog->description)
+                                                    <p class="card-text text-muted flex-grow-1 line-clamp-3">{{ Str::limit($blog->description, 100, '...') }}</p>
+                                                @endif
+
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <a
+                                                            href="{{ route('blogs.show', $blog->slug) }}"
+                                                            target="_blank"
+                                                            class="btn btn-outline-warning btn-sm"
+                                                            style="border-color: #f9bf3b; color: #f9bf3b;"
+                                                        >
+                                                            Read more <i class="fa fa-arrow-right"></i>
+                                                        </a>
+
+                                                        @if($blog->tags && is_array($blog->tags) && count($blog->tags) > 0)
+                                                            <div class="tags">
+                                                                @foreach(array_slice($blog->tags, 0, 1) as $tag)
+                                                                    <span class="badge" style="background: #f9bf3b; color: #1e1e1e; font-size: 0.7rem;">{{ $tag }}</span>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                @if($blogs->count() > 6)
+                                <div class="row">
+                                    <div class="col-12 text-center mt-4">
+                                        <a href="/all-blogs" class="btn btn-outline-warning" style="background: #f9bf3b; color: #1e1e1e; border-color: #f9bf3b; padding: 12px 24px; border-radius: 25px; font-weight: 600;">
+                                            <i class="fa fa-list"></i> View All {{ $blogs->count() }} Blogs
+                                        </a>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         @else
                             <div class="mh-no-blogs text-center wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.3s">
