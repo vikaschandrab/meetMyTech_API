@@ -10,6 +10,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- Performance Optimization - Resource Hints --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://maps.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
     {{-- SEO Meta Tags --}}
     <title>{{ $UserDetails->name }} - Personal CV/Resume</title>
     @if($UserDetails->seo_description)
@@ -52,21 +58,31 @@
     {{-- Preconnect for performance --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://maps.googleapis.com">
 
-    {{-- External Stylesheets --}}
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
-
-    {{-- Stylesheets --}}
-    @push('styles')
+    {{-- Critical CSS first --}}
+    <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vikas_css/css/styles.css') }}">
+    
+    {{-- Non-critical CSS loaded asynchronously --}}
+    <link rel="preload" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('vikas_css/plugins/css/animate.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('vikas_css/plugins/css/owl.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('vikas_css/plugins/css/jquery.fancybox.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('vikas_css/css/responsive.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('vikas_css/css/blog-section.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    {{-- Fallback for browsers that don't support preload --}}
+    <noscript>
         <link rel="stylesheet" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
         <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/animate.css') }}">
         <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/owl.css') }}">
         <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/jquery.fancybox.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vikas_css/css/styles.css') }}">
         <link rel="stylesheet" href="{{ asset('vikas_css/css/responsive.css') }}">
         <link rel="stylesheet" href="{{ asset('vikas_css/css/blog-section.css') }}">
-    @endpush
+    </noscript>
 
     {{-- Color Themes --}}
     @stack('color-themes')
@@ -105,7 +121,7 @@
                     <nav class="navbar navbar-expand-lg mh-nav nav-btn">
                         @if($UserDetails->logo_png)
                         <a class="navbar-brand" href="#">
-                            <img src="{{ asset('storage/'.$UserDetails->logo_png) }}" alt="{{ $UserDetails->name }}" class="img-fluid" width="64px">
+                            <img src="{{ asset('storage/'.$UserDetails->logo_png) }}" alt="{{ $UserDetails->name }}" class="img-fluid" width="64" height="64" loading="lazy" decoding="async">
                         </a>
                         @endif
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +216,7 @@
                         <div class="col-sm-6">
                             <div class="hero-img wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">
                                 <div class="img-border">
-                                    <img src="{{ asset('storage/'.$UserDetails->profilePic) }}" alt="Vikas"  class="img-fluid">
+                                    <img src="{{ asset('storage/'.$UserDetails->profilePic) }}" alt="{{ $UserDetails->name }} Profile Picture" class="img-fluid" width="400" height="400" loading="eager" decoding="sync">
                                 </div>
                             </div>
                         </div>
@@ -220,7 +236,7 @@
                 <div class="row section-separator">
                     <div class="col-sm-12 col-md-6">
                         <div class="mh-about-img shadow-2 wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s">
-                            <img src="{{asset('vikas_css/images/about_me.gif')}}" alt="About_me" class="img-fluid">
+                            <img src="{{asset('vikas_css/images/about_me.gif')}}" alt="About_me" class="img-fluid" loading="lazy" decoding="async">
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6">
@@ -635,9 +651,9 @@
                                                 <div class="mh-blog-img">
                                                     <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">
                                                         @if($blog->featured_image)
-                                                            <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}" class="img-fluid">
+                                                            <img src="{{ asset('storage/'.$blog->featured_image) }}" alt="{{ $blog->title }}" class="img-fluid" width="400" height="250" loading="lazy" decoding="async">
                                                         @else
-                                                            <img src="{{asset('vikas_css/images/contact.gif')}}" alt="{{ $blog->title }}" class="img-fluid">
+                                                            <img src="{{asset('vikas_css/images/contact.gif')}}" alt="{{ $blog->title }}" class="img-fluid" width="400" height="250" loading="lazy" decoding="async">
                                                         @endif
                                                     </a>
                                                 </div>
@@ -683,6 +699,10 @@
                                                     alt="{{ $blog->title }}"
                                                     class="card-img-top"
                                                     style="height: 180px; object-fit: cover;"
+                                                    width="300"
+                                                    height="180"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
                                             @else
                                                 <div class="card-img-top bg-gradient d-flex align-items-center justify-content-center" style="height: 180px;">
@@ -795,7 +815,7 @@
                             <div class="portfolioContainer row">
                                 <div class="grid-item col-md-4 col-sm-6 col-xs-12 user-interface">
                                     <figure>
-                                        <img src="{{asset('vikas_css/images/portfolio/g1.jpg')}}" alt="img04">
+                                        <img src="{{asset('vikas_css/images/portfolio/g1.jpg')}}" alt="img04" loading="lazy" decoding="async">
                                         <figcaption class="fig-caption">
                                             <i class="fa fa-search"></i>
                                             <h5 class="title">Creative Design</h5>
@@ -806,7 +826,7 @@
                                 </div>
                                 <div class="grid-item col-md-4 col-sm-6 col-xs-12 ui mockup">
                                     <figure>
-                                        <img src="{{asset('vikas_css/images/portfolio/g2.png')}}" alt="img04">
+                                        <img src="{{asset('vikas_css/images/portfolio/g2.png')}}" alt="img04" loading="lazy" decoding="async">
                                         <figcaption class="fig-caption">
                                             <i class="fa fa-search"></i>
                                             <h5 class="title">Creative Design</h5>
@@ -817,7 +837,7 @@
                                 </div>
                                 <div class="grid-item col-md-4 col-sm-6 col-xs-12 user-interface">
                                     <figure>
-                                        <img src="{{asset('vikas_css/images/portfolio/g3.png')}}" alt="img04">
+                                        <img src="{{asset('vikas_css/images/portfolio/g3.png')}}" alt="img04" loading="lazy" decoding="async">
                                         <figcaption class="fig-caption">
                                             <i class="fa fa-search"></i>
                                             <h5 class="title">Creative Design</h5>
@@ -1010,37 +1030,29 @@
     ==============
     -->
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-    <!-- jQuery -->
+    <!-- Critical JavaScript loaded first -->
     <script src="{{asset('vikas_css/plugins/js/jquery.min.js')}}"></script>
-    <!-- popper -->
     <script src="{{asset('vikas_css/plugins/js/popper.min.js')}}"></script>
-    <!-- bootstrap -->
     <script src="{{asset('vikas_css/plugins/js/bootstrap.min.js')}}"></script>
-    <!-- owl carousel -->
-    <script src="{{asset('vikas_css/plugins/js/owl.carousel.js')}}"></script>
-    <!-- validator -->
-    <script src="{{asset('vikas_css/plugins/js/validator.min.js')}}"></script>
-    <!-- wow -->
-    <script src="{{asset('vikas_css/plugins/js/wow.min.js')}}"></script>
-    <!-- mixin js-->
-    <script src="{{asset('vikas_css/plugins/js/jquery.mixitup.min.js')}}"></script>
-    <!-- circle progress-->
-    <script src="{{asset('vikas_css/plugins/js/circle-progress.js')}}"></script>
-    <!-- jquery nav -->
-    <script src="{{asset('vikas_css/plugins/js/jquery.nav.js')}}"></script>
-    <!-- Fancybox js-->
-    <script src="{{asset('vikas_css/plugins/js/jquery.fancybox.min.js')}}"></script>
-    <!-- Map api -->
+
+    <!-- Non-critical JavaScript loaded with defer -->
+    <script src="{{asset('vikas_css/plugins/js/owl.carousel.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/validator.min.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/wow.min.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/jquery.mixitup.min.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/circle-progress.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/jquery.nav.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/jquery.fancybox.min.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/isotope.pkgd.js')}}" defer></script>
+    <script src="{{asset('vikas_css/plugins/js/packery-mode.pkgd.js')}}" defer></script>
+    
+    <!-- Custom Scripts with defer -->
+    <script src="{{asset('vikas_css/js/map-init.js')}}" defer></script>
+    <script src="{{asset('vikas_css/js/custom-scripts.js')}}" defer></script>
+    <script src="{{asset('vikas_css/js/blog-carousel.js')}}" defer></script>
+
+    <!-- Map API loaded asynchronously -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;key=AIzaSyCRP2E3BhaVKYs7BvNytBNumU0MBmjhhxc" async defer></script>
-    <!-- isotope js-->
-    <script src="{{asset('vikas_css/plugins/js/isotope.pkgd.js')}}"></script>
-    <script src="{{asset('vikas_css/plugins/js/packery-mode.pkgd.js')}}"></script>
-    <!-- Custom Scripts-->
-    <script src="{{asset('vikas_css/js/map-init.js')}}"></script>
-    <script src="{{asset('vikas_css/js/custom-scripts.js')}}"></script>
-    <script src="{{asset('vikas_css/js/blog-carousel.js')}}"></script>
 
 
     {{-- Dynamic Footer Script --}}
