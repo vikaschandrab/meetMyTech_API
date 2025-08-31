@@ -1,10 +1,184 @@
 @extends('layouts.portfolio')
 
-@section('title', $blog->title)
+@section('title', $blog->meta_title ?: ($blog->title . ' - ' . $blog->user->name . ' | ' . config('app.name')))
+
+@push('meta')
+<!-- Primary Meta Tags -->
+<meta name="title" content="{{ $blog->meta_title ?: ($blog->title . ' - ' . $blog->user->name . ' | ' . config('app.name')) }}">
+<meta name="description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta name="keywords" content="{{ $blog->keywords ?: ($blog->tags ? implode(', ', $blog->tags) . ', ' . $blog->user->name . ', blog, article, ' . config('app.name') : $blog->user->name . ', blog, article, ' . config('app.name')) }}">
+<meta name="author" content="{{ $blog->user->name }}">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="language" content="en">
+<meta name="revisit-after" content="7 days">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ request()->url() }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request()->url() }}">
+<meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
+<meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ $blog->title }}">
+<meta property="og:site_name" content="{{ config('app.name') }}">
+<meta property="og:locale" content="en_US">
+
+<!-- Article specific Open Graph -->
+<meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toISOString() : $blog->created_at->toISOString() }}">
+<meta property="article:modified_time" content="{{ $blog->updated_at->toISOString() }}">
+<meta property="article:author" content="{{ $blog->user->name }}">
+<meta property="article:section" content="Technology">
+@if($blog->tags)
+    @foreach($blog->tags as $tag)
+        <meta property="article:tag" content="{{ $tag }}">
+    @endforeach
+@endif
+
+<!-- Twitter Card -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="{{ request()->url() }}">
+<meta property="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
+<meta property="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}">
+<meta property="twitter:image:alt" content="{{ $blog->title }}">
+<meta name="twitter:creator" content="@{{ str_replace(' ', '_', strtolower($blog->user->name)) }}">
+<meta name="twitter:site" content="@{{ config('app.name') }}">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="theme-color" content="#007bff">
+<meta name="msapplication-TileColor" content="#007bff">
+
+<!-- Performance optimization -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="//www.google.com">
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+<!-- Preload critical resources -->
+@if($blog->featured_image)
+<link rel="preload" href="{{ asset('storage/' . $blog->featured_image) }}" as="image">
+@endif
+
+<!-- Schema.org JSON-LD structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ request()->url() }}"
+  },
+  "headline": "{{ $blog->meta_title ?: $blog->title }}",
+  "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
+  "image": {
+    "@type": "ImageObject",
+    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}",
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Person",
+    "name": "{{ $blog->user->name }}",
+    "url": "{{ url('https://' . str_replace(' ', '', strtolower($blog->user->name)) . '.' . config('app.domain')) }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ config('app.name') }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ asset('assets/images/logo.png') }}",
+      "width": 60,
+      "height": 60
+    }
+  },
+  "datePublished": "{{ $blog->published_at ? $blog->published_at->toISOString() : $blog->created_at->toISOString() }}",
+  "dateModified": "{{ $blog->updated_at->toISOString() }}",
+  "wordCount": {{ str_word_count(strip_tags($blog->content)) }},
+  "timeRequired": "PT{{ $blog->reading_time ?? ceil(str_word_count(strip_tags($blog->content)) / 200) }}M",
+  "keywords": "{{ $blog->keywords ?: ($blog->tags ? implode(', ', $blog->tags) : '') }}",
+  "articleSection": "{{ $blog->tags ? $blog->tags[0] : 'Technology' }}",
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "url": "{{ request()->url() }}",
+  "interactionStatistic": [
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/ReadAction",
+      "userInteractionCount": {{ $blog->views_count ?? 0 }}
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/CommentAction",
+      "userInteractionCount": {{ count($comments) }}
+    }
+  ]
+}
+</script>
+
+<!-- Breadcrumb Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "All Blogs",
+      "item": "{{ route('home.all-blogs') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ $blog->user->name }}'s Profile",
+      "item": "{{ url('https://' . str_replace(' ', '', strtolower($blog->user->name)) . '.' . config('app.domain')) }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "{{ $blog->title }}",
+      "item": "{{ request()->url() }}"
+    }
+  ]
+}
+</script>
+@endpush
 
 @push('styles')
 <!-- Google reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<!-- Critical CSS for performance -->
+<style>
+/* Critical above-the-fold styles */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 15px; }
+.row { display: flex; flex-wrap: wrap; margin: 0 -15px; }
+.col-12, .col-lg-10 { flex: 0 0 100%; max-width: 100%; padding: 0 15px; }
+.col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+.justify-content-center { justify-content: center !important; }
+.mt-5 { margin-top: 3rem !important; }
+.mb-5 { margin-bottom: 3rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.display-4 { font-size: 2.5rem; font-weight: 300; line-height: 1.2; }
+.font-weight-bold { font-weight: 700 !important; }
+.btn { display: inline-block; padding: 0.375rem 0.75rem; font-size: 1rem; line-height: 1.5; text-align: center; text-decoration: none; border: 1px solid transparent; border-radius: 0.375rem; transition: all 0.15s ease-in-out; }
+.btn-outline-primary { color: #007bff; border-color: #007bff; background-color: transparent; }
+.btn-outline-primary:hover { color: #fff; background-color: #007bff; border-color: #007bff; }
+.img-fluid { max-width: 100%; height: auto; }
+.rounded { border-radius: 0.375rem !important; }
+.shadow-lg { box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; }
+@media (min-width: 992px) { .col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; } }
+</style>
 
 <style>
     /* TinyMCE Content Styling */
