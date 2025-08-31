@@ -63,7 +63,7 @@
     {{-- Critical CSS first --}}
     <link rel="stylesheet" href="{{ asset('vikas_css/plugins/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vikas_css/css/styles.css') }}">
-    
+
     {{-- Non-critical CSS loaded asynchronously --}}
     <link rel="preload" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -72,7 +72,7 @@
     <link rel="preload" href="{{ asset('vikas_css/plugins/css/jquery.fancybox.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ asset('vikas_css/css/responsive.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ asset('vikas_css/css/blog-section.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    
+
     {{-- Fallback for browsers that don't support preload --}}
     <noscript>
         <link rel="stylesheet" href="{{ asset('vikas_css/icons/font-awesome-4.7.0/css/font-awesome.min.css') }}">
@@ -1045,7 +1045,7 @@
     <script src="{{asset('vikas_css/plugins/js/jquery.fancybox.min.js')}}" defer></script>
     <script src="{{asset('vikas_css/plugins/js/isotope.pkgd.js')}}" defer></script>
     <script src="{{asset('vikas_css/plugins/js/packery-mode.pkgd.js')}}" defer></script>
-    
+
     <!-- Custom Scripts with defer -->
     <script src="{{asset('vikas_css/js/map-init.js')}}" defer></script>
     <script src="{{asset('vikas_css/js/custom-scripts.js')}}" defer></script>
