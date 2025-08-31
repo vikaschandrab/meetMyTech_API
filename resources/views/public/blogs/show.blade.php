@@ -1179,8 +1179,8 @@
     <!-- Back to Blog Link -->
     <div class="row">
         <div class="col-12 mb-4">
-            <a href="/{{ $blog->authorSlug }}" class="btn btn-outline-primary">
-                <i class="fa fa-arrow-left"></i> Back to {{ $blog->user->name }}'s Profile
+            <a href="{{ $backInfo['url'] }}" class="btn btn-outline-primary">
+                <i class="fa fa-arrow-left"></i> {{ $backInfo['label'] }}
             </a>
         </div>
     </div>

@@ -9,6 +9,7 @@ use Exception;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Log;
 use App\Services\BlogService;
+use App\Services\RedirectService;
 
 class ProfilePageController extends Controller
 {
@@ -131,7 +132,7 @@ class ProfilePageController extends Controller
      * @param string $slug
      * @return \Illuminate\View\View
      */
-    public function publicShow(string $slug)
+    public function publicShow(string $slug, Request $request)
     {
         try {
             $blog = $this->blogService->getBlogBySlug($slug, true); // Increment views
@@ -148,6 +149,9 @@ class ProfilePageController extends Controller
             if ($blog->user->status !== 'active') {
                 abort(404, 'Blog not available. Author account is inactive.');
             }
+
+            // Get smart back URL based on referrer
+            $backInfo = RedirectService::getBlogBackUrl($request, $blog);
 
             // Get related blogs by same author (excluding current blog)
             $relatedBlogs = Blog::with('user:id,name,email,slug,status')
@@ -168,7 +172,7 @@ class ProfilePageController extends Controller
             // Load all comments for this blog
             $comments = \App\Models\Comment::where('blog_id', $blog->id)->orderBy('created_at')->get();
 
-            return view('public.blogs.show', compact('blog', 'relatedBlogs', 'comments'));
+            return view('public.blogs.show', compact('blog', 'relatedBlogs', 'comments', 'backInfo'));
         } catch (Exception $e) {
             Log::error('Error showing public blog: ' . $e->getMessage(), ['slug' => $slug]);
             abort(404, 'Blog not found.');
