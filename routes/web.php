@@ -35,6 +35,23 @@ Route::domain('{slug}.' . config('app.domain'))->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-blogs');
 
+// Temporary debug route - REMOVE BEFORE PRODUCTION
+Route::get('/debug-session', function() {
+    if (!app()->environment('local')) {
+        abort(404);
+    }
+
+    return response()->json([
+        'session_id' => session()->getId(),
+        'csrf_token' => csrf_token(),
+        'session_data' => session()->all(),
+        'app_env' => app()->environment(),
+        'app_domain' => config('app.domain'),
+        'request_host' => request()->getHost(),
+        'session_domain' => config('session.domain'),
+    ]);
+})->name('debug.session');
+
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])
     ->name('login.submit')
@@ -162,4 +179,4 @@ Route::post('/blog/subscription-status', [\App\Http\Controllers\BlogSubscription
     ->name('blog.subscription.status');
 
 // Route for user profiles based on username (catch-all - must be last)
-//  Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
+Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');

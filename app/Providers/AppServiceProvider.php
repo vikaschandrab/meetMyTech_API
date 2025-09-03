@@ -50,5 +50,10 @@ class AppServiceProvider extends ServiceProvider
             $limit = $params[1] ?? 100;
             return "<?php echo App\Helpers\FormatHelper::truncate($text, $limit); ?>";
         });
+
+        // Captcha helper directive
+        Blade::directive('captchaEnabled', function () {
+            return "<?php echo (app()->environment('local') && config('captcha.disable_in_local')) ? 'false' : 'true'; ?>";
+        });
     }
 }

@@ -15,16 +15,25 @@ class BlogSubscriptionController extends Controller
     public function subscribe(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            // Base validation rules
+            $rules = [
                 'email' => 'required|email|max:255',
-                'g-recaptcha-response' => 'required|captcha',
-            ], [
+            ];
+
+            $messages = [
                 'email.required' => 'Email address is required.',
                 'email.email' => 'Please enter a valid email address.',
                 'email.max' => 'Email address must not exceed 255 characters.',
-                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-                'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
-            ]);
+            ];
+
+            // Add captcha validation only if not in local environment or if captcha is explicitly enabled
+            if (!app()->environment('local') || !config('captcha.disable_in_local', false)) {
+                $rules['g-recaptcha-response'] = 'required|captcha';
+                $messages['g-recaptcha-response.required'] = 'Please verify that you are not a robot.';
+                $messages['g-recaptcha-response.captcha'] = 'reCAPTCHA verification failed, please try again.';
+            }
+
+            $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
                 return response()->json([

@@ -25,6 +25,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Disable Captcha in Local Environment
+    |--------------------------------------------------------------------------
+    |
+    | When set to true, captcha will be disabled in local environment
+    | This should NEVER be true in production
+    |
+    */
+    'disable_in_local' => env('DISABLE_CAPTCHA_LOCAL', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | No-Captcha Options
     |--------------------------------------------------------------------------
     |

@@ -16,6 +16,7 @@ trait ProfileValidationTrait
             'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
             'contactNum' => 'required|string|max:15',
             'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cropped_image' => 'nullable|string', // Base64 encoded cropped image data
             'address' => 'required|string|max:500',
             'github' => 'nullable|url|max:255',
             'twitter' => 'nullable|url|max:255',

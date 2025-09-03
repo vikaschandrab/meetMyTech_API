@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Exception;
 
@@ -41,8 +42,26 @@ class ProfileService
             /** @var User $user */
             $user = Auth::user();
 
-            // Handle profile image upload (simplified version without GD)
-            if (isset($data['profile_pic']) && $data['profile_pic']) {
+            // Debug logging for cropped image
+            if (app()->environment('local')) {
+                Log::info('ProfileService updateProfile called', [
+                    'has_cropped_image' => isset($data['cropped_image']),
+                    'cropped_image_length' => isset($data['cropped_image']) ? strlen($data['cropped_image']) : 0,
+                    'has_profile_pic' => isset($data['profile_pic']),
+                    'data_keys' => array_keys($data)
+                ]);
+            }
+
+            // Handle cropped image data
+            if (isset($data['cropped_image']) && $data['cropped_image']) {
+                Log::info('Processing cropped image', ['user_id' => $user->id]);
+                $profilePicPath = $this->handleCroppedImageUpload($data['cropped_image'], $user);
+                $user->profilePic = $profilePicPath;
+                $user->save();
+                Log::info('Cropped image saved', ['path' => $profilePicPath]);
+            }
+            // Handle profile image upload (simplified version without GD) - fallback
+            elseif (isset($data['profile_pic']) && $data['profile_pic']) {
                 $profilePicPath = $this->handleSimpleProfilePictureUpload($data['profile_pic'], $user);
                 $user->profilePic = $profilePicPath;
                 $user->save();
@@ -128,6 +147,75 @@ class ProfileService
         }
 
         return $path;
+    }
+
+    /**
+     * Handle cropped image upload from base64 data
+     *
+     * @param string $base64Data
+     * @param User $user
+     * @return string
+     * @throws Exception
+     */
+    private function handleCroppedImageUpload(string $base64Data, User $user): string
+    {
+        try {
+            Log::info('handleCroppedImageUpload called', [
+                'user_id' => $user->id,
+                'data_length' => strlen($base64Data)
+            ]);
+
+            // Delete old profile picture if exists
+            if ($user->profilePic && Storage::disk('public')->exists($user->profilePic)) {
+                Storage::disk('public')->delete($user->profilePic);
+                Log::info('Deleted old profile picture', ['path' => $user->profilePic]);
+            }
+
+            // Extract base64 data (remove data:image/jpeg;base64, prefix)
+            if (preg_match('/^data:image\/(\w+);base64,/', $base64Data, $type)) {
+                $data = substr($base64Data, strpos($base64Data, ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, gif
+
+                Log::info('Extracted image type', ['type' => $type]);
+
+                if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                    throw new Exception('Invalid image type: ' . $type);
+                }
+            } else {
+                throw new Exception('Invalid base64 image data format');
+            }
+
+            // Decode base64 data
+            $imageData = base64_decode($data);
+
+            if ($imageData === false) {
+                throw new Exception('Failed to decode base64 image data');
+            }
+
+            Log::info('Decoded image data', ['size' => strlen($imageData)]);
+
+            // Generate unique filename
+            $filename = time() . '_' . uniqid() . '.' . ($type === 'jpg' ? 'jpeg' : $type);
+            $path = 'profile_pics/' . $filename;
+
+            // Store the image
+            $success = Storage::disk('public')->put($path, $imageData);
+
+            if (!$success) {
+                throw new Exception('Failed to store image file');
+            }
+
+            Log::info('Image stored successfully', ['path' => $path]);
+
+            return $path;
+
+        } catch (Exception $e) {
+            Log::error('Failed to process cropped image', [
+                'error' => $e->getMessage(),
+                'user_id' => $user->id
+            ]);
+            throw new Exception('Failed to process cropped image: ' . $e->getMessage());
+        }
     }
 
     /**

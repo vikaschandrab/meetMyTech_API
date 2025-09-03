@@ -2,6 +2,16 @@
 <form action="{{ route('login.submit') }}" method="POST" class="needs-validation" novalidate>
     @csrf
 
+    {{-- Debug info for local development --}}
+    @if(app()->environment('local'))
+        <div class="alert alert-info small mb-3">
+            <strong>Debug Info (Local Only):</strong><br>
+            CSRF Token: {{ csrf_token() }}<br>
+            Session ID: {{ session()->getId() }}<br>
+            Form Action: {{ route('login.submit') }}
+        </div>
+    @endif
+
     {{-- Email Field --}}
     <div class="mb-3">
         <label for="email" class="form-label">
@@ -58,16 +68,26 @@
     {{-- Honeypot (Anti-spam) --}}
     @honeypot
 
-    {{-- Google reCAPTCHA --}}
-    <div class="mb-3 text-center">
-        <div class="d-flex justify-content-center">
-            {!! NoCaptcha::renderJs() !!}
-            {!! NoCaptcha::display() !!}
+    {{-- Google reCAPTCHA - Only show if not in local environment or if captcha is explicitly enabled --}}
+    @if(!app()->environment('local') || !config('captcha.disable_in_local', false))
+        <div class="mb-3 text-center">
+            <div class="d-flex justify-content-center">
+                {!! NoCaptcha::renderJs() !!}
+                {!! NoCaptcha::display() !!}
+            </div>
+            @error('g-recaptcha-response')
+                <div class="text-danger small mt-2">{{ $message }}</div>
+            @enderror
         </div>
-        @error('g-recaptcha-response')
-            <div class="text-danger small mt-2">{{ $message }}</div>
-        @enderror
-    </div>
+    @else
+        {{-- Local development notice --}}
+        <div class="mb-3">
+            <div class="alert alert-info small text-center">
+                <i class="fas fa-info-circle me-1"></i>
+                CAPTCHA disabled for local development
+            </div>
+        </div>
+    @endif
 
     {{-- Submit Button --}}
     <div class="d-grid gap-2">

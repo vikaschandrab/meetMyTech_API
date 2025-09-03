@@ -20,7 +20,7 @@
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}">
+<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="{{ $blog->title }}">
@@ -43,7 +43,7 @@
 <meta property="twitter:url" content="{{ request()->url() }}">
 <meta property="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}">
+<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}">
 <meta property="twitter:image:alt" content="{{ $blog->title }}">
 <meta name="twitter:creator" content="@{{ str_replace(' ', '_', strtolower($blog->user->name)) }}">
 <meta name="twitter:site" content="@{{ config('app.name') }}">
@@ -76,7 +76,7 @@
   "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
   "image": {
     "@type": "ImageObject",
-    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profile_picture ? asset('storage/' . $blog->user->profile_picture) : asset('storage/default-avatar.png')) }}",
+    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}",
     "width": 1200,
     "height": 630
   },
@@ -1732,15 +1732,23 @@
                     @honeypot
 
                     <!-- Google reCAPTCHA -->
-                    <div class="elegant-captcha">
-                        <div class="captcha-wrapper">
-                            {!! NoCaptcha::renderJs() !!}
-                            {!! NoCaptcha::display() !!}
+                    @if(!app()->environment('local') || !config('captcha.disable_in_local', false))
+                        <div class="elegant-captcha">
+                            <div class="captcha-wrapper">
+                                {!! NoCaptcha::renderJs() !!}
+                                {!! NoCaptcha::display() !!}
+                            </div>
+                            @error('g-recaptcha-response')
+                                <div class="elegant-error mt-2">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('g-recaptcha-response')
-                            <div class="elegant-error mt-2">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @else
+                        <!-- CAPTCHA disabled for local development -->
+                        <div class="alert alert-info text-center" style="font-size: 0.85rem; margin: 1rem 0;">
+                            <i class="fas fa-info-circle me-2"></i>
+                            CAPTCHA disabled for local development
+                        </div>
+                    @endif
                 </form>
             </div>
             <div class="modal-footer elegant-footer">
@@ -1817,6 +1825,7 @@
                     </div>
 
                     <!-- reCAPTCHA -->
+                    @if(!app()->environment('local'))
                     <div class="elegant-captcha subscription-captcha">
                         <div class="captcha-wrapper">
                             {!! NoCaptcha::renderJs() !!}
@@ -1824,6 +1833,7 @@
                         </div>
                         <div class="elegant-error" id="modalRecaptchaError" style="display: none;"></div>
                     </div>
+                    @endif
 
                     <!-- Success/Error Messages -->
                     <div id="modalSubscriptionMessage" class="elegant-alert" style="display: none;"></div>
