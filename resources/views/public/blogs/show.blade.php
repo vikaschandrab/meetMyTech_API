@@ -12,6 +12,10 @@
 <meta name="language" content="en">
 <meta name="revisit-after" content="7 days">
 
+<!-- Force cache busting for social media -->
+<meta property="fb:app_id" content="{{ config('services.facebook.app_id', '') }}">
+<meta property="og:updated_time" content="{{ $blog->updated_at->timestamp }}">
+
 <!-- Canonical URL -->
 <link rel="canonical" href="{{ request()->url() }}">
 
@@ -20,10 +24,10 @@
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}">
+<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{{ $blog->title }}">
+<meta property="og:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
 <meta property="og:site_name" content="{{ config('app.name') }}">
 <meta property="og:locale" content="en_US">
 
@@ -31,6 +35,7 @@
 <meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toISOString() : $blog->created_at->toISOString() }}">
 <meta property="article:modified_time" content="{{ $blog->updated_at->toISOString() }}">
 <meta property="article:author" content="{{ $blog->user->name }}">
+<meta property="og:author" content="{{ $blog->user->name }}">
 <meta property="article:section" content="Technology">
 @if($blog->tags)
     @foreach($blog->tags as $tag)
@@ -43,8 +48,8 @@
 <meta property="twitter:url" content="{{ request()->url() }}">
 <meta property="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}">
-<meta property="twitter:image:alt" content="{{ $blog->title }}">
+<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}">
+<meta property="twitter:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
 <meta name="twitter:creator" content="@{{ str_replace(' ', '_', strtolower($blog->user->name)) }}">
 <meta name="twitter:site" content="@{{ config('app.name') }}">
 
@@ -76,7 +81,7 @@
   "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
   "image": {
     "@type": "ImageObject",
-    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : ($blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : asset('storage/default-avatar.png')) }}",
+    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}",
     "width": 1200,
     "height": 630
   },
