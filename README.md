@@ -55,6 +55,28 @@ Thank you for considering contributing to the Laravel framework! The contributio
 
 In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
+## Local Development Configuration
+
+### CAPTCHA Disable for Local Development
+
+For local development convenience, this application includes an option to disable CAPTCHA verification. This feature should **NEVER** be enabled in production environments.
+
+**Configuration:**
+- Set `DISABLE_CAPTCHA_LOCAL=true` in your `.env` file
+- Ensure `APP_ENV=local` in your environment
+- When both conditions are met, CAPTCHA validation will be skipped
+
+**Security Note:** 
+⚠️ **IMPORTANT**: This setting must be `false` or removed entirely in production environments. The application will automatically enforce CAPTCHA in non-local environments regardless of the setting.
+
+**Files Modified for Local CAPTCHA Disable:**
+- `config/captcha.php` - Added local disable configuration
+- `app/Http/Controllers/AuthController.php` - Conditional CAPTCHA validation
+- `app/Http/Controllers/ContactController.php` - Conditional CAPTCHA validation
+- `app/Http/Controllers/BlogSubscriptionController.php` - Conditional CAPTCHA validation
+- `app/Http/Controllers/ProfilePageController.php` - Conditional CAPTCHA validation
+- Login/forgot password forms - Conditional CAPTCHA display
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.

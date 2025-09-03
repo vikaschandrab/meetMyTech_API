@@ -8,28 +8,28 @@
         transition: all 0.3s ease;
         border-left: 4px solid transparent;
     }
-    
+
     .education-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         border-left-color: #007bff;
     }
-    
+
     .education-meta {
         color: #6c757d;
         font-size: 0.9rem;
     }
-    
+
     .education-degree {
         color: #495057;
         font-weight: 600;
     }
-    
+
     .education-university {
         color: #007bff;
         font-weight: 500;
     }
-    
+
     .education-period {
         background: #f8f9fa;
         border-radius: 0.25rem;
@@ -37,7 +37,7 @@
         font-size: 0.85rem;
         border: 1px solid #e9ecef;
     }
-    
+
     .education-score {
         background: linear-gradient(45deg, #28a745, #20c997);
         color: white;
@@ -46,19 +46,19 @@
         font-size: 0.85rem;
         font-weight: 600;
     }
-    
+
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
         color: #6c757d;
     }
-    
+
     .empty-state i {
         font-size: 3rem;
         margin-bottom: 1rem;
         opacity: 0.5;
     }
-    
+
     .timeline-indicator {
         width: 12px;
         height: 12px;
@@ -68,7 +68,7 @@
         flex-shrink: 0;
         margin-top: 0.25rem;
     }
-    
+
     .current-study {
         background: #28a745;
     }
@@ -149,9 +149,7 @@
                                     $totalYears = 0;
                                     if ($education) {
                                         foreach ($education as $edu) {
-                                            $fromDate = \Carbon\Carbon::parse($edu->from_date);
-                                            $toDate = $edu->to_date ? \Carbon\Carbon::parse($edu->to_date) : \Carbon\Carbon::now();
-                                            $totalYears += $fromDate->diffInYears($toDate);
+                                            $totalYears += $edu->duration_in_years;
                                         }
                                     }
                                 @endphp
@@ -218,7 +216,7 @@
                                                 <div class="d-flex flex-wrap gap-2">
                                                     <span class="education-period">
                                                         <i data-feather="calendar" class="feather-sm me-1"></i>
-                                                        {{ \Carbon\Carbon::parse($edu->from_date)->format('M Y') }} - 
+                                                        {{ \Carbon\Carbon::parse($edu->from_date)->format('M Y') }} -
                                                         {{ $edu->to_date ? \Carbon\Carbon::parse($edu->to_date)->format('M Y') : 'Present' }}
                                                     </span>
                                                     <span class="education-score">
@@ -237,7 +235,7 @@
                                             <p class="text-muted mb-0" style="text-align: justify;">
                                                 {{ Str::limit($edu->description, 150) }}
                                                 @if(strlen($edu->description) > 150)
-                                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button" 
+                                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#desc-{{ $edu->id }}">
                                                         Read more
                                                     </button>

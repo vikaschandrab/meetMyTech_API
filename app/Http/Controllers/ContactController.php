@@ -22,8 +22,8 @@ class ContactController extends Controller
      */
     public function submit(Request $request)
     {
-        // Validate the form data including reCAPTCHA
-        $validator = Validator::make($request->all(), [
+        // Base validation rules
+        $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'personal_email' => 'required|email|max:255',
@@ -31,11 +31,19 @@ class ContactController extends Controller
             'current_organization' => 'required|string|max:255',
             'position' => 'required|string|max:255',
             'technologies' => 'required|string|max:1000',
-            'g-recaptcha-response' => 'required|captcha',
-        ], [
-            'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-            'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
-        ]);
+        ];
+
+        $messages = [];
+
+        // Add captcha validation only if not in local environment or if captcha is explicitly enabled
+        if (!app()->environment('local') || !config('captcha.disable_in_local', false)) {
+            $rules['g-recaptcha-response'] = 'required|captcha';
+            $messages['g-recaptcha-response.required'] = 'Please verify that you are not a robot.';
+            $messages['g-recaptcha-response.captcha'] = 'reCAPTCHA verification failed, please try again.';
+        }
+
+        // Validate the form data including reCAPTCHA
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();

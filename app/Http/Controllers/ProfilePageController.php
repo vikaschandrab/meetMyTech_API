@@ -189,19 +189,28 @@ class ProfilePageController extends Controller
     public function storeComment(Request $request, string $slug)
     {
         try {
-            // Validate the request including reCAPTCHA
-            $request->validate([
+            // Base validation rules
+            $rules = [
                 'user_name' => 'required|string|max:255',
                 'message' => 'required|string|max:1000',
-                'g-recaptcha-response' => 'required|captcha',
-            ], [
+            ];
+
+            $messages = [
                 'user_name.required' => 'Please enter your name.',
                 'user_name.max' => 'Name must not exceed 255 characters.',
                 'message.required' => 'Please enter your comment.',
                 'message.max' => 'Comment must not exceed 1000 characters.',
-                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-                'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.',
-            ]);
+            ];
+
+            // Add captcha validation only if not in local environment or if captcha is explicitly enabled
+            if (!app()->environment('local') || !config('captcha.disable_in_local', false)) {
+                $rules['g-recaptcha-response'] = 'required|captcha';
+                $messages['g-recaptcha-response.required'] = 'Please verify that you are not a robot.';
+                $messages['g-recaptcha-response.captcha'] = 'reCAPTCHA verification failed, please try again.';
+            }
+
+            // Validate the request including reCAPTCHA
+            $request->validate($rules, $messages);
 
             // Find the blog
             $blog = $this->blogService->getBlogBySlug($slug, false);
