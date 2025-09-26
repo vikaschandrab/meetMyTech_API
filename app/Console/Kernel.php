@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,6 +18,14 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('tokens:revoke-expired')->daily();
+        $schedule->command('backup:db')
+            ->daily()
+            ->onFailure(function () {
+                \Log::error('Database backup failed in cron job.');
+            })
+            ->onSuccess(function () {
+                \Log::info('Database backup completed successfully via cron job.');
+            });
     }
 
     /**
