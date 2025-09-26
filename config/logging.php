@@ -184,6 +184,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'dbbackup' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/dbbackup.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
