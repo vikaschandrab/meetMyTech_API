@@ -199,6 +199,9 @@
                         <a class="nav-link" href="{{ route('home.all-blogs') }}">All Blogs</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home.mock-interview') }}">Mock Interview</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link btn btn-outline-primary px-3 ms-2" href="{{ route('contact') }}">Get Started</a>
                     </li>
                 </ul>

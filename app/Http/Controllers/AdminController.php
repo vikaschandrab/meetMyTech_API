@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Blog;
-use App\Models\BlogSubscriber;
-use App\Models\UserActivity;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Mail\NewUserWelcome;
+use App\Models\UserActivity;
+use App\Models\MockInterview;
+use Illuminate\Http\Request;
+use App\Models\BlogSubscriber;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -250,6 +251,37 @@ class AdminController extends Controller
             'success' => true,
             'message' => 'Blog deleted successfully'
         ]);
+    }
+
+    public function mockInterview()
+    {
+        $interviews = MockInterview::latest()->paginate(10);
+        return view('admin.mock-interview', compact('interviews'));
+    }
+
+    public function mockInterviewDetails($id)
+    {
+        $interview = MockInterview::findOrFail($id);
+        return view('admin.mock-interview-details', compact('interview'));
+    }
+
+    public function updateInterviewStatus(Request $request, $id)
+    {
+        $interview = MockInterview::findOrFail($id);
+        $interview->status = $request->status;
+        $interview->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sendCustomReply(Request $request, $id)
+    {
+        $interview = MockInterview::findOrFail($id);
+        // Here you can implement sending email or storing reply
+        $interview->reply = $request->message;
+        $interview->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
