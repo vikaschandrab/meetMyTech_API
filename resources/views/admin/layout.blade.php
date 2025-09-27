@@ -85,6 +85,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.*mock-interview*') ? 'active' : '' }}"
+                               href="{{ route('admin.mock-interview') }}">
+                                <i class="fas fa-user-tie me-2"></i>Mock Interview
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.subscribers') ? 'active' : '' }}"
                                href="{{ route('admin.subscribers') }}">
                                 <i class="fas fa-envelope me-2"></i>Subscribers

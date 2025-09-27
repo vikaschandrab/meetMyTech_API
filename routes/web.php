@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfilePageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MockInterviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,9 @@ Route::domain('{slug}.' . config('app.domain'))->group(function () {
 // Homepage Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-blogs');
+
+Route::get('/mock-interview', [MockInterviewController::class, 'index'])->name('home.mock-interview');
+Route::post('/mock-interview', [MockInterviewController::class, 'submitForm'])->name('mock-interview.submit');
 
 // Temporary debug route - REMOVE BEFORE PRODUCTION
 Route::get('/debug-session', function() {
@@ -138,6 +142,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/blogs/{id}/edit', [AdminController::class, 'editBlog'])->name('edit-blog');
     Route::put('/blogs/{id}', [AdminController::class, 'updateBlog'])->name('update-blog');
     Route::delete('/blogs/{id}', [AdminController::class, 'deleteBlog'])->name('delete-blog');
+
+    // Mock Interview Routes
+    Route::get('mock-interview', [AdminController::class, 'mockInterview'])->name('mock-interview');
+    Route::get('mock-interview/{id}', [AdminController::class, 'mockInterviewDetails'])->name('mock-interview-details');
+    Route::post('mock-interview/{id}/status', [AdminController::class, 'updateInterviewStatus']);
+    Route::post('mock-interview/{id}/reply', [AdminController::class, 'sendCustomReply']);
+
 
     // Blog Subscribers Management
     Route::get('/subscribers', [AdminController::class, 'subscribers'])->name('subscribers');
