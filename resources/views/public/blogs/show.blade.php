@@ -75,35 +75,30 @@
         Log::info('Using default logo', ['url' => $imageUrl]);
     }
 
-    // Always ensure HTTPS in production
-    if (app()->environment('production')) {
-        $imageUrl = preg_replace('/^http:/', 'https:', $imageUrl);
-    }    // First try the blog's featured image
-    if ($blog->featured_image) {
-        $featuredImagePath = $blog->featured_image;
-        if (Storage::disk('public')->exists($featuredImagePath)) {
-            $imageUrl = $baseUrl . Storage::url($featuredImagePath);
-            Log::info('Using blog featured image', ['url' => $imageUrl]);
+    // Final URL cleanup
+    try {
+        // Ensure URL is properly encoded
+        $imageUrl = str_replace(' ', '%20', $imageUrl);
+
+        // Force HTTPS in production
+        if (app()->environment('production')) {
+            $imageUrl = preg_replace('/^http:/', 'https:', $imageUrl);
         }
-    }
 
-    // If featured image is not available or accessible, use default logo
-    if (empty($imageUrl) || !verifyImage($imageUrl)) {
+        // Verify the image is accessible
+        $headers = @get_headers($imageUrl);
+        if (!$headers || strpos($headers[0], '200') === false) {
+            Log::warning('Image not accessible, falling back to default logo', [
+                'attempted_url' => $imageUrl
+            ]);
+            $imageUrl = $defaultLogo;
+        }
+    } catch (\Exception $e) {
+        Log::error('Error processing image URL', [
+            'error' => $e->getMessage(),
+            'url' => $imageUrl
+        ]);
         $imageUrl = $defaultLogo;
-        Log::info('Using default MeetMyTech logo', ['url' => $imageUrl]);
-    }
-
-    // Ensure HTTPS for production
-    if (app()->environment('production')) {
-        $imageUrl = preg_replace('/^http:/', 'https:', $imageUrl);
-    }
-
-    // URL encode the final image URL
-    $imageUrl = str_replace(' ', '%20', $imageUrl);
-
-    // Force HTTPS for production
-    if (app()->environment('production') && !str_starts_with($imageUrl, 'https://')) {
-        $imageUrl = str_replace('http://', 'https://', $imageUrl);
     }
 @endphp
 
