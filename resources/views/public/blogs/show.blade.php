@@ -31,30 +31,80 @@
 <link rel="canonical" href="{{ request()->url() }}">
 
 @php
-    // Get the absolute URL for images
+    // Debug information
+    Log::info('Blog Share Debug Info', [
+        'blog_id' => $blog->id,
+        'blog_title' => $blog->title,
+        'author_id' => $blog->user->id,
+        'author_name' => $blog->user->name,
+        'featured_image' => $blog->featured_image,
+        'author_photo' => $blog->user->profile_photo_path,
+        'url' => request()->url()
+    ]);
+
+    // Get the absolute URL for images with strict checking
     $imageUrl = '';
-    if ($blog->featured_image && Storage::disk('public')->exists($blog->featured_image)) {
-        $imageUrl = url(Storage::url($blog->featured_image));
-    } elseif ($blog->user->profile_photo_path && Storage::disk('public')->exists($blog->user->profile_photo_path)) {
-        $imageUrl = url(Storage::url($blog->user->profile_photo_path));
-    } else {
-        $imageUrl = url('meetmytech_logo.jpg');
+    $defaultLogo = url('/public/meetmytech_logo.jpg');
+
+    // Function to verify image existence and accessibility
+    function verifyImage($path) {
+        if (empty($path)) return false;
+
+        // For absolute URLs
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            $headers = @get_headers($path);
+            return $headers && strpos($headers[0], '200') !== false;
+        }
+
+        // For storage files
+        return Storage::disk('public')->exists($path);
     }
 
-    // Ensure the image exists and is accessible
-    $imageHeaders = get_headers($imageUrl);
-    if (!$imageHeaders || strpos($imageHeaders[0], '200') === false) {
-        $imageUrl = url('meetmytech_logo.jpg');
+    // Check featured image
+    if ($blog->featured_image && verifyImage($blog->featured_image)) {
+        $imageUrl = url(Storage::url($blog->featured_image));
+        Log::info('Using featured image: ' . $imageUrl);
+    }
+    // Check author's profile photo
+    elseif ($blog->user->profile_photo_path && verifyImage($blog->user->profile_photo_path)) {
+        $imageUrl = url(Storage::url($blog->user->profile_photo_path));
+        Log::info('Using author photo: ' . $imageUrl);
+    }
+    // Use default logo
+    else {
+        $imageUrl = $defaultLogo;
+        Log::info('Using default logo: ' . $imageUrl);
+    }
+
+    // Final verification
+    if (!verifyImage($imageUrl)) {
+        $imageUrl = $defaultLogo;
+        Log::info('Fallback to default logo after verification failed');
+    }
+
+    // Force HTTPS for production
+    if (app()->environment('production') && !str_starts_with($imageUrl, 'https://')) {
+        $imageUrl = str_replace('http://', 'https://', $imageUrl);
     }
 @endphp
 
-<!-- Generic Social Media Meta Tags -->
+<!-- Debug Comment for Image Source -->
+<!-- Using Image: {{ $imageUrl }} -->
+<!-- Author: {{ $blog->user->name }} -->
+<!-- Blog ID: {{ $blog->id }} -->
+
+<!-- Force No Cache Headers -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- Generic Social Media Meta Tags with Version -->
 <meta property="og:type" content="article">
-<meta property="og:url" content="{{ request()->url() }}">
+<meta property="og:url" content="{{ request()->url() }}?v={{ time() }}">
 <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="og:image" content="{{ $imageUrl }}">
-<meta property="og:image:secure_url" content="{{ $imageUrl }}">
+<meta property="og:image" content="{{ $imageUrl }}?v={{ time() }}">
+<meta property="og:image:secure_url" content="{{ $imageUrl }}?v={{ time() }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
@@ -63,11 +113,14 @@
 
 <!-- WhatsApp Specific -->
 <meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
 <!-- LinkedIn Specific -->
-<meta property="linkedin:image" content="{{ $imageUrl }}">
+<meta property="linkedin:image" content="{{ $imageUrl }}?v={{ time() }}">
 <meta property="linkedin:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="linkedin:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta name="image" content="{{ $imageUrl }}?v={{ time() }}">
 
 <!-- Article specific Open Graph -->
 <meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toISOString() : $blog->created_at->toISOString() }}">
@@ -85,15 +138,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@meetmytech">
 <meta name="twitter:creator" content="{{ '@' . str_replace(' ', '', strtolower($blog->user->name)) }}">
-<meta name="twitter:url" content="{{ request()->url() }}">
+<meta name="twitter:url" content="{{ request()->url() }}?v={{ time() }}">
 <meta name="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta name="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta name="twitter:image" content="{{ $imageUrl }}">
+<meta name="twitter:image" content="{{ $imageUrl }}?v={{ time() }}">
 <meta name="twitter:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
-<meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}">
-<meta property="twitter:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
-<meta name="twitter:creator" content="@{{ str_replace(' ', '_', strtolower($blog->user->name)) }}">
-<meta name="twitter:site" content="@{{ config('app.name') }}">
+<meta name="twitter:creator" content="@{{ str_replace(' ', '', strtolower($blog->user->name)) }}">
+<meta name="twitter:site" content="@meetmytech">
 
 <!-- Additional SEO Meta Tags -->
 <meta name="theme-color" content="#007bff">
@@ -123,7 +174,7 @@
   "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
   "image": {
     "@type": "ImageObject",
-    "url": "{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}",
+    "url": "{{ $imageUrl }}?v={{ time() }}",
     "width": 1200,
     "height": 630
   },
