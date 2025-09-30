@@ -48,40 +48,37 @@
     $defaultLogo = $baseUrl . '/meetmytech_logo.jpg';
     $meetMytechFavicon = $baseUrl . '/favicon.ico';
 
-    // Function to verify image existence and accessibility
-    function verifyImage($url) {
-        if (empty($url)) return false;
+    // Debug the featured image path
+    Log::info('Featured image debug', [
+        'raw_path' => $blog->featured_image,
+        'storage_exists' => Storage::disk('public')->exists($blog->featured_image),
+        'full_storage_url' => Storage::disk('public')->url($blog->featured_image),
+        'base_url' => $baseUrl
+    ]);
 
-        try {
-            // URL encode spaces and special characters
-            $encodedUrl = str_replace(' ', '%20', $url);
+    // Build the featured image URL if it exists
+    if ($blog->featured_image && Storage::disk('public')->exists($blog->featured_image)) {
+        // Get the correct storage URL and ensure proper encoding
+        $storageUrl = Storage::disk('public')->url($blog->featured_image);
+        $imageUrl = $baseUrl . $storageUrl;
 
-            // Handle both HTTP and HTTPS
-            if (!preg_match('~^(?:f|ht)tps?://~i', $encodedUrl)) {
-                $encodedUrl = 'https://' . ltrim($encodedUrl, '/');
-            }
+        // URL encode any spaces in the path
+        $imageUrl = str_replace(' ', '%20', $imageUrl);
 
-            // For absolute URLs
-            $headers = @get_headers($encodedUrl);
-            $isAccessible = $headers && strpos($headers[0], '200') !== false;
-
-            Log::info('Image verification', [
-                'url' => $url,
-                'encoded_url' => $encodedUrl,
-                'accessible' => $isAccessible
-            ]);
-
-            return $isAccessible;
-        } catch (\Exception $e) {
-            Log::error('Image verification failed', [
-                'url' => $url,
-                'error' => $e->getMessage()
-            ]);
-            return false;
-        }
+        Log::info('Using featured image', [
+            'original_path' => $blog->featured_image,
+            'final_url' => $imageUrl
+        ]);
+    } else {
+        // Fallback to default logo
+        $imageUrl = $defaultLogo;
+        Log::info('Using default logo', ['url' => $imageUrl]);
     }
 
-    // First try the blog's featured image
+    // Always ensure HTTPS in production
+    if (app()->environment('production')) {
+        $imageUrl = preg_replace('/^http:/', 'https:', $imageUrl);
+    }    // First try the blog's featured image
     if ($blog->featured_image) {
         $featuredImagePath = $blog->featured_image;
         if (Storage::disk('public')->exists($featuredImagePath)) {
