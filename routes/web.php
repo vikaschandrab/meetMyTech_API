@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ActivitiesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\ExperianceController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SiteSettingsController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfilePageController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\MockInterviewController;
 
 /*
@@ -39,7 +40,6 @@ Route::get('/all-blogs', [HomeController::class, 'allBlogs'])->name('home.all-bl
 Route::get('/mock-interview', [MockInterviewController::class, 'index'])->name('home.mock-interview');
 Route::post('/mock-interview', [MockInterviewController::class, 'submitForm'])->name('mock-interview.submit');
 
-// Temporary debug route - REMOVE BEFORE PRODUCTION
 Route::get('/debug-session', function() {
     if (!app()->environment('local')) {
         abort(404);
@@ -150,6 +150,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('mock-interview/{id}/reply', [AdminController::class, 'sendCustomReply']);
 
 
+
     // Blog Subscribers Management
     Route::get('/subscribers', [AdminController::class, 'subscribers'])->name('subscribers');
     Route::post('/subscribers/{id}/unsubscribe', [AdminController::class, 'unsubscribeUser'])->name('unsubscribe-user');
@@ -191,3 +192,4 @@ Route::post('/blog/subscription-status', [\App\Http\Controllers\BlogSubscription
 
 // Route for user profiles based on username (catch-all - must be last)
 Route::get('/{slug}', [ProfilePageController::class, 'show'])->name('profile.show');
+

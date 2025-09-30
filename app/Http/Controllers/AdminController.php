@@ -13,6 +13,9 @@ use App\Models\BlogSubscriber;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\MeetingInvitationMail;
+use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -253,33 +256,100 @@ class AdminController extends Controller
         ]);
     }
 
+    // ================================
+    // LIST ALL INTERVIEWS
+    // ================================
     public function mockInterview()
     {
         $interviews = MockInterview::latest()->paginate(10);
         return view('admin.mock-interview', compact('interviews'));
     }
 
+    // ================================
+    // INTERVIEW DETAILS
+    // ================================
     public function mockInterviewDetails($id)
     {
         $interview = MockInterview::findOrFail($id);
         return view('admin.mock-interview-details', compact('interview'));
     }
 
+    // ================================
+    // UPDATE STATUS (ACCEPT / REJECT)
+    // ================================
     public function updateInterviewStatus(Request $request, $id)
     {
         $interview = MockInterview::findOrFail($id);
-        $interview->status = $request->status;
+        $status = $request->status;
+
+        switch ($status) {
+            case 'accepted':
+                // Check if slot is already booked
+                $exists = MockInterview::where('date', $interview->date)
+                    ->where('time', $interview->time)
+                    ->where('status', 'accepted')
+                    ->where('id', '!=', $interview->id)
+                    ->exists();
+
+                if ($exists) {
+                    Mail::to($interview->email)
+                        ->send(new MeetingInvitationMail($interview, 'slot_unavailable'));
+                    return response()->json(['success' => false, 'message' => 'This slot is already booked']);
+                }
+
+                Mail::to($interview->email)
+                    ->send(new MeetingInvitationMail($interview, 'accepted_pending'));
+                break;
+
+            case 'rejected':
+                Mail::to($interview->email)
+                    ->send(new MeetingInvitationMail($interview, 'rejected'));
+                break;
+
+            case 'completed':
+                if (empty($request->admin_notes)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Interview report is required for completed status'
+                    ]);
+                }
+
+                $interview->admin_notes = $request->admin_notes;
+
+                // Generate PDF report
+                $pdf = PDF::loadView('pdfs.interview-report', [
+                    'interview' => $interview,
+                    'watermark' => public_path('images/meetmytech_logo.jpg'),
+                    'header' => public_path('images/meetmytech_logo.jpg')
+                ]);
+
+                Mail::to($interview->email)
+                    ->send(new MeetingInvitationMail($interview, 'completed', null, $pdf->output()));
+                break;
+        }
+
+        // Update status
+        $interview->status = $status;
         $interview->save();
 
         return response()->json(['success' => true]);
     }
 
+    // ================================
+    // SEND CUSTOM REPLY
+    // ================================
     public function sendCustomReply(Request $request, $id)
     {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+
         $interview = MockInterview::findOrFail($id);
-        // Here you can implement sending email or storing reply
-        $interview->reply = $request->message;
-        $interview->save();
+        $customMessage = $request->message;
+
+        // Send email
+        Mail::to($interview->email)
+            ->send(new MeetingInvitationMail($interview, 'custom', $customMessage));
 
         return response()->json(['success' => true]);
     }

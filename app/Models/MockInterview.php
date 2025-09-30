@@ -16,7 +16,13 @@ class MockInterview extends Model
         'time',
         'experience',
         'technology',
-        'notes'
+        'notes',
+        'status',
+        'meeting_link',
+        'meeting_id',
+        'admin_notes',
+        'created_by',
+        'duration',
     ];
 
     protected $casts = [
