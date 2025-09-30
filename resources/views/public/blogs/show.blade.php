@@ -121,10 +121,10 @@
 <meta http-equiv="Expires" content="0">
 
 <!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
-<link rel="shortcut icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
-<link rel="apple-touch-icon" href="{{ $defaultLogo }}">
-<meta name="msapplication-TileImage" content="{{ $defaultLogo }}">
+<link rel="icon" type="image/x-icon" href="{{ url('/favicon.ico') }}">
+<link rel="shortcut icon" type="image/x-icon" href="{{ url('/favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url('/meetmytech_logo.jpg') }}">
+<meta name="msapplication-TileImage" content="{{ url('/meetmytech_logo.jpg') }}">
 
 <!-- Generic Social Media Meta Tags with Version -->
 <meta property="og:type" content="article">
@@ -202,7 +202,7 @@
   "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
   "image": {
     "@type": "ImageObject",
-    "url": "{{ $meetMytechLogo }}?v={{ time() }}",
+    "url": "{{ $imageUrl }}?v={{ time() }}",
     "width": 1200,
     "height": 630
   },
