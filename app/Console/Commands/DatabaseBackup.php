@@ -18,26 +18,40 @@ class DatabaseBackup extends Command
 
     protected function findMysqldump()
     {
-        // Common paths for mysqldump
-        $paths = [
-            "C:/xampp/mysql/bin/mysqldump.exe",
-            "C:/wamp64/bin/mysql/mysql8.0.31/bin/mysqldump.exe",
-            "C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqldump.exe",
-            "mysqldump"  // If available in system PATH
-        ];
-
-        foreach ($paths as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
+        // For Linux/Unix systems, try common paths first
+        if (PHP_OS !== 'WINNT') {
+            $paths = [
+                '/usr/bin/mysqldump',
+                '/usr/local/bin/mysqldump',
+                '/usr/local/mysql/bin/mysqldump',
+                '/opt/mysql/bin/mysqldump'
+            ];
+        } else {
+            // For Windows systems
+            $paths = [
+                "C:/xampp/mysql/bin/mysqldump.exe",
+                "C:/wamp64/bin/mysql/mysql8.0.31/bin/mysqldump.exe",
+                "C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqldump.exe"
+            ];
         }
 
-        // Try using which/where command to find mysqldump
-        $command = PHP_OS === 'WINNT' ? 'where mysqldump' : 'which mysqldump';
-        exec($command, $output, $returnVar);
+        // Add system PATH check
+        $paths[] = 'mysqldump' . (PHP_OS === 'WINNT' ? '.exe' : '');
 
-        if ($returnVar === 0 && !empty($output[0])) {
-            return $output[0];
+        // Check each path
+        foreach ($paths as $path) {
+            if (PHP_OS === 'WINNT') {
+                if (file_exists($path)) {
+                    return $path;
+                }
+            } else {
+                // For Unix systems, use which command
+                $command = "which " . basename($path) . " 2>/dev/null";
+                exec($command, $output, $returnVar);
+                if ($returnVar === 0 && !empty($output[0])) {
+                    return $output[0];
+                }
+            }
         }
 
         throw new \Exception("mysqldump executable not found. Please ensure MySQL is installed and mysqldump is in the system PATH.");
@@ -84,10 +98,28 @@ class DatabaseBackup extends Command
             $mysqldumpPath = $this->findMysqldump();
 
             // Construct and execute mysqldump command
-            $command = "\"{$mysqldumpPath}\" --user={$user} --password={$pass} --host={$host} --single-transaction --routines --triggers {$db} 2>&1 > \"{$sqlFile}\"";
+            if (PHP_OS === 'WINNT') {
+                $command = "\"{$mysqldumpPath}\" --user={$user} --password={$pass} --host={$host} --single-transaction --routines --triggers {$db} 2>&1 > \"{$sqlFile}\"";
+            } else {
+                // For Unix systems, use proper escaping
+                $command = sprintf(
+                    '%s --user=%s --password=%s --host=%s --single-transaction --routines --triggers %s 2>&1 > %s',
+                    escapeshellcmd($mysqldumpPath),
+                    escapeshellarg($user),
+                    escapeshellarg($pass),
+                    escapeshellarg($host),
+                    escapeshellarg($db),
+                    escapeshellarg($sqlFile)
+                );
+            }
 
             $output = [];
             $returnVar = null;
+
+            // On Unix systems, use bash to execute the command
+            if (PHP_OS !== 'WINNT') {
+                $command = '/bin/bash -c ' . escapeshellarg($command);
+            }
 
             exec($command, $output, $returnVar);
 
