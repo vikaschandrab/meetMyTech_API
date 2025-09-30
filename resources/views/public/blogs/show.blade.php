@@ -43,47 +43,66 @@
     ]);
 
     // Get the absolute URL for images with strict checking
-    $baseUrl = config('app.url');
+    $baseUrl = rtrim(config('app.url'), '/');
     $imageUrl = '';
     $defaultLogo = $baseUrl . '/meetmytech_logo.jpg';
+    $meetMytechFavicon = $baseUrl . '/favicon.ico';
 
     // Function to verify image existence and accessibility
     function verifyImage($url) {
         if (empty($url)) return false;
 
-        // URL encode spaces and special characters
-        $encodedUrl = str_replace(' ', '%20', $url);
+        try {
+            // URL encode spaces and special characters
+            $encodedUrl = str_replace(' ', '%20', $url);
 
-        // For absolute URLs
-        $headers = @get_headers($encodedUrl);
-        return $headers && strpos($headers[0], '200') !== false;
-    }
+            // Handle both HTTP and HTTPS
+            if (!preg_match('~^(?:f|ht)tps?://~i', $encodedUrl)) {
+                $encodedUrl = 'https://' . ltrim($encodedUrl, '/');
+            }
 
-    // Check featured image
-    if ($blog->featured_image) {
-        $featuredImageUrl = url(Storage::url($blog->featured_image));
-        // URL encode spaces and special characters
-        $featuredImageUrl = str_replace(' ', '%20', $featuredImageUrl);
+            // For absolute URLs
+            $headers = @get_headers($encodedUrl);
+            $isAccessible = $headers && strpos($headers[0], '200') !== false;
 
-        if (verifyImage($featuredImageUrl)) {
-            $imageUrl = $featuredImageUrl;
-            Log::info('Using featured image: ' . $imageUrl);
+            Log::info('Image verification', [
+                'url' => $url,
+                'encoded_url' => $encodedUrl,
+                'accessible' => $isAccessible
+            ]);
+
+            return $isAccessible;
+        } catch (\Exception $e) {
+            Log::error('Image verification failed', [
+                'url' => $url,
+                'error' => $e->getMessage()
+            ]);
+            return false;
         }
     }
 
-    // If featured image fails or doesn't exist, use default logo
+    // First try the blog's featured image
+    if ($blog->featured_image) {
+        $featuredImagePath = $blog->featured_image;
+        if (Storage::disk('public')->exists($featuredImagePath)) {
+            $imageUrl = $baseUrl . Storage::url($featuredImagePath);
+            Log::info('Using blog featured image', ['url' => $imageUrl]);
+        }
+    }
+
+    // If featured image is not available or accessible, use default logo
     if (empty($imageUrl) || !verifyImage($imageUrl)) {
         $imageUrl = $defaultLogo;
-        Log::info('Using default logo: ' . $imageUrl);
+        Log::info('Using default MeetMyTech logo', ['url' => $imageUrl]);
     }
 
-    // Force HTTPS for production
+    // Ensure HTTPS for production
     if (app()->environment('production')) {
-        $imageUrl = str_replace('http://', 'https://', $imageUrl);
+        $imageUrl = preg_replace('/^http:/', 'https:', $imageUrl);
     }
 
-    // Set favicon
-    $meetMytechFavicon = $baseUrl . '/favicon.ico';
+    // URL encode the final image URL
+    $imageUrl = str_replace(' ', '%20', $imageUrl);
 
     // Force HTTPS for production
     if (app()->environment('production') && !str_starts_with($imageUrl, 'https://')) {
@@ -104,8 +123,8 @@
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
 <link rel="shortcut icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
-<link rel="apple-touch-icon" href="{{ $meetMytechLogo }}">
-<meta name="msapplication-TileImage" content="{{ $meetMytechLogo }}">
+<link rel="apple-touch-icon" href="{{ $defaultLogo }}">
+<meta name="msapplication-TileImage" content="{{ $defaultLogo }}">
 
 <!-- Generic Social Media Meta Tags with Version -->
 <meta property="og:type" content="article">
