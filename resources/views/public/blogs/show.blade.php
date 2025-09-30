@@ -43,44 +43,47 @@
     ]);
 
     // Get the absolute URL for images with strict checking
+    $baseUrl = config('app.url');
     $imageUrl = '';
-    $defaultLogo = url('/public/meetmytech_logo.jpg');
+    $defaultLogo = $baseUrl . '/meetmytech_logo.jpg';
 
     // Function to verify image existence and accessibility
-    function verifyImage($path) {
-        if (empty($path)) return false;
+    function verifyImage($url) {
+        if (empty($url)) return false;
+
+        // URL encode spaces and special characters
+        $encodedUrl = str_replace(' ', '%20', $url);
 
         // For absolute URLs
-        if (filter_var($path, FILTER_VALIDATE_URL)) {
-            $headers = @get_headers($path);
-            return $headers && strpos($headers[0], '200') !== false;
-        }
-
-        // For storage files
-        return Storage::disk('public')->exists($path);
+        $headers = @get_headers($encodedUrl);
+        return $headers && strpos($headers[0], '200') !== false;
     }
 
     // Check featured image
-    if ($blog->featured_image && verifyImage($blog->featured_image)) {
-        $imageUrl = url(Storage::url($blog->featured_image));
-        Log::info('Using featured image: ' . $imageUrl);
+    if ($blog->featured_image) {
+        $featuredImageUrl = url(Storage::url($blog->featured_image));
+        // URL encode spaces and special characters
+        $featuredImageUrl = str_replace(' ', '%20', $featuredImageUrl);
+
+        if (verifyImage($featuredImageUrl)) {
+            $imageUrl = $featuredImageUrl;
+            Log::info('Using featured image: ' . $imageUrl);
+        }
     }
-    // Check author's profile photo
-    elseif ($blog->user->profile_photo_path && verifyImage($blog->user->profile_photo_path)) {
-        $imageUrl = url(Storage::url($blog->user->profile_photo_path));
-        Log::info('Using author photo: ' . $imageUrl);
-    }
-    // Use default logo
-    else {
+
+    // If featured image fails or doesn't exist, use default logo
+    if (empty($imageUrl) || !verifyImage($imageUrl)) {
         $imageUrl = $defaultLogo;
         Log::info('Using default logo: ' . $imageUrl);
     }
 
-    // Final verification
-    if (!verifyImage($imageUrl)) {
-        $imageUrl = $defaultLogo;
-        Log::info('Fallback to default logo after verification failed');
+    // Force HTTPS for production
+    if (app()->environment('production')) {
+        $imageUrl = str_replace('http://', 'https://', $imageUrl);
     }
+
+    // Set favicon
+    $meetMytechFavicon = $baseUrl . '/favicon.ico';
 
     // Force HTTPS for production
     if (app()->environment('production') && !str_starts_with($imageUrl, 'https://')) {
@@ -98,13 +101,19 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
+<link rel="shortcut icon" type="image/x-icon" href="{{ $meetMytechFavicon }}">
+<link rel="apple-touch-icon" href="{{ $meetMytechLogo }}">
+<meta name="msapplication-TileImage" content="{{ $meetMytechLogo }}">
+
 <!-- Generic Social Media Meta Tags with Version -->
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ request()->url() }}?v={{ time() }}">
 <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="og:image" content="{{ $imageUrl }}?v={{ time() }}">
-<meta property="og:image:secure_url" content="{{ $imageUrl }}?v={{ time() }}">
+<meta property="og:image" content="{{ str_replace(' ', '%20', $imageUrl) }}?v={{ time() }}">
+<meta property="og:image:secure_url" content="{{ str_replace(' ', '%20', $imageUrl) }}?v={{ time() }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
@@ -174,7 +183,7 @@
   "description": "{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}",
   "image": {
     "@type": "ImageObject",
-    "url": "{{ $imageUrl }}?v={{ time() }}",
+    "url": "{{ $meetMytechLogo }}?v={{ time() }}",
     "width": 1200,
     "height": 630
   },
