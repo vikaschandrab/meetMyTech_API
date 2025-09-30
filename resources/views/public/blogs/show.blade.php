@@ -3,6 +3,13 @@
 @section('title', $blog->meta_title ?: ($blog->title . ' - ' . $blog->user->name . ' | ' . config('app.name')))
 
 @push('meta')
+<!-- Cache Control Headers -->
+@php
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Pragma: no-cache');
+@endphp
+
 <!-- Primary Meta Tags -->
 <meta name="title" content="{{ $blog->meta_title ?: ($blog->title . ' - ' . $blog->user->name . ' | ' . config('app.name')) }}">
 <meta name="description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
@@ -15,21 +22,52 @@
 <!-- Force cache busting for social media -->
 <meta property="fb:app_id" content="{{ config('services.facebook.app_id', '') }}">
 <meta property="og:updated_time" content="{{ $blog->updated_at->timestamp }}">
+<meta name="timestamp" content="{{ time() }}">
+
+<!-- Force image refresh -->
+<meta property="og:image:cache_buster" content="{{ time() }}">
 
 <!-- Canonical URL -->
 <link rel="canonical" href="{{ request()->url() }}">
 
-<!-- Open Graph / Facebook -->
+@php
+    // Get the absolute URL for images
+    $imageUrl = '';
+    if ($blog->featured_image && Storage::disk('public')->exists($blog->featured_image)) {
+        $imageUrl = url(Storage::url($blog->featured_image));
+    } elseif ($blog->user->profile_photo_path && Storage::disk('public')->exists($blog->user->profile_photo_path)) {
+        $imageUrl = url(Storage::url($blog->user->profile_photo_path));
+    } else {
+        $imageUrl = url('meetmytech_logo.jpg');
+    }
+
+    // Ensure the image exists and is accessible
+    $imageHeaders = get_headers($imageUrl);
+    if (!$imageHeaders || strpos($imageHeaders[0], '200') === false) {
+        $imageUrl = url('meetmytech_logo.jpg');
+    }
+@endphp
+
+<!-- Generic Social Media Meta Tags -->
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
 <meta property="og:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
-<meta property="og:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}">
+<meta property="og:image" content="{{ $imageUrl }}">
+<meta property="og:image:secure_url" content="{{ $imageUrl }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
 <meta property="og:site_name" content="{{ config('app.name') }}">
 <meta property="og:locale" content="en_US">
+
+<!-- WhatsApp Specific -->
+<meta property="og:image:type" content="image/jpeg">
+
+<!-- LinkedIn Specific -->
+<meta property="linkedin:image" content="{{ $imageUrl }}">
+<meta property="linkedin:title" content="{{ $blog->meta_title ?: $blog->title }}">
+<meta property="linkedin:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
 
 <!-- Article specific Open Graph -->
 <meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toISOString() : $blog->created_at->toISOString() }}">
@@ -44,10 +82,14 @@
 @endif
 
 <!-- Twitter Card -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="{{ request()->url() }}">
-<meta property="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
-<meta property="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@meetmytech">
+<meta name="twitter:creator" content="{{ '@' . str_replace(' ', '', strtolower($blog->user->name)) }}">
+<meta name="twitter:url" content="{{ request()->url() }}">
+<meta name="twitter:title" content="{{ $blog->meta_title ?: $blog->title }}">
+<meta name="twitter:description" content="{{ $blog->description ?: ($blog->excerpt ?: Str::limit(strip_tags($blog->content), 155)) }}">
+<meta name="twitter:image" content="{{ $imageUrl }}">
+<meta name="twitter:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
 <meta property="twitter:image" content="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}">
 <meta property="twitter:image:alt" content="{{ $blog->title }} by {{ $blog->user->name }}">
 <meta name="twitter:creator" content="@{{ str_replace(' ', '_', strtolower($blog->user->name)) }}">
