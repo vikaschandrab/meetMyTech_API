@@ -134,6 +134,9 @@
                         <a class="nav-link active" href="{{ route('home.all-blogs') }}">All Blogs</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home.mock-interview') }}">Mock Interview</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link btn btn-outline-primary px-3 ms-2" href="{{ route('login') }}">Get Started</a>
                     </li>
                 </ul>
@@ -386,34 +389,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5 class="text-warning">
-                        <i class="fas fa-code me-2"></i>MeetMyTech
-                    </h5>
-                    <p class="text-muted">
-                        Empowering tech professionals to showcase their journey and share knowledge with the world.
-                    </p>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Platform</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('home') }}" class="text-muted text-decoration-none">Home</a></li>
-                        <li><a href="{{ route('home.all-blogs') }}" class="text-muted text-decoration-none">All Blogs</a></li>
-                        <li><a href="{{ route('login') }}" class="text-muted text-decoration-none">Sign Up</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-6 mb-4 text-md-end">
-                    <small class="text-muted">
-                        © {{ date('Y') }} MeetMyTech. Built with ❤️ for the tech community.
-                    </small>
-                </div>
-            </div>
-        </div>
-    </footer>
+   @include('layouts.footer')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
