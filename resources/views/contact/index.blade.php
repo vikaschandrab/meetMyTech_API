@@ -412,24 +412,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h6 class="text-warning mb-0">
-                        <i class="fas fa-code me-2"></i>MeetMyTech
-                    </h6>
-                    <small class="text-muted">Empowering tech professionals worldwide</small>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <small class="text-muted">
-                        © {{ date('Y') }} MeetMyTech. Built with ❤️ for the tech community.
-                    </small>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @include('layouts.footer')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
