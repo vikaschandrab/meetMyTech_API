@@ -1,4 +1,4 @@
-/*------------- 
+/*-------------
 [Table of contents]
 
 [ DEFULT INDEX NUMBER ]
@@ -21,15 +21,15 @@
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
 [ Color codes ]
-    
+
     [ Text and Background Color ]
-        Main color 1:       #1c93e5     
-        Main color 2:       #009688      
+        Main color 1:       #1c93e5
+        Main color 2:       #009688
         Main color 3:       #9c27b0
-        Main color 4:       #ff4081      
-        Background 1:       #FFFFFF            
-        Background 2:       #F6F6F6           
-        Shadow color:       #000000;            
+        Main color 4:       #ff4081
+        Background 1:       #FFFFFF
+        Background 2:       #F6F6F6
+        Shadow color:       #000000;
 
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
@@ -56,7 +56,7 @@
         font-size: 20px;
         font-weight: 600;
 
-    p:  
+    p:
         font-size: 18px;
         line-height: 30px;
 
@@ -79,7 +79,7 @@
 
 /**
  * -------------------
- *  Defult CSS 
+ *  Defult CSS
  * -------------------
  */
 html {
@@ -446,7 +446,7 @@ a:focus {
   margin-left: 10px;
 }
 
-/** 
+/**
  * -----------------
  * Social Icon Style
  * -----------------
@@ -732,7 +732,7 @@ button:focus {
   z-index: 0;
 }
 
-/** 
+/**
  * -----------------
  * General CSS
  * -----------------
@@ -1032,11 +1032,8 @@ button:focus {
   opacity: 0.9;
 }
 
-.dark-vertion.black-bg {
-  background-color: #100e17;
-}
 
-.dark-vertion .section-loader {
+/* .dark-vertion .section-loader {
   background: #100e17;
 }
 
@@ -1238,7 +1235,7 @@ button:focus {
 
 .dark-vertion.home-slider .mh-home .hero-img img {
   border-color: rgba(255, 255, 255, 0.4);
-}
+} */
 
 .home-slider .mh-home .img-border {
   border: 20px solid rgba(0, 0, 0, 0.52);
@@ -1282,7 +1279,7 @@ li .fa {
     ==============
 */
 /*---------------------------------------------------------------------*/
-/* Loader 
+/* Loader
 /*---------------------------------------------------------------------*/
 .section-loader {
   position: fixed;
@@ -2516,7 +2513,7 @@ li .fa {
 */
 .old {
   /*==============
-                Overlay            
+                Overlay
       ================== */
   /*  Navigation Menu */
 }
