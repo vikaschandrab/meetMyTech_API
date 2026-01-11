@@ -664,7 +664,7 @@
                                                             <span class="blog-category">{{ $blog->tags[0] }}</span>
                                                         @endif
                                                         @if($blog->reading_time)
-                                                            <span class="blog-reading-time">{{ $blog->reading_time }} min read</span>
+                                                            <span class="blog-reading-time">{{ $blog->reading_time }}</span>
                                                         @endif
                                                     </div>
                                                     <h3><a href="{{ route('blogs.show', $blog->slug) }}" target="_blank">{{ Str::limit($blog->title, 60, '...') }}</a></h3>
@@ -720,7 +720,7 @@
                                                     </small>
                                                     @if($blog->reading_time)
                                                         <small class="text-muted">
-                                                            <i class="fa fa-clock-o"></i> {{ $blog->reading_time }} min read
+                                                            <i class="fa fa-clock-o"></i> {{ $blog->reading_time }}
                                                         </small>
                                                     @endif
                                                 </div>
