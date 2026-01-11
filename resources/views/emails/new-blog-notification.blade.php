@@ -168,7 +168,7 @@
                 <div class="blog-meta">
                     Published on {{ $blog->published_at->format('F j, Y') }}
                     @if($blog->reading_time)
-                        • {{ $blog->reading_time }} min read
+                        • {{ $blog->reading_time }}
                     @endif
                     @if($blog->views_count)
                         • {{ number_format($blog->views_count) }} views

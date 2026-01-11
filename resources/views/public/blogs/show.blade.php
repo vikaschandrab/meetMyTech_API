@@ -1517,7 +1517,7 @@
                                 @if($blog->reading_time)
                                     <span class="meta-item">
                                         <i class="fa fa-clock-o"></i>
-                                        {{ $blog->reading_time }} min read
+                                        {{ $blog->reading_time }}
                                     </span>
                                 @endif
                             </div>
