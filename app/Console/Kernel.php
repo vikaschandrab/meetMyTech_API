@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
             ->onSuccess(function () {
                 \Log::info('Database backup completed successfully via cron job.');
             });
+        // Clear logs every month
+        $schedule->command('logs:clear')->monthly();
     }
 
     /**

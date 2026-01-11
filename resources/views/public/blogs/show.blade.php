@@ -448,7 +448,7 @@
         font-weight: 600;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    }
+    }dark-vertion.black-bg
 
     .comment-form .btn-primary:hover {
         transform: translateY(-2px);
