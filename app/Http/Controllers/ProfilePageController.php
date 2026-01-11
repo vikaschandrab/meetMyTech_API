@@ -22,6 +22,10 @@ class ProfilePageController extends Controller
 
     public function show($slug)
     {
+        if ($slug === 'www.meetmytech.com') {
+            return redirect()->to('https://meetmytech.com', 301);
+        }
+
         $UserDetails = User::with(['SiteSettings', 'userActivity', 'detail', 'userProfessionalSkills'])
             ->where('slug', $slug)
             ->first();
