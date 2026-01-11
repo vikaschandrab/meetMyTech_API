@@ -122,6 +122,16 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
         Route::get('/{slug}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('toggle-featured');
     });
 
+    // Interview Questions Routes
+    Route::prefix('interview-questions')->name('interviewQuestions.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\InterviewQuestionsController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\InterviewQuestionsController::class, 'create'])->name('create');
+        // Route::post('/', [\App\Http\Controllers\InterviewQuestionsController::class, 'store'])->name('store');
+        // Route::get('/{id}/edit', [\App\Http\Controllers\InterviewQuestionsController::class, 'edit'])->name('edit');
+        // Route::put('/{id}', [\App\Http\Controllers\InterviewQuestionsController::class, 'update'])->name('update');
+        // Route::delete('/{id}', [\App\Http\Controllers\InterviewQuestionsController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 // Admin Routes

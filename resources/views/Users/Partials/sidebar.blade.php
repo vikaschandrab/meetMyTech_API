@@ -61,6 +61,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->routeIs('interviewQuestions.*') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('interviewQuestions.index') }}">
+                    <i class="align-middle" data-feather="clipboard"></i>
+                    <span class="align-middle">My Interview Questions</span>
+                </a>
+            </li>
+
             <li class="sidebar-header">
                 Settings
             </li>
