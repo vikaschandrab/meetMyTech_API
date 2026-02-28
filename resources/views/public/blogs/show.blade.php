@@ -48,25 +48,27 @@
     $defaultLogo = $baseUrl . '/meetmytech_logo.jpg';
     $meetMytechFavicon = $baseUrl . '/favicon.ico';
 
-    // Debug the featured image path
+    $featuredImagePath = $blog->featured_image;
+
+    // Debug the featured image path (guard null/empty)
     Log::info('Featured image debug', [
-        'raw_path' => $blog->featured_image,
-        'storage_exists' => Storage::disk('public')->exists($blog->featured_image),
-        'full_storage_url' => Storage::disk('public')->url($blog->featured_image),
+        'raw_path' => $featuredImagePath,
+        'storage_exists' => $featuredImagePath ? Storage::disk('public')->exists($featuredImagePath) : false,
+        'full_storage_url' => $featuredImagePath ? Storage::disk('public')->url($featuredImagePath) : null,
         'base_url' => $baseUrl
     ]);
 
     // Build the featured image URL if it exists
-    if ($blog->featured_image && Storage::disk('public')->exists($blog->featured_image)) {
+    if ($featuredImagePath && Storage::disk('public')->exists($featuredImagePath)) {
         // Get the correct storage URL and ensure proper encoding
-        $storageUrl = Storage::disk('public')->url($blog->featured_image);
+        $storageUrl = Storage::disk('public')->url($featuredImagePath);
         $imageUrl = $baseUrl . $storageUrl;
 
         // URL encode any spaces in the path
         $imageUrl = str_replace(' ', '%20', $imageUrl);
 
         Log::info('Using featured image', [
-            'original_path' => $blog->featured_image,
+            'original_path' => $featuredImagePath,
             'final_url' => $imageUrl
         ]);
     } else {
@@ -448,7 +450,7 @@
         font-weight: 600;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    }dark-vertion.black-bg
+    }
 
     .comment-form .btn-primary:hover {
         transform: translateY(-2px);
@@ -1517,7 +1519,7 @@
                                 @if($blog->reading_time)
                                     <span class="meta-item">
                                         <i class="fa fa-clock-o"></i>
-                                        {{ $blog->reading_time }}
+                                        {{ $blog->reading_time }} min read
                                     </span>
                                 @endif
                             </div>
