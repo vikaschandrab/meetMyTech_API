@@ -32,20 +32,20 @@
         padding: 3rem 0;
         margin-bottom: 2rem;
     }
-    
+
     .blog-meta {
         background: rgba(255,255,255,0.1);
         border-radius: 0.5rem;
         padding: 1rem;
         margin-top: 1rem;
     }
-    
+
     .blog-content {
         font-size: 1.1rem;
         line-height: 1.8;
         color: #495057;
     }
-    
+
     .blog-content h1, .blog-content h2, .blog-content h3,
     .blog-content h4, .blog-content h5, .blog-content h6 {
         color: #2c3e50;
@@ -61,7 +61,7 @@
     .blog-content h4 { font-size: 1.5rem; }
     .blog-content h5 { font-size: 1.25rem; }
     .blog-content h6 { font-size: 1.1rem; }
-    
+
     .blog-content p {
         margin-bottom: 1.5rem;
         text-align: justify;
@@ -83,7 +83,7 @@
     .blog-content ol li {
         list-style-type: decimal;
     }
-    
+
     .blog-content blockquote {
         border-left: 4px solid #007bff;
         padding-left: 1rem;
@@ -93,7 +93,7 @@
         padding: 1rem 1rem 1rem 2rem;
         border-radius: 0.25rem;
     }
-    
+
     .blog-content code {
         background: #f8f9fa;
         padding: 0.2rem 0.4rem;
@@ -102,16 +102,16 @@
         color: #e83e8c;
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
-    
+
     .blog-content pre {
-        background: #2d3748;
+        background: #485b6e;;
         color: #f7fafc;
         padding: 1rem;
         border-radius: 0.5rem;
         overflow-x: auto;
         margin: 1.5rem 0;
     }
-    
+
     .blog-content pre code {
         background: none;
         color: inherit;
@@ -161,7 +161,7 @@
         border: 0;
         border-top: 2px solid #dee2e6;
     }
-    
+
     .blog-content img {
         max-width: 100%;
         height: auto;
@@ -169,11 +169,11 @@
         margin: 1rem 0;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    
+
     .blog-tags {
         margin: 2rem 0;
     }
-    
+
     .tag-item {
         background: #e9ecef;
         color: #495057;
@@ -185,13 +185,13 @@
         display: inline-block;
         transition: all 0.3s ease;
     }
-    
+
     .tag-item:hover {
         background: #007bff;
         color: white;
         text-decoration: none;
     }
-    
+
     .featured-image {
         width: 100%;
         height: 300px;
@@ -200,7 +200,7 @@
         margin-bottom: 2rem;
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
-    
+
     .blog-actions {
         background: #f8f9fa;
         border-radius: 0.5rem;
@@ -208,7 +208,7 @@
         margin: 2rem 0;
         text-align: center;
     }
-    
+
     .reading-time {
         background: rgba(255,255,255,0.1);
         padding: 0.5rem 1rem;
@@ -216,7 +216,7 @@
         font-size: 0.875rem;
         display: inline-block;
     }
-    
+
     .blog-status {
         font-size: 0.75rem;
         padding: 0.25rem 0.75rem;
@@ -225,47 +225,47 @@
         text-transform: uppercase;
         margin-left: 1rem;
     }
-    
+
     .status-draft {
         background: #f8f9fa;
         color: #6c757d;
         border: 1px solid #dee2e6;
     }
-    
+
     .status-published {
         background: #d1e7dd;
         color: #0f5132;
         border: 1px solid #badbcc;
     }
-    
+
     .status-archived {
         background: #f8d7da;
         color: #721c24;
         border: 1px solid #f5c2c7;
     }
-    
+
     .blog-sidebar {
         position: sticky;
         top: 2rem;
     }
-    
+
     .table-of-contents {
         background: #f8f9fa;
         border-radius: 0.5rem;
         padding: 1.5rem;
         margin-bottom: 2rem;
     }
-    
+
     .table-of-contents ul {
         list-style: none;
         padding-left: 0;
     }
-    
+
     .table-of-contents ul ul {
         padding-left: 1rem;
         margin-top: 0.5rem;
     }
-    
+
     .table-of-contents a {
         color: #495057;
         text-decoration: none;
@@ -275,19 +275,19 @@
         padding-left: 0.5rem;
         transition: all 0.3s ease;
     }
-    
+
     .table-of-contents a:hover,
     .table-of-contents a.active {
         background: #007bff;
         color: white;
     }
-    
+
     .blog-navigation {
         border-top: 1px solid #dee2e6;
         padding-top: 2rem;
         margin-top: 3rem;
     }
-    
+
     .nav-blog {
         padding: 1rem;
         border-radius: 0.5rem;
@@ -296,13 +296,13 @@
         color: #495057;
         transition: all 0.3s ease;
     }
-    
+
     .nav-blog:hover {
         background: #e9ecef;
         color: #007bff;
         text-decoration: none;
     }
-    
+
     .blog-share {
         position: fixed;
         left: 2rem;
@@ -313,7 +313,7 @@
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .share-btn {
         width: 3rem;
         height: 3rem;
@@ -326,18 +326,18 @@
         transition: all 0.3s ease;
         font-size: 1.2rem;
     }
-    
+
     .share-facebook { background: #3b5998; }
     .share-twitter { background: #1da1f2; }
     .share-linkedin { background: #0077b5; }
     .share-copy { background: #6c757d; }
-    
+
     .share-btn:hover {
         transform: scale(1.1);
         color: white;
         text-decoration: none;
     }
-    
+
     @media (max-width: 768px) {
         .blog-share {
             position: static;
@@ -346,20 +346,20 @@
             justify-content: center;
             margin: 2rem 0;
         }
-        
+
         .blog-header {
             padding: 2rem 0;
         }
-        
+
         .featured-image {
             height: 200px;
         }
     }
-    
+
     .print-only {
         display: none;
     }
-    
+
     @media print {
         .blog-actions,
         .blog-navigation,
@@ -367,11 +367,11 @@
         .no-print {
             display: none !important;
         }
-        
+
         .print-only {
             display: block;
         }
-        
+
         .blog-content {
             font-size: 12pt;
             line-height: 1.6;
@@ -384,26 +384,26 @@
 <div class="container-fluid p-0">
     {{-- Blog Share Buttons --}}
     <div class="blog-share no-print">
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
-           target="_blank" 
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
+           target="_blank"
            class="share-btn share-facebook"
            title="Share on Facebook">
             <i data-feather="facebook"></i>
         </a>
-        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}" 
-           target="_blank" 
+        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($blog->title) }}"
+           target="_blank"
            class="share-btn share-twitter"
            title="Share on Twitter">
             <i data-feather="twitter"></i>
         </a>
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}" 
-           target="_blank" 
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}"
+           target="_blank"
            class="share-btn share-linkedin"
            title="Share on LinkedIn">
             <i data-feather="linkedin"></i>
         </a>
-        <a href="#" 
-           class="share-btn share-copy" 
+        <a href="#"
+           class="share-btn share-copy"
            id="copyLink"
            title="Copy Link">
             <i data-feather="copy"></i>
@@ -416,32 +416,32 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
                     <h1 class="display-4 mb-3">{{ $blog->title }}</h1>
-                    
+
                     @if($blog->description)
                         <p class="lead mb-4">{{ $blog->description }}</p>
                     @endif
-                    
+
                     <div class="blog-meta">
                         <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
                             <div class="d-flex align-items-center">
                                 <i data-feather="calendar" class="feather-sm me-2"></i>
                                 {{ $blog->published_at ? $blog->published_at->format('M d, Y') : $blog->created_at->format('M d, Y') }}
                             </div>
-                            
+
                             <div class="d-flex align-items-center">
                                 <i data-feather="clock" class="feather-sm me-2"></i>
                                 <span class="reading-time">{{ $estimatedReadTime ?? '5' }} min read</span>
                             </div>
-                            
+
                             <div class="d-flex align-items-center">
                                 <i data-feather="eye" class="feather-sm me-2"></i>
                                 {{ $blog->views_count ?? 0 }} views
                             </div>
-                            
+
                             <span class="blog-status status-{{ $blog->status }}">
                                 {{ ucfirst($blog->status) }}
                             </span>
-                            
+
                             @if($blog->is_featured)
                                 <span class="badge bg-warning">
                                     <i data-feather="star" class="feather-sm me-1"></i>
@@ -487,8 +487,8 @@
 
                 {{-- Featured Image --}}
                 @if($blog->featured_image)
-                    <img src="{{ asset('storage/' . $blog->featured_image) }}" 
-                         alt="{{ $blog->title }}" 
+                    <img src="{{ asset('storage/' . $blog->featured_image) }}"
+                         alt="{{ $blog->title }}"
                          class="featured-image">
                 @endif
 
@@ -533,7 +533,7 @@
                                 </a>
                             </div>
                         @endif
-                        
+
                         @if(isset($nextBlog))
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('blogs.show', $nextBlog->slug) }}" class="nav-blog">
@@ -642,25 +642,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const content = document.querySelector('.blog-content');
         const tocContainer = document.getElementById('tableOfContents');
         const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-        
+
         if (headings.length === 0) {
             return;
         }
-        
+
         let tocHTML = '<ul>';
         headings.forEach((heading, index) => {
             const id = `heading-${index}`;
             heading.id = id;
-            
+
             const level = parseInt(heading.tagName.charAt(1));
             const indent = level > 2 ? 'style="margin-left: ' + ((level - 2) * 1) + 'rem;"' : '';
-            
+
             tocHTML += `<li ${indent}><a href="#${id}" class="toc-link">${heading.textContent}</a></li>`;
         });
         tocHTML += '</ul>';
-        
+
         tocContainer.innerHTML = tocHTML;
-        
+
         // Add smooth scrolling and active state
         const tocLinks = tocContainer.querySelectorAll('.toc-link');
         tocLinks.forEach(link => {
@@ -675,7 +675,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-        
+
         // Highlight active section on scroll
         window.addEventListener('scroll', function() {
             let current = '';
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     current = heading.id;
                 }
             });
-            
+
             tocLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === '#' + current) {
@@ -694,9 +694,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     generateTableOfContents();
-    
+
     // Copy link functionality
     const copyBtn = document.getElementById('copyLink');
     copyBtn.addEventListener('click', function(e) {
@@ -712,20 +712,20 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-    
+
     // Dark mode toggle
     const darkModeBtn = document.getElementById('toggleDarkMode');
     const body = document.body;
-    
+
     // Check for saved dark mode preference
     if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark-mode');
         darkModeBtn.innerHTML = '<i data-feather="sun" class="feather-sm me-1"></i>Light Mode';
     }
-    
+
     darkModeBtn.addEventListener('click', function() {
         body.classList.toggle('dark-mode');
-        
+
         if (body.classList.contains('dark-mode')) {
             localStorage.setItem('darkMode', 'enabled');
             this.innerHTML = '<i data-feather="sun" class="feather-sm me-1"></i>Light Mode';
@@ -733,11 +733,11 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('darkMode', null);
             this.innerHTML = '<i data-feather="moon" class="feather-sm me-1"></i>Dark Mode';
         }
-        
+
         // Re-initialize feather icons
         feather.replace();
     });
-    
+
     // Delete confirmation
     const deleteForm = document.querySelector('.delete-form');
     if (deleteForm) {
@@ -759,7 +759,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Reading progress indicator
     function updateReadingProgress() {
         const content = document.querySelector('.blog-content');
@@ -767,39 +767,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const documentHeight = content.offsetHeight;
         const scrollTop = window.pageYOffset;
         const contentTop = content.offsetTop;
-        
-        const progress = Math.max(0, Math.min(100, 
+
+        const progress = Math.max(0, Math.min(100,
             ((scrollTop - contentTop + windowHeight) / documentHeight) * 100
         ));
-        
+
         // You can add a progress bar here if needed
         console.log('Reading progress:', progress + '%');
     }
-    
+
     window.addEventListener('scroll', updateReadingProgress);
-    
+
     // Enhance content formatting
     function enhanceContent() {
         const content = document.querySelector('.blog-content');
-        
+
         // Convert markdown-like formatting to HTML
         let html = content.innerHTML;
-        
+
         // Bold text **text**
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
+
         // Italic text *text*
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        
+
         // Inline code `code`
         html = html.replace(/`(.*?)`/g, '<code>$1</code>');
-        
+
         // Links [text](url)
         html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-        
+
         content.innerHTML = html;
     }
-    
+
     enhanceContent();
 });
 
@@ -809,11 +809,11 @@ const darkModeStyles = `
         background-color: #1a1a1a;
         color: #e0e0e0;
     }
-    
+
     .dark-mode .blog-content {
         color: #e0e0e0;
     }
-    
+
     .dark-mode .blog-content h1,
     .dark-mode .blog-content h2,
     .dark-mode .blog-content h3,
@@ -822,16 +822,16 @@ const darkModeStyles = `
     .dark-mode .blog-content h6 {
         color: #ffffff;
     }
-    
+
     .dark-mode .card {
         background-color: #2d2d2d;
         border-color: #444;
     }
-    
+
     .dark-mode .table-of-contents {
         background-color: #2d2d2d;
     }
-    
+
     .dark-mode .tag-item {
         background-color: #444;
         color: #e0e0e0;
