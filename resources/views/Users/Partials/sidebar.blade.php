@@ -61,12 +61,19 @@
                 </a>
             </li>
 
-            <li class="sidebar-item {{ request()->routeIs('interviewQuestions.*') ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ route('interviewQuestions.index') }}">
-                    <i class="align-middle" data-feather="clipboard"></i>
-                    <span class="align-middle">My Interview Questions</span>
-                </a>
-            </li>
+            @php
+                $allowedInterviewSlugs = ['vikas', 'jyothi', 'manikanta'];
+                $showInterviewQuestions = auth()->check() && in_array(auth()->user()->slug, $allowedInterviewSlugs, true);
+            @endphp
+
+            @if($showInterviewQuestions)
+                <li class="sidebar-item {{ request()->routeIs('interviewQuestions.*') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('interviewQuestions.index') }}">
+                        <i class="align-middle" data-feather="help-circle"></i>
+                        <span class="align-middle">Interview Questions</span>
+                    </a>
+                </li>
+            @endif
 
             <li class="sidebar-header">
                 Settings

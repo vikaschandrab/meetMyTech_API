@@ -16,6 +16,7 @@ use App\Http\Controllers\ExperianceController;
 use App\Http\Controllers\ProfilePageController;
 use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\MockInterviewController;
+use App\Http\Controllers\InterviewQuestionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,14 +123,13 @@ Route::middleware(['auth', 'ensure.user'])->group(function () {
         Route::get('/{slug}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('toggle-featured');
     });
 
-    // Interview Questions Routes
+    // Interview Questions
     Route::prefix('interview-questions')->name('interviewQuestions.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\InterviewQuestionsController::class, 'index'])->name('index');
-        Route::get('/create', [\App\Http\Controllers\InterviewQuestionsController::class, 'create'])->name('create');
-        // Route::post('/', [\App\Http\Controllers\InterviewQuestionsController::class, 'store'])->name('store');
-        // Route::get('/{id}/edit', [\App\Http\Controllers\InterviewQuestionsController::class, 'edit'])->name('edit');
-        // Route::put('/{id}', [\App\Http\Controllers\InterviewQuestionsController::class, 'update'])->name('update');
-        // Route::delete('/{id}', [\App\Http\Controllers\InterviewQuestionsController::class, 'destroy'])->name('destroy');
+        Route::get('/', [InterviewQuestionsController::class, 'index'])->name('index');
+        Route::get('/create', [InterviewQuestionsController::class, 'create'])->name('create');
+        Route::post('/', [InterviewQuestionsController::class, 'store'])->name('store');
+        Route::get('/import', [InterviewQuestionsController::class, 'importForm'])->name('import');
+        Route::post('/import', [InterviewQuestionsController::class, 'import'])->name('import.store');
     });
 
 });

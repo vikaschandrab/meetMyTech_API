@@ -287,6 +287,36 @@ class BlogController extends Controller
      * @param string $slug
      * @return \Illuminate\Http\RedirectResponse
      */
+    /**
+     * Preview a blog post (draft or published) without incrementing views
+     *
+     * @param string $slug
+     * @return \Illuminate\View\View
+     */
+    public function preview(string $slug)
+    {
+        try {
+            $blog = $this->blogService->getBlogBySlug($slug, false); // Don't increment views
+
+            if (!$blog) {
+                return redirect()->route('blogs.index')->with('error', 'Blog not found.');
+            }
+
+            // Only allow blog owner to preview
+            if ($blog->user_id !== Auth::id()) {
+                return redirect()->route('blogs.index')->with('error', 'You can only preview your own blogs.');
+            }
+
+            // Add preview mode flag
+            $isPreview = true;
+
+            return view('Users.Pages.blogs.show', compact('blog', 'isPreview'));
+        } catch (Exception $e) {
+            Log::error('Error previewing blog: ' . $e->getMessage(), ['slug' => $slug]);
+            return redirect()->route('blogs.index')->with('error', 'Failed to load blog preview.');
+        }
+    }
+
     public function duplicate(string $slug)
     {
         try {
