@@ -290,6 +290,16 @@
 @section('content')
 @php
     $authorUrl = 'https://' . $blog->user->slug . '.' . config('app.domain');
+    $authorProfilePic = $blog->user->profilePic;
+    $authorProfilePicUrl = null;
+
+    if ($authorProfilePic) {
+        if (Str::startsWith($authorProfilePic, ['http://', 'https://'])) {
+            $authorProfilePicUrl = $authorProfilePic;
+        } elseif (Storage::disk('public')->exists($authorProfilePic)) {
+            $authorProfilePicUrl = asset('storage/' . $authorProfilePic);
+        }
+    }
 @endphp
 <div class="blog-page" id="blogPage" data-subscribe-url="{{ route('blog.subscribe') }}">
 <div class="blog-hero" style="background-image: url('{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}');">
@@ -302,7 +312,13 @@
             <h1 class="blog-hero-title">{{ $blog->title }}</h1>
             <div class="blog-hero-meta">
                 <div class="blog-author">
-                    <div class="author-avatar">{{ substr($blog->user->name, 0, 1) }}</div>
+                    <div class="author-avatar">
+                        @if($authorProfilePicUrl)
+                            <img src="{{ $authorProfilePicUrl }}" alt="{{ $blog->user->name }}" class="author-avatar-img" loading="lazy" decoding="async">
+                        @else
+                            {{ strtoupper(substr($blog->user->name, 0, 1)) }}
+                        @endif
+                    </div>
                     <div>
                         <a href="{{ $authorUrl }}" class="author-name">{{ $blog->user->name }}</a>
                         <div class="author-role">Author</div>
@@ -374,7 +390,13 @@
                 <div class="sidebar-card">
                     <h6>About the author</h6>
                     <div class="d-flex align-items-center mt-3">
-                        <div class="author-avatar me-3">{{ substr($blog->user->name, 0, 1) }}</div>
+                        <div class="author-avatar me-3">
+                            @if($authorProfilePicUrl)
+                                <img src="{{ $authorProfilePicUrl }}" alt="{{ $blog->user->name }}" class="author-avatar-img" loading="lazy" decoding="async">
+                            @else
+                                {{ strtoupper(substr($blog->user->name, 0, 1)) }}
+                            @endif
+                        </div>
                         <div>
                             <a href="{{ $authorUrl }}" class="author-name">{{ $blog->user->name }}</a>
                             <div class="author-role">Contributor</div>
