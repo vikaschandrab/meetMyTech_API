@@ -290,16 +290,7 @@
 @section('content')
 @php
     $authorUrl = 'https://' . $blog->user->slug . '.' . config('app.domain');
-    $authorProfilePic = $blog->user->profilePic;
-    $authorProfilePicUrl = null;
-
-    if ($authorProfilePic) {
-        if (Str::startsWith($authorProfilePic, ['http://', 'https://'])) {
-            $authorProfilePicUrl = $authorProfilePic;
-        } elseif (Storage::disk('public')->exists($authorProfilePic)) {
-            $authorProfilePicUrl = asset('storage/' . $authorProfilePic);
-        }
-    }
+    $authorProfilePicUrl = $blog->user->profilePic ? asset('storage/' . $blog->user->profilePic) : null;
 @endphp
 <div class="blog-page" id="blogPage" data-subscribe-url="{{ route('blog.subscribe') }}">
 <div class="blog-hero" style="background-image: url('{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('meetmytech_logo.jpg') }}');">
