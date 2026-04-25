@@ -5,7 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeetMyTech - Showcase Your Tech Journey & Share Knowledge</title>
     <meta name="description" content="MeetMyTech is a platform for tech professionals to showcase their portfolios and share knowledge through blogs. Connect, learn, and grow with the tech community.">
-    <meta name="keywords" content="tech portfolio, programming blogs, developer showcase, technology, coding, web development">
+    <meta name="keywords" content="tech portfolio, programming blogs, developer showcase, technology, coding, web development, software engineering, tech community, programming tutorials">
+    <meta name="author" content="MeetMyTech">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="1 day">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ config('app.url') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta property="og:title" content="MeetMyTech - Showcase Your Tech Journey & Share Knowledge">
+    <meta property="og:description" content="MeetMyTech is a platform for tech professionals to showcase their portfolios and share knowledge through blogs. Connect, learn, and grow with the tech community.">
+    <meta property="og:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="MeetMyTech - Tech Portfolio and Blog Platform">
+    <meta property="og:site_name" content="MeetMyTech">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ config('app.url') }}">
+    <meta name="twitter:title" content="MeetMyTech - Showcase Your Tech Journey & Share Knowledge">
+    <meta name="twitter:description" content="MeetMyTech is a platform for tech professionals to showcase their portfolios and share knowledge through blogs. Connect, learn, and grow with the tech community.">
+    <meta name="twitter:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta name="twitter:image:alt" content="MeetMyTech - Tech Portfolio and Blog Platform">
+    <meta name="twitter:site" content="@meetmytech">
+    <meta name="twitter:creator" content="@meetmytech">
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <meta name="msapplication-TileImage" content="{{ asset('meetmytech_logo.jpg') }}">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="//www.google.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "MeetMyTech",
+      "url": "{{ config('app.url') }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ asset('meetmytech_logo.jpg') }}",
+        "width": 200,
+        "height": 200
+      },
+      "description": "MeetMyTech is a platform for tech professionals to showcase their portfolios and share knowledge through blogs.",
+      "foundingDate": "2024",
+      "sameAs": [
+        "https://twitter.com/meetmytech"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "",
+        "contactType": "customer service",
+        "url": "{{ route('contact') }}"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "MeetMyTech",
+      "url": "{{ config('app.url') }}",
+      "description": "Platform for tech professionals to showcase portfolios and share knowledge through blogs",
+      "publisher": {
+        "@type": "Organization",
+        "name": "MeetMyTech"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ route('home.all-blogs', ['search' => '{search_term_string}']) }}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
@@ -521,23 +610,23 @@
                     <h5 class="text-warning">
                         <i class="fas fa-code me-2"></i>MeetMyTech
                     </h5>
-                    <p class="text-muted">
+                    <p class="text-light">
                         Empowering tech professionals to showcase their journey and share knowledge with the world.
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6>Platform</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#features" class="text-muted text-decoration-none">Features</a></li>
-                        <li><a href="{{ route('home.all-blogs') }}" class="text-muted text-decoration-none">All Blogs</a></li>
-                        <li><a href="{{ route('login') }}" class="text-muted text-decoration-none">Sign Up</a></li>
+                        <li><a href="#features" class="text-light text-decoration-none">Features</a></li>
+                        <li><a href="{{ route('home.all-blogs') }}" class="text-light text-decoration-none">All Blogs</a></li>
+                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">Sign Up</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6>Community</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#community" class="text-muted text-decoration-none">Contributors</a></li>
-                        <li><a href="#blogs" class="text-muted text-decoration-none">Featured Blogs</a></li>
+                        <li><a href="#community" class="text-light text-decoration-none">Contributors</a></li>
+                        <li><a href="#blogs" class="text-light text-decoration-none">Featured Blogs</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-4">
@@ -558,12 +647,12 @@
             <hr class="my-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="text-muted small mb-0">
+                    <p class="text-light small mb-0">
                         © {{ date('Y') }} MeetMyTech. Built with ❤️ for the tech community.
                     </p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <small class="text-muted">
+                    <small class="text-light">
                         Developed and maintained by <a href="https://meetmytech.com" class="text-warning text-decoration-none">meetmytech.com</a>
                     </small>
                 </div>
