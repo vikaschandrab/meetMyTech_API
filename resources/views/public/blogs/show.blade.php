@@ -335,6 +335,16 @@
 </div>
 
 <div class="container blog-body">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ config('app.url') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home.all-blogs') }}">All Blogs</a></li>
+            <li class="breadcrumb-item"><a href="{{ $authorUrl }}">{{ $blog->user->name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($blog->title, 30) }}</li>
+        </ol>
+    </nav>
+
     <div class="row justify-content-center">
         <div class="col-lg-8">
             @if($blog->excerpt)

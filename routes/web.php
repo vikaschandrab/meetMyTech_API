@@ -69,6 +69,11 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
     ->name('forgot-password.submit')
     ->middleware(['throttle:3,15', \Spatie\Honeypot\ProtectAgainstSpam::class]);
 
+// Reset Password Routes
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+    ->name('password.update')
+    ->middleware(['throttle:5,10', \Spatie\Honeypot\ProtectAgainstSpam::class]);
 
 Route::get('/health', [\App\Http\Controllers\HealthCheckController::class, 'index']);
 
@@ -187,6 +192,9 @@ Route::post('/contact', [ContactController::class, 'submit'])
         'throttle:5,10', // 5 requests per 10 minutes
         \Spatie\Honeypot\ProtectAgainstSpam::class
     ]);
+
+// Sitemap
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
 // Blog Subscription Routes
 Route::post('/blog/subscribe', [\App\Http\Controllers\BlogSubscriptionController::class, 'subscribe'])

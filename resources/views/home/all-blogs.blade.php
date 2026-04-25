@@ -5,6 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Blogs - MeetMyTech</title>
     <meta name="description" content="Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.">
+    <meta name="keywords" content="tech blogs, programming tutorials, developer articles, technology insights, coding tips, software development, web development blogs">
+    <meta name="author" content="MeetMyTech Community">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="1 day">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request()->url() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="All Blogs - MeetMyTech">
+    <meta property="og:description" content="Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.">
+    <meta property="og:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="MeetMyTech - All Tech Blogs">
+    <meta property="og:site_name" content="MeetMyTech">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request()->url() }}">
+    <meta name="twitter:title" content="All Blogs - MeetMyTech">
+    <meta name="twitter:description" content="Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.">
+    <meta name="twitter:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta name="twitter:image:alt" content="MeetMyTech - All Tech Blogs">
+    <meta name="twitter:site" content="@meetmytech">
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <meta name="msapplication-TileImage" content="{{ asset('meetmytech_logo.jpg') }}">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="//www.google.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "All Blogs - MeetMyTech",
+      "description": "Explore all blogs from tech professionals on MeetMyTech. Discover insights, tutorials, and knowledge from our community of developers and tech experts.",
+      "url": "{{ request()->url() }}",
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": {{ $blogs->total() }},
+        "itemListElement": [
+          @foreach($blogs as $index => $blog)
+          {
+            "@type": "ListItem",
+            "position": {{ $index + 1 }},
+            "item": {
+              "@type": "BlogPosting",
+              "name": "{{ $blog->title }}",
+              "url": "{{ route('blogs.show', $blog->slug) }}",
+              "author": {
+                "@type": "Person",
+                "name": "{{ $blog->user->name }}"
+              },
+              "datePublished": "{{ $blog->published_at->toISOString() }}",
+              "description": "{{ Str::limit($blog->description, 155) }}"
+            }
+          }{{ !$loop->last ? ',' : '' }}
+          @endforeach
+        ]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "MeetMyTech"
+      }
+    }
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ config('app.url') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "All Blogs",
+          "item": "{{ route('home.all-blogs') }}"
+        }
+      ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
@@ -98,18 +198,29 @@
         .pagination .page-link {
             border-radius: 10px;
             margin: 0 3px;
-            border: none;
+            border: 1px solid #dee2e6;
             color: var(--primary-color);
+            background-color: white;
         }
 
         .pagination .page-link:hover {
             background: var(--primary-color);
             color: white;
+            border-color: var(--primary-color);
         }
 
         .pagination .page-item.active .page-link {
             background: var(--primary-color);
             border-color: var(--primary-color);
+            color: white;
+        }
+
+        .pagination .page-link:focus {
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        .pagination {
+            justify-content: center;
         }
     </style>
 </head>
@@ -158,6 +269,13 @@
     <!-- Main Content -->
     <section class="py-5">
         <div class="container">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">All Blogs</li>
+                </ol>
+            </nav>
             <div class="row">
                 <!-- Sidebar -->
                 <div class="col-lg-3 mb-4">
@@ -360,9 +478,11 @@
                         </div>
 
                         <!-- Pagination -->
+                        @if($blogs->hasPages())
                         <div class="d-flex justify-content-center mt-5">
-                            {{ $blogs->withQueryString()->links() }}
+                            {{ $blogs->withQueryString()->links('pagination::bootstrap-5') }}
                         </div>
+                        @endif
                     @else
                         <!-- No Results -->
                         <div class="text-center py-5">
@@ -394,20 +514,20 @@
                     <h5 class="text-warning">
                         <i class="fas fa-code me-2"></i>MeetMyTech
                     </h5>
-                    <p class="text-muted">
+                    <p class="text-light">
                         Empowering tech professionals to showcase their journey and share knowledge with the world.
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6>Platform</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('home') }}" class="text-muted text-decoration-none">Home</a></li>
-                        <li><a href="{{ route('home.all-blogs') }}" class="text-muted text-decoration-none">All Blogs</a></li>
-                        <li><a href="{{ route('login') }}" class="text-muted text-decoration-none">Sign Up</a></li>
+                        <li><a href="{{ route('home') }}" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="{{ route('home.all-blogs') }}" class="text-light text-decoration-none">All Blogs</a></li>
+                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">Sign Up</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-6 mb-4 text-md-end">
-                    <small class="text-muted">
+                    <small class="text-light">
                         © {{ date('Y') }} MeetMyTech. Built with ❤️ for the tech community.
                     </small>
                 </div>

@@ -5,6 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Start Your Tech Journey | MeetMyTech</title>
     <meta name="description" content="Ready to showcase your tech journey? Contact MeetMyTech to get started with your professional portfolio and blog platform.">
+    <meta name="keywords" content="contact MeetMyTech, tech portfolio, blog platform, get started, tech community">
+    <meta name="author" content="MeetMyTech">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="1 month">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request()->url() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="Contact Us - Start Your Tech Journey | MeetMyTech">
+    <meta property="og:description" content="Ready to showcase your tech journey? Contact MeetMyTech to get started with your professional portfolio and blog platform.">
+    <meta property="og:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta property="og:site_name" content="MeetMyTech">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="{{ request()->url() }}">
+    <meta name="twitter:title" content="Contact Us - Start Your Tech Journey | MeetMyTech">
+    <meta name="twitter:description" content="Ready to showcase your tech journey? Contact MeetMyTech to get started with your professional portfolio and blog platform.">
+    <meta name="twitter:image" content="{{ asset('meetmytech_logo.jpg') }}">
+    <meta name="twitter:site" content="@meetmytech">
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact MeetMyTech",
+      "description": "Get in touch with MeetMyTech to start your tech portfolio and blogging journey",
+      "url": "{{ request()->url() }}",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "MeetMyTech",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "url": "{{ route('contact') }}"
+        }
+      }
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('meetmytech_favicon.jpg') }}" type="image/jpeg">
@@ -420,10 +465,10 @@
                     <h6 class="text-warning mb-0">
                         <i class="fas fa-code me-2"></i>MeetMyTech
                     </h6>
-                    <small class="text-muted">Empowering tech professionals worldwide</small>
+                    <small class="text-light">Empowering tech professionals worldwide</small>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <small class="text-muted">
+                    <small class="text-light">
                         © {{ date('Y') }} MeetMyTech. Built with ❤️ for the tech community.
                     </small>
                 </div>

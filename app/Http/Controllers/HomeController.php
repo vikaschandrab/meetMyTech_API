@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
         $data = $this->homeService->getHomepageData();
-        
+
         return view('home.index', $data);
     }
 
@@ -40,5 +40,21 @@ class HomeController extends Controller
         $popularTags = $this->homeService->getPopularTags();
 
         return view('home.all-blogs', compact('blogs', 'popularTags'));
+    }
+
+    /**
+     * Generate XML sitemap
+     */
+    public function sitemap()
+    {
+        $blogs = \App\Models\Blog::where('status', 'published')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        $users = \App\Models\User::whereHas('blogs', function($query) {
+            $query->where('status', 'published');
+        })->get();
+
+        return response()->view('sitemap', compact('blogs', 'users'))->header('Content-Type', 'text/xml');
     }
 }

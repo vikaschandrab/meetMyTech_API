@@ -189,6 +189,6 @@ class HomeService
                 break;
         }
 
-        return $query->paginate(12)->withQueryString();
+        return $query->paginate(6)->withQueryString();
     }
 }

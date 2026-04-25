@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\LoggingService;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -133,7 +131,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle forgot password request
+     * Handle forgot password request - Send password reset link
      */
     public function forgotPassword(Request $request)
     {
@@ -157,42 +155,88 @@ class AuthController extends Controller
         $request->validate($rules, $messages);
 
         try {
-            // Find user by email
-            $user = User::where('email', $request->email)->first();
-
-            if (!$user) {
-                return back()->withErrors(['email' => 'No account found with this email address.']);
-            }
-
-            // Generate new random password
-            $newPassword = Str::random(12) . rand(10, 99); // 12 chars + 2 digits
-
-            // Update user's password
-            $user->password = Hash::make($newPassword);
-            $user->save();
-
-            // Prepare email data
-            $emailData = [
-                'user' => $user,
-                'newPassword' => $newPassword,
-                'loginUrl' => route('login')
-            ];
-
-            // Send email with new password
-            Mail::send('emails.forgot-password', $emailData, function($message) use ($user) {
-                $message->to($user->email)
-                        ->from('admin@meetmytech.com', 'MeetMyTech Support')
-                        ->subject('Your New Password - MeetMyTech');
-            });
+            // Send password reset link using Laravel's built-in functionality
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
 
             // Log the activity
-            LoggingService::logAuth('forgot_password_success', 'Password reset sent to: ' . $user->email, ['user_id' => $user->id]);
+            LoggingService::logAuth('forgot_password_attempt', 'Password reset link requested for: ' . $request->email);
 
-            return back()->with('success', 'A new password has been sent to your email address. Please check your inbox and login with the new password.');
+            if ($status === Password::RESET_LINK_SENT) {
+                LoggingService::logAuth('forgot_password_success', 'Password reset link sent to: ' . $request->email);
+                return back()->with('success', 'We have emailed your password reset link! Please check your inbox.');
+            } else {
+                LoggingService::logAuth('forgot_password_error', 'Failed to send password reset link: ' . $status);
+                return back()->withErrors(['email' => 'Unable to send password reset link. Please try again.']);
+            }
 
         } catch (\Exception $e) {
             LoggingService::logAuth('forgot_password_error', 'Failed to send password reset: ' . $e->getMessage());
             return back()->with('error', 'Sorry, there was an error processing your request. Please try again or contact support.');
+        }
+    }
+
+    /**
+     * Show the password reset form
+     */
+    public function showResetPasswordForm($token)
+    {
+        LoggingService::logAuth('reset_password_page_view', 'User viewed password reset page');
+        return view('Users.reset-password', ['token' => $token]);
+    }
+
+    /**
+     * Handle password reset
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ], [
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+        ]);
+
+        // Add captcha validation only if not in local environment or if captcha is explicitly enabled
+        if (!app()->environment('local') || !config('captcha.disable_in_local', false)) {
+            $request->validate([
+                'g-recaptcha-response' => 'required|captcha'
+            ], [
+                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+                'g-recaptcha-response.captcha' => 'reCAPTCHA verification failed, please try again.'
+            ]);
+        }
+
+        try {
+            // Reset the password using Laravel's built-in functionality
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user, $password) {
+                    $user->forceFill([
+                        'password' => Hash::make($password)
+                    ])->save();
+
+                    // Log the successful password reset
+                    LoggingService::logAuth('password_reset_success', 'Password reset successful for user: ' . $user->email, ['user_id' => $user->id]);
+                }
+            );
+
+            if ($status === Password::PASSWORD_RESET) {
+                return redirect()->route('login')->with('success', 'Your password has been reset successfully! You can now log in with your new password.');
+            } else {
+                LoggingService::logAuth('password_reset_error', 'Password reset failed: ' . $status);
+                return back()->withErrors(['email' => 'Invalid or expired reset token. Please request a new password reset link.']);
+            }
+
+        } catch (\Exception $e) {
+            LoggingService::logAuth('password_reset_error', 'Failed to reset password: ' . $e->getMessage());
+            return back()->with('error', 'Sorry, there was an error resetting your password. Please try again.');
         }
     }
 }
