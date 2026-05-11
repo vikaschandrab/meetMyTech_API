@@ -75,10 +75,83 @@ class AdminController extends Controller
         // Generate auto password (8 characters: mix of uppercase, lowercase, numbers)
         $autoPassword = $this->generateSecurePassword();
 
-        // Generate unique slug from name
-        $baseSlug = Str::slug($request->name);
-        $slug = $baseSlug;
-        $counter = 1;
+        // Clean and split name
+        $nameParts = preg_split('/\s+/', trim($request->name));
+        $nameParts = array_values(array_filter($nameParts));
+
+        /*
+        |--------------------------------------------------------------------------
+        | Slug Logic
+        |--------------------------------------------------------------------------
+        |
+        */
+
+        // Detect starting index
+        $startIndex = 0;
+
+        // If first word is single letter
+        if (isset($nameParts[0]) && strlen($nameParts[0]) === 1) {
+
+            // If second word exists and also single letter
+            if (isset($nameParts[1]) && strlen($nameParts[1]) === 1) {
+
+                // Use all initials + next real word
+                // Example: K C Vikas => k-c-vikas
+                $temp = [];
+
+                foreach ($nameParts as $part) {
+                    $temp[] = Str::slug($part);
+
+                    // Stop once we hit first non-single-letter word
+                    if (strlen($part) > 1) {
+                        break;
+                    }
+                }
+
+                $nameParts = $temp;
+
+            } else {
+
+                // Skip first initial
+                // Example: K Vikas => vikas
+                array_shift($nameParts);
+            }
+        }
+
+        // Fallback
+        if (empty($nameParts)) {
+            $nameParts[] = 'user';
+        }
+
+        $slug = '';
+        $tempSlug = '';
+
+        // Try progressively building slug
+        foreach ($nameParts as $index => $part) {
+
+            $tempSlug = $index === 0
+                ? Str::slug($part)
+                : $tempSlug . '-' . Str::slug($part);
+
+            if (!User::where('slug', $tempSlug)->exists()) {
+                $slug = $tempSlug;
+                break;
+            }
+        }
+
+        // Final uniqueness fallback
+        if (empty($slug)) {
+
+            $baseSlug = $tempSlug ?: 'user';
+
+            $counter = 1;
+            $slug = $baseSlug;
+
+            while (User::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+        }
 
         // Check if slug exists and make it unique
         while (User::where('slug', $slug)->exists()) {
