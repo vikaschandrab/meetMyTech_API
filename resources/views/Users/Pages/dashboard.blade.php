@@ -24,9 +24,20 @@
             </h1>
             <p class="text-muted mb-0">Here's what's happening with your profile</p>
         </div>
-        <div>
-            <span class="badge bg-primary">Profile {{ $stats['profile_completion'] ?? 0 }}% Complete</span>
-        </div>
+        <div class="d-flex align-items-center gap-2">
+    <span class="badge bg-primary">
+        Profile {{ $stats['profile_completion'] ?? 0 }}% Complete
+    </span>
+
+    @if(Auth::user()->slug)
+        <a href="{{ url('/' . Auth::user()->slug) }}" 
+           target="_blank" 
+           class="btn btn-sm btn-outline-primary">
+            <i data-feather="external-link" class="feather-sm me-1"></i>
+            {{ Auth::user()->slug }}
+        </a>
+    @endif
+</div>
     </div>
 
     {{-- Stats Cards --}}
